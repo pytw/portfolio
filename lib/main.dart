@@ -1,34 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart'; // Import your firebase_options.dart
-import 'pages/home_page.dart';
-import 'pages/projects_page.dart';
-import 'pages/about_me_page.dart';
-import 'pages/contact_page.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'firebase/firebase_options.dart';
+import 'router/app_router.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const PortfolioApp());
+  runApp(const MyApp());
 }
 
-class PortfolioApp extends StatelessWidget {
-  const PortfolioApp({super.key});
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'My Portfolio',
-      theme: ThemeData(primarySwatch: Colors.blue),
-      initialRoute: '/',
-      routes: {
-        '/': (context) => HomePage(),
-        '/projects': (context) => ProjectsPage(),
-        '/about': (context) => AboutMePage(),
-        '/contact': (context) => ContactPage(),
-      },
+    return MaterialApp.router(
+      debugShowCheckedModeBanner: false,
+      routerConfig: router,  // GoRouter instance from app_router.dart
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        textTheme: GoogleFonts.latoTextTheme(),  // Google Fonts for styling
+      ),
     );
   }
 }

@@ -1,37 +1,33 @@
 import 'package:flutter/material.dart';
 
-class ContactPage extends StatelessWidget {
-  const ContactPage({super.key});
+class ContactScreen extends StatelessWidget {
+  const ContactScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Contact')),
+      appBar: AppBar(title: const Text('Contact Me')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            const Text(
-              'Feel free to reach out!',
-              style: TextStyle(fontSize: 24),
-            ),
-            const SizedBox(height: 20),
+            const Text('Contact Me', style: TextStyle(fontSize: 32)),
             const TextField(
               decoration: InputDecoration(labelText: 'Your Name'),
             ),
             const TextField(
-              decoration: InputDecoration(labelText: 'Your Email'),
+              decoration: InputDecoration(labelText: 'Email'),
             ),
             const TextField(
-              decoration: InputDecoration(labelText: 'Your Message'),
+              decoration: InputDecoration(labelText: 'Message'),
               maxLines: 4,
             ),
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                // Handle contact form submission
+                // Send message functionality (if needed)
               },
-              child: const Text('Send Message'),
+              child: const Text('Send'),
             ),
           ],
         ),
