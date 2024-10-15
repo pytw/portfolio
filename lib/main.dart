@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart'; // Import your firebase_options.dart
 import 'pages/home_page.dart';
+import 'pages/projects_page.dart';
+import 'pages/about_me_page.dart';
+import 'pages/contact_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,10 +20,15 @@ class PortfolioApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
       title: 'My Portfolio',
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: const HomePage(),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => HomePage(),
+        '/projects': (context) => ProjectsPage(),
+        '/about': (context) => AboutMePage(),
+        '/contact': (context) => ContactPage(),
+      },
     );
   }
 }

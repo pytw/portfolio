@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'projects_page.dart';
-import 'about_me_page.dart';
-import 'contact_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -14,28 +12,19 @@ class HomePage extends StatelessWidget {
         actions: [
           TextButton(
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const ProjectsPage()),
-              );
+              Navigator.pushNamed(context, '/projects');
             },
             child: const Text('Projects'),
           ),
           TextButton(
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const AboutMePage()),
-              );
+              Navigator.pushNamed(context, '/about');
             },
             child: const Text('About Me'),
           ),
           TextButton(
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const ContactPage()),
-              );
+              Navigator.pushNamed(context, '/contact');
             },
             child: const Text('Contact'),
           ),
