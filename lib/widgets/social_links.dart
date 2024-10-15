@@ -20,7 +20,7 @@ class SocialLinks extends StatelessWidget {
       children: [
         IconButton(
           icon: const Icon(Icons.link),
-          onPressed: () => _launchURL('https://linkedin.com/in/pyapril15'),
+          onPressed: () => _launchURL('https://linkedin.com/in/pyapril1507'),
         ),
         IconButton(
           icon: const Icon(Icons.code),
