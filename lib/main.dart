@@ -22,7 +22,8 @@ class PortfolioApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Portfolio - Praveen Yadav',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        scaffoldBackgroundColor: Colors.black,
+        appBarTheme: const AppBarTheme(backgroundColor: Colors.black, foregroundColor: Colors.white),
         textTheme: GoogleFonts.latoTextTheme(),
       ),
       routerConfig: router, // GoRouter config from router.dart

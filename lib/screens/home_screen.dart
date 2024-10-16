@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 import '../widgets/navbar.dart';
@@ -30,19 +32,49 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: Navbar(),
-      body: SingleChildScrollView(
-        controller: _scrollController,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            _buildHeroSection(context),
-            _buildAnimatedSection(_buildProfileSection(), "Profile"),
-            _buildAnimatedSection(_buildSkillsSection(context), "Skills"),
-            _buildAnimatedSection(_buildProjectsSection(context), "Projects"),
-            _buildAnimatedSection(_buildContactSection(context), "Contact"),
-          ],
+    return SafeArea(
+      child: Scaffold(
+        appBar: const Navbar(),
+        body: Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: SingleChildScrollView(
+            controller: _scrollController,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                _buildHeroSection(context),
+                _buildAnimatedSection(_buildProfileSection(), "Profile"),
+                _buildAnimatedSection(_buildSkillsSection(context), "Skills"),
+                _buildAnimatedSection(
+                    _buildProjectsSection(context), "Projects"),
+                _buildAnimatedSection(_buildContactSection(context), "Contact"),
+                const Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                        child: Divider(
+                      height: 1.2,
+                      thickness: 1,
+                      color: Colors.white,
+                      indent: 50,
+                      endIndent: 10,
+                    )),
+                    Text(
+                        "Don't hesitate to reach out. \u00A9 2024 | Praveen Yadav",
+                        style: TextStyle(color: Colors.white, fontSize: 18)),
+                    Expanded(
+                        child: Divider(
+                      height: 1.2,
+                      thickness: 1,
+                      color: Colors.white,
+                      indent: 10,
+                      endIndent: 50,
+                    )),
+                  ],
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );
@@ -306,35 +338,131 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // Contact Section with More Attractive Design
   Widget _buildContactSection(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(20.0),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Contact Me',
-            style: TextStyle(
-                fontSize: 32,
-                fontWeight: FontWeight.bold,
-                color: Colors.blueAccent),
+            "Let's get to know each other better.",
+            style: Theme.of(context).textTheme.headlineLarge?.copyWith(fontWeight: FontWeight.bold),
           ),
-          SizedBox(height: 20),
-          Text(
-            'Feel free to reach out via email or social media!',
-            style: TextStyle(fontSize: 18, color: Colors.black87),
-          ),
-          SizedBox(height: 20),
-          CustomButton(
-            label: 'Email Me',
-            onPressed: () {
-              // Action for email
-            },
+          const SizedBox(height: 20),
+          Row(
+            children: [
+              Expanded(
+                child: MouseRegion(
+                  onEnter: (_) => _showGlowEffect(true),
+                  onExit: (_) => _showGlowEffect(false),
+                  child: SvgPicture.asset(
+                    'assets/images/connect.svg', // Ensure you have added the correct path for SVG
+                    fit: BoxFit.cover,
+                    placeholderBuilder: (context) => const Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                    // Fallback if the image is not found
+                  ),
+                ),
+              ),
+              const SizedBox(width: 20),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      "Thank you for visiting! This is your direct line to reach me. "
+                          "Whether you have a project in mind, a question about web development, "
+                          "or just want to say hello, I'm here and eager to connect with you. "
+                          "Reach out to me via email:",
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    const SizedBox(height: 10),
+                    _buildGlowButton(
+                      onPressed: () {},
+                      label: "praveen885127@gmail.com",
+                      icon: Icons.mail_outline,
+                    ),
+                    const SizedBox(height: 20),
+                    const Text(
+                      "Connect through social media:",
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    ),
+                    const SizedBox(height: 10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        _buildGlowButton(
+                          onPressed: () {},
+                          label: "Github",
+                          icon: FontAwesomeIcons.github,
+                        ),
+                        _buildGlowButton(
+                          onPressed: () {},
+                          label: "Twitter",
+                          icon: FontAwesomeIcons.twitter,
+                        ),
+                        _buildGlowButton(
+                          onPressed: () {},
+                          label: "LinkedIn",
+                          icon: FontAwesomeIcons.linkedin,
+                        ),
+                        _buildGlowButton(
+                          onPressed: () {},
+                          label: "Instagram",
+                          icon: FontAwesomeIcons.instagram,
+                        ),
+                        _buildGlowButton(
+                          onPressed: () {},
+                          label: "Facebook",
+                          icon: FontAwesomeIcons.facebook,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
         ],
       ),
     );
   }
+
+  Widget _buildGlowButton({
+    required VoidCallback onPressed,
+    required String label,
+    required IconData icon,
+  }) {
+    return MouseRegion(
+      onEnter: (_) => _showGlowEffect(true),
+      onExit: (_) => _showGlowEffect(false),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.transparent,
+          borderRadius: BorderRadius.circular(8),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.blue.withOpacity(0.5),
+              blurRadius: 10.0,
+              spreadRadius: 1.0,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: TextButton.icon(
+          onPressed: onPressed,
+          icon: FaIcon(icon, size: 20.0, color: Colors.black),
+          label: Text(label, style: const TextStyle(color: Colors.black)),
+        ),
+      ),
+    );
+  }
+
+  void _showGlowEffect(bool isHovered) {
+    // Logic to handle glow effect state
+  }
+
 
   // Wrapper for animated sections
   Widget _buildAnimatedSection(Widget child, String sectionName) {
