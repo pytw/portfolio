@@ -28,7 +28,7 @@ You can view the live demo of the portfolio website [here](https://your-live-dem
 
 - Responsive design for mobile and web.
 - Showcase of projects and skills.
-- Contact form for inquiries.
+- Contact form for inquiries
 - [Other features you might have implemented]
 
 ## Getting Started
@@ -63,7 +63,11 @@ This project is deployed using GitHub Pages. To update the live site, push your 
 
 ## CI/CD with GitHub Actions
 
+<<<<<<< HEAD
 This repository is set up with GitHub Actions to automate testing and deployment.
+=======
+This repository is set up with GitHub Actions to automate testing and deployment. 
+>>>>>>> e6450c4869f2446af749951d07f5ee8dc374ddc4
 
 - The workflow file is located in `.github/workflows/deploy.yml`.
 - It triggers on push events to the `main` branch, runs tests, and deploys the site automatically.
