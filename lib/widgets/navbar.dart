@@ -7,7 +7,7 @@ class Navbar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: Colors.blue,
+      backgroundColor: Colors.green,
       title: const Text('Portfolio'),
       actions: [
         TextButton(
