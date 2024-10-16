@@ -5,9 +5,9 @@ class SocialLinks extends StatelessWidget {
   const SocialLinks({super.key});
 
   void _launchURL(String url) async {
-    final Uri uri = Uri.parse(url); // Parse the URL to a Uri object
+    final Uri uri = Uri.parse(url);
     if (await canLaunchUrl(uri)) {
-      await launchUrl(uri, mode: LaunchMode.externalApplication); // Open URL externally
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
     } else {
       throw 'Could not launch $url';
     }

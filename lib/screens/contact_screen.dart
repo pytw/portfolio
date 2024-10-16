@@ -1,34 +1,22 @@
 import 'package:flutter/material.dart';
+import '../widgets/navbar.dart';
 
 class ContactScreen extends StatelessWidget {
   const ContactScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Contact Me')),
+    return const Scaffold(
+      appBar: Navbar(),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(20),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('Contact Me', style: TextStyle(fontSize: 32)),
-            const TextField(
-              decoration: InputDecoration(labelText: 'Your Name'),
-            ),
-            const TextField(
-              decoration: InputDecoration(labelText: 'Email'),
-            ),
-            const TextField(
-              decoration: InputDecoration(labelText: 'Message'),
-              maxLines: 4,
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                // Send message functionality (if needed)
-              },
-              child: const Text('Send'),
-            ),
+            Text('Contact Me', style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold)),
+            SizedBox(height: 20),
+            Text('Email: praveen885127@gmail.com'),
+            Text('LinkedIn: linkedin.com/in/pyapril1507'),
           ],
         ),
       ),
