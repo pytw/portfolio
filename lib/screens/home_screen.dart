@@ -18,8 +18,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late ScrollController _scrollController;
-  bool _isMailHovered = false; // Track email hover state
-  bool _isSocialButtonHovered = false; // Track social button hover state
 
   @override
   void initState() {
@@ -35,6 +33,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+
     return SafeArea(
       child: Scaffold(
         appBar: const Navbar(),
@@ -46,35 +46,12 @@ class _HomeScreenState extends State<HomeScreen> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 _buildHeroSection(context),
-                _buildAnimatedSection(_buildProfileSection(), "Profile"),
+                _buildAnimatedSection(_buildProfileSection(context), "Profile"),
                 _buildAnimatedSection(_buildSkillsSection(context), "Skills"),
                 _buildAnimatedSection(
                     _buildProjectsSection(context), "Projects"),
                 _buildAnimatedSection(_buildContactSection(context), "Contact"),
-                const Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                        child: Divider(
-                          height: 1.2,
-                          thickness: 1,
-                          color: Colors.white,
-                          indent: 50,
-                          endIndent: 10,
-                        )),
-                    Text(
-                        "Don't hesitate to reach out. \u00A9 2024 | Praveen Yadav",
-                        style: TextStyle(color: Colors.white, fontSize: 18)),
-                    Expanded(
-                        child: Divider(
-                          height: 1.2,
-                          thickness: 1,
-                          color: Colors.white,
-                          indent: 10,
-                          endIndent: 50,
-                        )),
-                  ],
-                ),
+                _buildFooter(screenWidth),
               ],
             ),
           ),
@@ -85,6 +62,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   // Hero Section
   Widget _buildHeroSection(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+
     return Stack(
       children: [
         Positioned.fill(
@@ -114,17 +93,19 @@ class _HomeScreenState extends State<HomeScreen> {
                 Text(
                   'Hi, I\'m Praveen Yadav',
                   style: GoogleFonts.lato(
-                    textStyle: const TextStyle(
+                    textStyle: TextStyle(
                       color: Colors.white,
-                      fontSize: 48,
+                      fontSize: screenWidth < 600 ? 32 : 48,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
                 const SizedBox(height: 10),
-                const Text(
+                Text(
                   'BCA Student | Software Developer',
-                  style: TextStyle(color: Colors.white70, fontSize: 24),
+                  style: TextStyle(
+                      color: Colors.white70,
+                      fontSize: screenWidth < 600 ? 16 : 24),
                 ),
                 const SizedBox(height: 20),
                 CustomButton(
@@ -144,16 +125,19 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   // Profile Section
-  Widget _buildProfileSection() {
+  Widget _buildProfileSection(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 20),
+      padding: EdgeInsets.symmetric(
+          vertical: 50, horizontal: screenWidth < 600 ? 10 : 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const Text(
+          Text(
             'About Me',
             style: TextStyle(
-              fontSize: 32,
+              fontSize: screenWidth < 600 ? 24 : 32,
               fontWeight: FontWeight.bold,
               color: Colors.blueAccent,
             ),
@@ -162,18 +146,19 @@ class _HomeScreenState extends State<HomeScreen> {
           ClipOval(
             child: Image.asset(
               'assets/images/py.jpg',
-              width: 160,
-              height: 160,
+              width: screenWidth < 600 ? 120 : 160,
+              height: screenWidth < 600 ? 120 : 160,
               fit: BoxFit.cover,
             ),
           ),
           const SizedBox(height: 20),
-          const Text(
+          Text(
             'I am Praveen Yadav, a BCA student with a passion for software development. '
                 'I specialize in Flutter, Java, and Python development, and I enjoy building '
                 'scalable applications that solve real-world problems.',
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 18, color: Colors.black87),
+            style: TextStyle(
+                fontSize: screenWidth < 600 ? 14 : 18, color: Colors.black87),
           ),
           const SizedBox(height: 20),
           CustomButton(
@@ -189,14 +174,16 @@ class _HomeScreenState extends State<HomeScreen> {
 
   // Skills Section
   Widget _buildSkillsSection(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+
     return Padding(
       padding: const EdgeInsets.all(20.0),
       child: Column(
         children: [
-          const Text(
+          Text(
             'Skills',
             style: TextStyle(
-              fontSize: 32,
+              fontSize: screenWidth < 600 ? 24 : 32,
               fontWeight: FontWeight.bold,
               color: Colors.blueAccent,
             ),
@@ -207,7 +194,7 @@ class _HomeScreenState extends State<HomeScreen> {
             spacing: 20,
             runSpacing: 20,
             children: List.generate(5, (int index) {
-              return _buildSkillCard(_getSkillLabel(index));
+              return _buildSkillCard(_getSkillLabel(index), screenWidth);
             }),
           ),
         ],
@@ -215,12 +202,12 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildSkillCard(String skill) {
+  Widget _buildSkillCard(String skill, double screenWidth) {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeInOut,
-      width: 150,
-      height: 100,
+      width: screenWidth < 600 ? 120 : 150,
+      height: screenWidth < 600 ? 80 : 100,
       decoration: BoxDecoration(
         color: Colors.blueAccent,
         borderRadius: BorderRadius.circular(15),
@@ -235,9 +222,9 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Center(
         child: Text(
           skill,
-          style: const TextStyle(
+          style: TextStyle(
             color: Colors.white,
-            fontSize: 18,
+            fontSize: screenWidth < 600 ? 14 : 18,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -264,14 +251,16 @@ class _HomeScreenState extends State<HomeScreen> {
 
   // Projects Section
   Widget _buildProjectsSection(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+
     return Padding(
       padding: const EdgeInsets.all(20.0),
       child: Column(
         children: [
-          const Text(
+          Text(
             'Projects',
             style: TextStyle(
-              fontSize: 32,
+              fontSize: screenWidth < 600 ? 24 : 32,
               fontWeight: FontWeight.bold,
               color: Colors.blueAccent,
             ),
@@ -281,11 +270,13 @@ class _HomeScreenState extends State<HomeScreen> {
             context,
             'University ERP System',
             'A comprehensive ERP system for managing university operations.',
+            screenWidth,
           ),
           _buildProjectCard(
             context,
             'Personal Portfolio Website',
             'A personal portfolio website to showcase my skills and projects.',
+            screenWidth,
           ),
         ],
       ),
@@ -293,7 +284,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildProjectCard(
-      BuildContext context, String title, String description) {
+      BuildContext context, String title, String description, double screenWidth) {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
       margin: const EdgeInsets.symmetric(vertical: 10),
@@ -315,8 +306,8 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             Text(
               title,
-              style: const TextStyle(
-                fontSize: 20,
+              style: TextStyle(
+                fontSize: screenWidth < 600 ? 18 : 20,
                 fontWeight: FontWeight.bold,
                 color: Colors.blueAccent,
               ),
@@ -324,13 +315,16 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(height: 10),
             Text(
               description,
-              style: const TextStyle(fontSize: 16, color: Colors.black87),
+              style: TextStyle(
+                fontSize: screenWidth < 600 ? 14 : 16,
+                color: Colors.black87,
+              ),
             ),
             const SizedBox(height: 10),
             CustomButton(
               label: 'View Project',
               onPressed: () {
-                // Action for viewing the project
+                // Action to view project
               },
             ),
           ],
@@ -339,77 +333,105 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-// Contact Section
+  // Contact Section
   Widget _buildContactSection(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+
     return Padding(
-      padding: const EdgeInsets.all(20.0),
+      padding: EdgeInsets.all(screenWidth < 600 ? 10 : 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "Let's get to know each other better.",
-            style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+            'Contact Me',
+            style: TextStyle(
+              fontSize: screenWidth < 600 ? 24 : 32,
               fontWeight: FontWeight.bold,
               color: Colors.blue,
             ),
           ),
           const SizedBox(height: 20),
+
+          // Row for SVG and text with 50% width each
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Flexible SVG image to avoid overflow
-              Flexible(
+              // SVG Image with 50% width
+              Expanded(
+                flex: 1,
                 child: SvgPicture.asset(
-                  'assets/images/connect.svg',
-                  fit: BoxFit.contain, // Adjust fit to prevent overflow
-                  placeholderBuilder: (context) => const Center(
-                    child: CircularProgressIndicator(),
-                  ),
+                  'assets/images/connect.svg', // Ensure this path is correct
+                  fit: BoxFit.contain,
                 ),
               ),
-              const SizedBox(width: 20),
-              // Expanded Column to handle overflow in content
+              const SizedBox(width: 20), // Space between SVG and text
+
+              // Text with 50% width
               Expanded(
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        "Thank you for visiting! This is your direct line to reach me. "
-                            "Whether you have a project in mind, a question about web development, "
-                            "or just want to say hello, I'm here and eager to connect with you. "
-                            "Reach out to me via email:",
-                        style: TextStyle(fontSize: 16, color: Colors.white, height: 2, letterSpacing: 1),
+                flex: 1,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Thank you for visiting! This is your direct line to reach me. Whether you have a project in mind, a question about web development, or just want to say hello, I'm here and eager to connect with you.",
+                      style: TextStyle(
+                        fontSize: screenWidth < 600 ? 14 : 20,
+                        color: const Color(0xff9ca3af),
+                        height: 3
                       ),
-                      const SizedBox(height: 30),
-                      SocialButton(
-                        label: "praveen885127@gmail.com",
-                        icon: Icons.mail_outline,
-                        onPressed: () { launch('mailto:praveen885127@gmail.com'); },
+                    ),
+                    const SizedBox(height: 40),
+                    Text(
+                      "Reach me out:-",
+                      style: TextStyle(
+                          fontSize: screenWidth < 600 ? 14 : 20,
+                          color: const Color(0xff9ca3af),
                       ),
-                      const SizedBox(height: 30),
-                      const Text(
-                        "Connect through social media:",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                          color: Colors.white,
+                    ),
+                    const SizedBox(height: 20),
+                    // Email Button
+                    SocialButton(
+                      label: 'praveen885127@gmail.com',
+                      icon: Icons.mail_outline,
+                      onPressed: () {
+                        launch('mailto:praveen885127@gmail.com');
+                      },
+                    ),
+                    const SizedBox(height: 40),
+
+                    // Social Links as buttons
+                    Wrap(
+                      spacing: screenWidth < 600 ? 10 : 20,
+                      runSpacing: 10,
+                      children: [
+                        SocialButton(
+                          label: 'Github',
+                          icon: FontAwesomeIcons.github,
+                          onPressed: () {launch("https://www.github.com/pyapril15");},
                         ),
-                      ),
-                      const SizedBox(height: 20),
-                      Wrap(
-                        spacing: 10.0,
-                        runSpacing: 10.0,
-                        children: [
-                          SocialButton(label: "Github", icon: FontAwesomeIcons.github, onPressed: () { launch('https://github.com/pyapril15'); }),
-                          SocialButton(label: "Twitter", icon: FontAwesomeIcons.twitter, onPressed: () { launch('https://twitter.com/pyapril15'); }),
-                          SocialButton(label: "LinkedIn", icon: FontAwesomeIcons.linkedin, onPressed: () { launch('https://linkedin.com/in/pyapril1507'); }),
-                          SocialButton(label: "Discord", icon: FontAwesomeIcons.discord, onPressed: () { launch('https://discord.com/pyapril15'); }),
-                          SocialButton(label: "Instagram", icon: FontAwesomeIcons.instagram, onPressed: () { launch('https://instagram.com/__pyapril15.py__'); }),
-                        ],
-                      ),
-                    ],
-                  ),
+                        SocialButton(
+                          label: 'LinkedIn',
+                          icon: FontAwesomeIcons.linkedin,
+                          onPressed: (){launch("https://www.linkedin.com/pyapril1507");},
+                        ),
+                        SocialButton(
+                          label: 'Twitter',
+                          icon: FontAwesomeIcons.twitter,
+                          onPressed: (){launch("https://www.twitter.com/pyapril15");},
+                        ),
+                        SocialButton(
+                          label: 'Discord',
+                          icon: FontAwesomeIcons.discord,
+                          onPressed: (){launch("https://www.discord.com/pyapril15");},
+                        ),
+                        SocialButton(
+                          label: 'Instagram',
+                          icon: FontAwesomeIcons.instagram,
+                          onPressed: () {launch("https://www.instagram.com/__pyapril15.py__");},
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
             ],
@@ -420,19 +442,46 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
 
-  // Wrapper to make section widgets animated
-  Widget _buildAnimatedSection(Widget section, String key) {
+  // Footer
+  Widget _buildFooter(double screenWidth) {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      color: Colors.blueGrey[900],
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text(
+            '© 2024 Praveen Yadav. All rights reserved.',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: screenWidth < 600 ? 14 : 16,
+            ),
+          ),
+          const SizedBox(height: 10),
+          Text(
+            'Made with Flutter',
+            style: TextStyle(
+              color: Colors.white70,
+              fontSize: screenWidth < 600 ? 12 : 14,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Animated Section
+  Widget _buildAnimatedSection(Widget child, String key) {
     return VisibilityDetector(
       key: Key(key),
       onVisibilityChanged: (VisibilityInfo info) {
         if (info.visibleFraction > 0.3) {
-          // Trigger animation when section is 30% visible
+          setState(() {
+            // Trigger animations here
+          });
         }
       },
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 300),
-        child: section,
-      ),
+      child: child,
     );
   }
 }
