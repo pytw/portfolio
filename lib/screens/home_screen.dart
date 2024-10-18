@@ -256,82 +256,164 @@ class _HomeScreenState extends State<HomeScreen> {
     return Padding(
       padding: const EdgeInsets.all(20.0),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Projects',
+            'Here is a glimpse of what I have done.',
             style: TextStyle(
-              fontSize: screenWidth < 600 ? 24 : 32,
+              fontSize: screenWidth < 600 ? 24 : 28,
               fontWeight: FontWeight.bold,
-              color: Colors.blueAccent,
+              color: Colors.white,
             ),
           ),
           const SizedBox(height: 20),
+          // First project: Image on the left, Text on the right
           _buildProjectCard(
             context,
-            'University ERP System',
-            'A comprehensive ERP system for managing university operations.',
+            'Dashboard',
+            'Our MERN dashboard: The all-in-one command center for managing and visualizing data, simplified for you.',
+            'assets/images/admin-dashboard.webp', // Placeholder path for the image
+            ['CRUD operation', 'JWT auth', 'Forget/Reset password', 'Admin and User based access'],
             screenWidth,
+            isImageLeft: true,
           ),
+          const SizedBox(height: 30),
+          // Second project: Text on the left, Image on the right
           _buildProjectCard(
             context,
-            'Personal Portfolio Website',
-            'A personal portfolio website to showcase my skills and projects.',
+            'Chat App',
+            'Discover our Chat App — an uncomplicated chat app for straightforward conversations, powered by the latest technologies.',
+            'assets/images/chat-app.webp', // Placeholder path for the image
+            ['Quick login with Google', 'Add friend with Email', 'Send messages in real-time'],
             screenWidth,
+            isImageLeft: false,
           ),
         ],
       ),
     );
   }
 
+// Project Card with alternating image position
   Widget _buildProjectCard(
-      BuildContext context, String title, String description, double screenWidth) {
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 300),
-      margin: const EdgeInsets.symmetric(vertical: 10),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(15),
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black12,
-            blurRadius: 10,
-            offset: const Offset(0, 5),
-          ),
+      BuildContext context, String title, String description, String imagePath, List<String> features, double screenWidth, {bool isImageLeft = true}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: isImageLeft
+            ? [
+          // Image on the Left
+          _buildImageSection(imagePath, screenWidth),
+          const SizedBox(width: 20), // Space between image and text
+          _buildTextSection(title, description, features, screenWidth),
+        ]
+            : [
+          // Text on the Left
+          _buildTextSection(title, description, features, screenWidth),
+          const SizedBox(width: 20), // Space between text and image
+          _buildImageSection(imagePath, screenWidth),
         ],
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(15.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              title,
-              style: TextStyle(
-                fontSize: screenWidth < 600 ? 18 : 20,
-                fontWeight: FontWeight.bold,
-                color: Colors.blueAccent,
-              ),
-            ),
-            const SizedBox(height: 10),
-            Text(
-              description,
-              style: TextStyle(
-                fontSize: screenWidth < 600 ? 14 : 16,
-                color: Colors.black87,
-              ),
-            ),
-            const SizedBox(height: 10),
-            CustomButton(
-              label: 'View Project',
-              onPressed: () {
-                // Action to view project
-              },
+    );
+  }
+
+// Image section
+  Widget _buildImageSection(String imagePath, double screenWidth) {
+    return Expanded(
+      flex: 1,
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.blue.withOpacity(1),
+              blurRadius: 10,
+              offset: const Offset(0, 0),
             ),
           ],
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(50),
+          child: Image.asset(
+            imagePath, // Ensure the correct image path
+            fit: BoxFit.cover,
+          ),
         ),
       ),
     );
   }
+
+// Text section
+  Widget _buildTextSection(String title, String description, List<String> features, double screenWidth) {
+    return Expanded(
+      flex: 1,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: TextStyle(
+              fontSize: screenWidth < 600 ? 18 : 22,
+              fontWeight: FontWeight.bold,
+              color: Colors.blue,
+            ),
+          ),
+          const SizedBox(height: 10),
+          Text(
+            description,
+            style: TextStyle(
+              fontSize: screenWidth < 600 ? 14 : 16,
+              color: Colors.white,
+            ),
+          ),
+          const SizedBox(height: 15),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: features.map((feature) {
+              return Row(
+                children: [
+                  const Icon(Icons.check_circle, color: Colors.green, size: 16),
+                  const SizedBox(width: 5),
+                  Text(
+                    feature,
+                    style: TextStyle(
+                      fontSize: screenWidth < 600 ? 12 : 14,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              );
+            }).toList(),
+          ),
+          const SizedBox(height: 15),
+          // Action Buttons (View and Source Code)
+          Row(
+            children: [
+              ElevatedButton.icon(
+                onPressed: () {
+                  // Action to view the project
+                },
+                icon: const Icon(Icons.open_in_new, color: Colors.white),
+                label: const Text('Have a look'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue,
+                ),
+              ),
+              const SizedBox(width: 10),
+              OutlinedButton(
+                onPressed: () {
+                  // Action for source code
+                },
+                child: const Text('Source Code'),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+
 
   // Contact Section
   Widget _buildContactSection(BuildContext context) {
@@ -343,7 +425,7 @@ class _HomeScreenState extends State<HomeScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Contact Me',
+            "Let's get to know each other better.",
             style: TextStyle(
               fontSize: screenWidth < 600 ? 24 : 32,
               fontWeight: FontWeight.bold,
@@ -361,9 +443,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 flex: 1,
                 child: SvgPicture.asset(
                   'assets/images/connect.svg', // Ensure this path is correct
-                  fit: BoxFit.contain,
+                  fit: BoxFit.cover,
                 ),
               ),
+
               const SizedBox(width: 20), // Space between SVG and text
 
               // Text with 50% width
@@ -372,23 +455,29 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      "Thank you for visiting! This is your direct line to reach me. Whether you have a project in mind, a question about web development, or just want to say hello, I'm here and eager to connect with you.",
-                      style: TextStyle(
-                        fontSize: screenWidth < 600 ? 14 : 20,
-                        color: const Color(0xff9ca3af),
-                        height: 3
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        "Thank you for visiting! This is your direct line to reach me. Whether you have a project in mind, a question about web development, or just want to say hello, I'm here and eager to connect with you.",
+                        style: TextStyle(
+                          fontSize: screenWidth < 600 ? 14 : 20,
+                          color: const Color(0xff9ca3af),
+                          height: 3
+                        ),
                       ),
                     ),
                     const SizedBox(height: 40),
-                    Text(
-                      "Reach me out:-",
-                      style: TextStyle(
-                          fontSize: screenWidth < 600 ? 14 : 20,
-                          color: const Color(0xff9ca3af),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        "Reach me out:-",
+                        style: TextStyle(
+                            fontSize: screenWidth < 600 ? 14 : 20,
+                            color: const Color(0xff9ca3af),
+                        ),
                       ),
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 5),
                     // Email Button
                     SocialButton(
                       label: 'praveen885127@gmail.com',
@@ -451,7 +540,7 @@ class _HomeScreenState extends State<HomeScreen> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
-            '© 2024 Praveen Yadav. All rights reserved.',
+            '\u00A9 2024 Praveen Yadav. All rights reserved.',
             style: TextStyle(
               color: Colors.white,
               fontSize: screenWidth < 600 ? 14 : 16,

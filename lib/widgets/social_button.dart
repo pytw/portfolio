@@ -21,43 +21,46 @@ class _SocialButtonState extends State<SocialButton> {
 
   @override
   Widget build(BuildContext context) {
-    return MouseRegion(
-      onEnter: (_) {
-        setState(() {
-          _isHovering = true;
-        });
-      },
-      onExit: (_) {
-        setState(() {
-          _isHovering = false;
-        });
-      },
-      child: Container(
-        decoration: BoxDecoration(
-          border: Border(
-            bottom: BorderSide(
-              color: _isHovering ? Colors.blue : Colors.transparent,
-              width: 2.0,
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: MouseRegion(
+        onEnter: (_) {
+          setState(() {
+            _isHovering = true;
+          });
+        },
+        onExit: (_) {
+          setState(() {
+            _isHovering = false;
+          });
+        },
+        child: Container(
+          decoration: BoxDecoration(
+            border: Border(
+              bottom: BorderSide(
+                color: _isHovering ? Colors.blue : Colors.transparent,
+                width: 2.0,
+              ),
             ),
           ),
-        ),
-        child: ElevatedButton.icon(
-          onPressed: widget.onPressed,
-          style: ButtonStyle(
-            backgroundColor: WidgetStateProperty.all<Color>(Colors.transparent), // Transparent background
-            padding: WidgetStateProperty.all<EdgeInsets>(const EdgeInsets.all(8)),
-            shadowColor: WidgetStateProperty.all<Color>(Colors.transparent), // No shadow
-          ),
-          icon: Icon(
-            widget.icon,
-            size: _isHovering ? 24 : 20, // Increase icon size on hover
-            color: _isHovering ? Colors.blue : Colors.white, // Change color on hover
-          ),
-          label: Text(
-            widget.label,
-            style: TextStyle(
-              fontSize: _isHovering ? 18 : 16, // Increase text size on hover
-              color: _isHovering ? Colors.blue : Colors.white, // Change text color on hover
+          child: ElevatedButton.icon(
+            onPressed: widget.onPressed,
+            style: ButtonStyle(
+              backgroundColor: WidgetStateProperty.all<Color>(Colors.transparent), // Transparent background
+              padding: WidgetStateProperty.all<EdgeInsets>(const EdgeInsets.all(8)),
+              shadowColor: WidgetStateProperty.all<Color>(Colors.transparent), // No shadow
+            ),
+            icon: Icon(
+              widget.icon,
+              size: _isHovering ? 28 : 24, // Increase icon size on hover
+              color: _isHovering ? Colors.blue : Colors.white, // Change color on hover
+            ),
+            label: Text(
+              widget.label,
+              style: TextStyle(
+                fontSize: _isHovering ? 24 : 20, // Increase text size on hover
+                color: _isHovering ? Colors.blue : Colors.white, // Change text color on hover
+              ),
             ),
           ),
         ),
