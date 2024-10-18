@@ -46,10 +46,9 @@ class _HomeScreenState extends State<HomeScreen> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 _buildHeroSection(context),
-                _buildAnimatedSection(_buildProfileSection(context), "Profile"),
+                _buildAnimatedSection(_buildProjectsSection(context), "Projects"),
                 _buildAnimatedSection(_buildSkillsSection(context), "Skills"),
-                _buildAnimatedSection(
-                    _buildProjectsSection(context), "Projects"),
+                _buildAnimatedSection(_buildAboutSection(context), "About"),
                 _buildAnimatedSection(_buildContactSection(context), "Contact"),
                 _buildFooter(screenWidth),
               ],
@@ -124,48 +123,181 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // Profile Section
-  Widget _buildProfileSection(BuildContext context) {
+  // Projects Section
+  Widget _buildProjectsSection(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
 
     return Padding(
-      padding: EdgeInsets.symmetric(
-          vertical: 50, horizontal: screenWidth < 600 ? 10 : 20),
+      padding: const EdgeInsets.all(20.0),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'About Me',
+            'Here is a glimpse of what I have done.',
             style: TextStyle(
-              fontSize: screenWidth < 600 ? 24 : 32,
+              fontSize: screenWidth < 600 ? 24 : 28,
               fontWeight: FontWeight.bold,
-              color: Colors.blueAccent,
+              color: Colors.white,
             ),
           ),
           const SizedBox(height: 20),
-          ClipOval(
-            child: Image.asset(
-              'assets/images/py.jpg',
-              width: screenWidth < 600 ? 120 : 160,
-              height: screenWidth < 600 ? 120 : 160,
-              fit: BoxFit.cover,
-            ),
+          // First project: Image on the left, Text on the right
+          _buildProjectCard(
+            context,
+            'Dashboard',
+            'Our MERN dashboard: The all-in-one command center for managing and visualizing data, simplified for you.',
+            'assets/images/admin-dashboard.webp', // Placeholder path for the image
+            [
+              'CRUD operation',
+              'JWT auth',
+              'Forget/Reset password',
+              'Admin and User based access'
+            ],
+            screenWidth,
+            isImageLeft: true,
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 30),
+          // Second project: Text on the left, Image on the right
+          _buildProjectCard(
+            context,
+            'Chat App',
+            'Discover our Chat App — an uncomplicated chat app for straightforward conversations, powered by the latest technologies.',
+            'assets/images/chat-app.webp', // Placeholder path for the image
+            [
+              'Quick login with Google',
+              'Add friend with Email',
+              'Send messages in real-time'
+            ],
+            screenWidth,
+            isImageLeft: false,
+          ),
+        ],
+      ),
+    );
+  }
+
+// Project Card with alternating image position
+  Widget _buildProjectCard(
+      BuildContext context,
+      String title,
+      String description,
+      String imagePath,
+      List<String> features,
+      double screenWidth,
+      {bool isImageLeft = true}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: isImageLeft
+            ? [
+                // Image on the Left
+                _buildImageSection(imagePath, screenWidth),
+                const SizedBox(width: 20), // Space between image and text
+                _buildTextSection(title, description, features, screenWidth),
+              ]
+            : [
+                // Text on the Left
+                _buildTextSection(title, description, features, screenWidth),
+                const SizedBox(width: 20), // Space between text and image
+                _buildImageSection(imagePath, screenWidth),
+              ],
+      ),
+    );
+  }
+
+// Image section
+  Widget _buildImageSection(String imagePath, double screenWidth) {
+    return Expanded(
+      flex: 1,
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.blue.withOpacity(1),
+              blurRadius: 20,
+              offset: const Offset(0, 0),
+            ),
+          ],
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(15),
+          child: Image.asset(
+            imagePath, // Ensure the correct image path
+            fit: BoxFit.cover,
+          ),
+        ),
+      ),
+    );
+  }
+
+// Text section
+  Widget _buildTextSection(String title, String description,
+      List<String> features, double screenWidth) {
+    return Expanded(
+      flex: 1,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
           Text(
-            'I am Praveen Yadav, a BCA student with a passion for software development. '
-                'I specialize in Flutter, Java, and Python development, and I enjoy building '
-                'scalable applications that solve real-world problems.',
-            textAlign: TextAlign.center,
+            title,
             style: TextStyle(
-                fontSize: screenWidth < 600 ? 14 : 18, color: Colors.black87),
+              fontSize: screenWidth < 600 ? 18 : 22,
+              fontWeight: FontWeight.bold,
+              color: Colors.blue,
+            ),
           ),
-          const SizedBox(height: 20),
-          CustomButton(
-            label: 'More About Me',
-            onPressed: () {
-              // Action to learn more about you
-            },
+          const SizedBox(height: 10),
+          Text(
+            description,
+            style: TextStyle(
+              fontSize: screenWidth < 600 ? 14 : 16,
+              color: Colors.white,
+            ),
+          ),
+          const SizedBox(height: 15),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: features.map((feature) {
+              return Row(
+                children: [
+                  const Icon(Icons.check_circle, color: Colors.green, size: 16),
+                  const SizedBox(width: 5),
+                  Text(
+                    feature,
+                    style: TextStyle(
+                      fontSize: screenWidth < 600 ? 12 : 14,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              );
+            }).toList(),
+          ),
+          const SizedBox(height: 15),
+          // Action Buttons (View and Source Code)
+          Row(
+            children: [
+              ElevatedButton.icon(
+                onPressed: () {
+                  // Action to view the project
+                },
+                icon: const Icon(Icons.open_in_new, color: Colors.white),
+                iconAlignment: IconAlignment.end,
+                label: const Text('Have a look'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue,
+                ),
+              ),
+              const SizedBox(width: 10),
+              OutlinedButton(
+                onPressed: () {
+                  // Action for source code
+                },
+                child: const Text('Source Code'),
+              ),
+            ],
           ),
         ],
       ),
@@ -249,8 +381,8 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  // Projects Section
-  Widget _buildProjectsSection(BuildContext context) {
+  // About Section
+  Widget _buildAboutSection(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
 
     return Padding(
@@ -259,161 +391,63 @@ class _HomeScreenState extends State<HomeScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Here is a glimpse of what I have done.',
+            'But wait.. Who am I...',
             style: TextStyle(
               fontSize: screenWidth < 600 ? 24 : 28,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
-          ),
-          const SizedBox(height: 20),
-          // First project: Image on the left, Text on the right
-          _buildProjectCard(
-            context,
-            'Dashboard',
-            'Our MERN dashboard: The all-in-one command center for managing and visualizing data, simplified for you.',
-            'assets/images/admin-dashboard.webp', // Placeholder path for the image
-            ['CRUD operation', 'JWT auth', 'Forget/Reset password', 'Admin and User based access'],
-            screenWidth,
-            isImageLeft: true,
-          ),
-          const SizedBox(height: 30),
-          // Second project: Text on the left, Image on the right
-          _buildProjectCard(
-            context,
-            'Chat App',
-            'Discover our Chat App — an uncomplicated chat app for straightforward conversations, powered by the latest technologies.',
-            'assets/images/chat-app.webp', // Placeholder path for the image
-            ['Quick login with Google', 'Add friend with Email', 'Send messages in real-time'],
-            screenWidth,
-            isImageLeft: false,
-          ),
-        ],
-      ),
-    );
-  }
-
-// Project Card with alternating image position
-  Widget _buildProjectCard(
-      BuildContext context, String title, String description, String imagePath, List<String> features, double screenWidth, {bool isImageLeft = true}) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: isImageLeft
-            ? [
-          // Image on the Left
-          _buildImageSection(imagePath, screenWidth),
-          const SizedBox(width: 20), // Space between image and text
-          _buildTextSection(title, description, features, screenWidth),
-        ]
-            : [
-          // Text on the Left
-          _buildTextSection(title, description, features, screenWidth),
-          const SizedBox(width: 20), // Space between text and image
-          _buildImageSection(imagePath, screenWidth),
-        ],
-      ),
-    );
-  }
-
-// Image section
-  Widget _buildImageSection(String imagePath, double screenWidth) {
-    return Expanded(
-      flex: 1,
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.blue.withOpacity(1),
-              blurRadius: 10,
-              offset: const Offset(0, 0),
-            ),
-          ],
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(50),
-          child: Image.asset(
-            imagePath, // Ensure the correct image path
-            fit: BoxFit.cover,
-          ),
-        ),
-      ),
-    );
-  }
-
-// Text section
-  Widget _buildTextSection(String title, String description, List<String> features, double screenWidth) {
-    return Expanded(
-      flex: 1,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            title,
-            style: TextStyle(
-              fontSize: screenWidth < 600 ? 18 : 22,
               fontWeight: FontWeight.bold,
               color: Colors.blue,
             ),
           ),
-          const SizedBox(height: 10),
-          Text(
-            description,
-            style: TextStyle(
-              fontSize: screenWidth < 600 ? 14 : 16,
-              color: Colors.white,
-            ),
-          ),
-          const SizedBox(height: 15),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: features.map((feature) {
-              return Row(
-                children: [
-                  const Icon(Icons.check_circle, color: Colors.green, size: 16),
-                  const SizedBox(width: 5),
-                  Text(
-                    feature,
-                    style: TextStyle(
-                      fontSize: screenWidth < 600 ? 12 : 14,
-                      color: Colors.white,
-                    ),
+          const SizedBox(height: 20),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: SvgPicture.asset(
+                    'assets/images/about-me.svg', // Ensure this path is correct
+                    fit: BoxFit.cover,
                   ),
-                ],
-              );
-            }).toList(),
-          ),
-          const SizedBox(height: 15),
-          // Action Buttons (View and Source Code)
-          Row(
-            children: [
-              ElevatedButton.icon(
-                onPressed: () {
-                  // Action to view the project
-                },
-                icon: const Icon(Icons.open_in_new, color: Colors.white),
-                label: const Text('Have a look'),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
                 ),
-              ),
-              const SizedBox(width: 10),
-              OutlinedButton(
-                onPressed: () {
-                  // Action for source code
-                },
-                child: const Text('Source Code'),
-              ),
-            ],
+                const SizedBox(width: 20),
+                Expanded(
+                  flex: 1,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Hello, I'm Praveen Yadav, a dedicated undergraduate student with a profound interest in web development. Currently pursuing my Bachelor of Computer Applications (BCA) degree, my goal is to master both front-end and back-end technologies, aiming to become a versatile and skilled developer. I thrive on the creativity and problem-solving that web development offers. Let's connect and exchange ideas in the dynamic world of web development. I'm always open to new connections and exciting opportunities. Feel free to reach out, and let's embark on this journey together.",
+                        style: TextStyle(
+                            fontSize: screenWidth < 600 ? 14 : 20,
+                            color: const Color(0xff9ca3af),
+                            height: 2
+                        ),
+                      ),
+                      const SizedBox(height: 50),
+                      ElevatedButton.icon(
+                        onPressed: () {
+                          // Action to connect with me
+                        },
+                        icon: const Icon(FontAwesomeIcons.link,
+                            color: Colors.white),
+                        iconAlignment: IconAlignment.end,
+                        label: const Text('Connect with me'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blue,
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
           ),
         ],
       ),
     );
   }
-
-
 
   // Contact Section
   Widget _buildContactSection(BuildContext context) {
@@ -438,7 +472,6 @@ class _HomeScreenState extends State<HomeScreen> {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // SVG Image with 50% width
               Expanded(
                 flex: 1,
                 child: SvgPicture.asset(
@@ -460,10 +493,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: Text(
                         "Thank you for visiting! This is your direct line to reach me. Whether you have a project in mind, a question about web development, or just want to say hello, I'm here and eager to connect with you.",
                         style: TextStyle(
-                          fontSize: screenWidth < 600 ? 14 : 20,
-                          color: const Color(0xff9ca3af),
-                          height: 3
-                        ),
+                            fontSize: screenWidth < 600 ? 14 : 20,
+                            color: const Color(0xff9ca3af),
+                            height: 3),
                       ),
                     ),
                     const SizedBox(height: 40),
@@ -472,8 +504,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: Text(
                         "Reach me out:-",
                         style: TextStyle(
-                            fontSize: screenWidth < 600 ? 14 : 20,
-                            color: const Color(0xff9ca3af),
+                          fontSize: screenWidth < 600 ? 14 : 20,
+                          color: const Color(0xff9ca3af),
                         ),
                       ),
                     ),
@@ -496,27 +528,38 @@ class _HomeScreenState extends State<HomeScreen> {
                         SocialButton(
                           label: 'Github',
                           icon: FontAwesomeIcons.github,
-                          onPressed: () {launch("https://www.github.com/pyapril15");},
+                          onPressed: () {
+                            launch("https://www.github.com/pyapril15");
+                          },
                         ),
                         SocialButton(
                           label: 'LinkedIn',
                           icon: FontAwesomeIcons.linkedin,
-                          onPressed: (){launch("https://www.linkedin.com/pyapril1507");},
+                          onPressed: () {
+                            launch("https://www.linkedin.com/pyapril1507");
+                          },
                         ),
                         SocialButton(
                           label: 'Twitter',
                           icon: FontAwesomeIcons.twitter,
-                          onPressed: (){launch("https://www.twitter.com/pyapril15");},
+                          onPressed: () {
+                            launch("https://www.twitter.com/pyapril15");
+                          },
                         ),
                         SocialButton(
                           label: 'Discord',
                           icon: FontAwesomeIcons.discord,
-                          onPressed: (){launch("https://www.discord.com/pyapril15");},
+                          onPressed: () {
+                            launch("https://www.discord.com/pyapril15");
+                          },
                         ),
                         SocialButton(
                           label: 'Instagram',
                           icon: FontAwesomeIcons.instagram,
-                          onPressed: () {launch("https://www.instagram.com/__pyapril15.py__");},
+                          onPressed: () {
+                            launch(
+                                "https://www.instagram.com/__pyapril15.py__");
+                          },
                         ),
                       ],
                     ),
@@ -529,7 +572,6 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
-
 
   // Footer
   Widget _buildFooter(double screenWidth) {
