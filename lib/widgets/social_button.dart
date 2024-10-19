@@ -13,7 +13,7 @@ class SocialButton extends StatefulWidget {
   });
 
   @override
-  _SocialButtonState createState() => _SocialButtonState();
+  State<SocialButton> createState() => _SocialButtonState();
 }
 
 class _SocialButtonState extends State<SocialButton> {

@@ -3,7 +3,7 @@ import 'package:portfolio_website/features/about_screen.dart';
 import 'package:portfolio_website/features/contact_screen.dart';
 import 'package:portfolio_website/features/project_screen.dart';
 import 'package:portfolio_website/features/skills_screen.dart';
-import '../../widgets/navbar.dart';
+import 'package:portfolio_website/widgets/navbar.dart';
 
 
 class HomeScreen extends StatefulWidget {
@@ -30,7 +30,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
 
     return SafeArea(
       child: Scaffold(
@@ -61,7 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     const SkillsSection(),
                     const AboutSection(),
                     const ContactSection(),
-                    _buildFooter(screenWidth),
+                    _buildFooter(),
                   ],
                 ),
               ),
@@ -74,7 +73,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   // Hero Section
   Widget _buildHeroSection(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
 
     return Padding(
       padding: const EdgeInsets.all(20.0),
@@ -87,22 +85,22 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                const Text(
                   'Hey Welcome!',
                   style: TextStyle(
-                    fontSize: screenWidth < 600 ? 16 : 20,
+                    fontSize: 20,
                     fontWeight: FontWeight.w400,
                     color: Colors.white,
                   ),
                 ),
                 const SizedBox(height: 10),
                 RichText(
-                  text: TextSpan(
+                  text: const TextSpan(
                     children: [
                       TextSpan(
                         text: "I'm ",
                         style: TextStyle(
-                          fontSize: screenWidth < 600 ? 24 : 32,
+                          fontSize: 20,
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
                         ),
@@ -110,7 +108,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       TextSpan(
                         text: 'Praveen Yadav',
                         style: TextStyle(
-                          fontSize: screenWidth < 600 ? 24 : 32,
+                          fontSize: 20,
                           fontWeight: FontWeight.bold,
                           color: Colors.blue,
                         ),
@@ -122,7 +120,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Text(
                   'Your Aspiring Fullstack Web Developer.',
                   style: TextStyle(
-                    fontSize: screenWidth < 600 ? 14 : 18,
+                    fontSize: 20,
                     color: Colors.grey[400],
                   ),
                 ),
@@ -218,26 +216,26 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   // Footer
-  Widget _buildFooter(double screenWidth) {
+  Widget _buildFooter() {
     return Container(
       padding: const EdgeInsets.all(20),
       color: Colors.blueGrey[900],
-      child: Column(
+      child: const Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
             '\u00A9 2024 Praveen Yadav. All rights reserved.',
             style: TextStyle(
               color: Colors.white,
-              fontSize: screenWidth < 600 ? 14 : 16,
+              fontSize: 16,
             ),
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: 10),
           Text(
             'Made with Flutter',
             style: TextStyle(
               color: Colors.white70,
-              fontSize: screenWidth < 600 ? 12 : 14,
+              fontSize: 14,
             ),
           ),
         ],
