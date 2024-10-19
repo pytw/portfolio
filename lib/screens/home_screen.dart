@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:portfolio_website/screens/skills_screen.dart';
 import 'package:portfolio_website/widgets/social_button.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:visibility_detector/visibility_detector.dart';
@@ -47,7 +48,8 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 _buildHeroSection(context),
                 _buildAnimatedSection(_buildProjectsSection(context), "Projects"),
-                _buildAnimatedSection(_buildSkillsSection(context), "Skills"),
+                SkillsSection(),
+                // _buildAnimatedSection(_buildSkillsSection(context), "Skills"),
                 _buildAnimatedSection(_buildAboutSection(context), "About"),
                 _buildAnimatedSection(_buildContactSection(context), "Contact"),
                 _buildFooter(screenWidth),
@@ -63,63 +65,141 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildHeroSection(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
 
-    return Stack(
-      children: [
-        Positioned.fill(
-          child: Image.asset(
-            'assets/images/bg.webp',
-            fit: BoxFit.cover,
-            errorBuilder: (context, error, stackTrace) {
-              return const Center(
-                  child: Text('Image not found',
-                      style: TextStyle(color: Colors.red)));
-            },
-          ),
-        ),
-        Container(
-          height: MediaQuery.of(context).size.height * 0.8,
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Colors.black.withOpacity(0.7), Colors.transparent],
-              begin: Alignment.bottomCenter,
-              end: Alignment.topCenter,
-            ),
-          ),
-          child: Center(
+    return Padding(
+      padding: const EdgeInsets.all(20.0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          // Left Section: Text and Buttons
+          Expanded(
+            flex: 2,
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Hi, I\'m Praveen Yadav',
-                  style: GoogleFonts.lato(
-                    textStyle: TextStyle(
-                      color: Colors.white,
-                      fontSize: screenWidth < 600 ? 32 : 48,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  'Hey Welcome!',
+                  style: TextStyle(
+                    fontSize: screenWidth < 600 ? 16 : 20,
+                    fontWeight: FontWeight.w400,
+                    color: Colors.white,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: "I'm ",
+                        style: TextStyle(
+                          fontSize: screenWidth < 600 ? 24 : 32,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                      TextSpan(
+                        text: 'Praveen Yadav',
+                        style: TextStyle(
+                          fontSize: screenWidth < 600 ? 24 : 32,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.blue,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 const SizedBox(height: 10),
                 Text(
-                  'BCA Student | Software Developer',
+                  'Your Aspiring Fullstack Web Developer.',
                   style: TextStyle(
-                      color: Colors.white70,
-                      fontSize: screenWidth < 600 ? 16 : 24),
+                    fontSize: screenWidth < 600 ? 14 : 18,
+                    color: Colors.grey[400],
+                  ),
                 ),
                 const SizedBox(height: 20),
-                CustomButton(
-                  label: 'Download CV',
-                  onPressed: () {
-                    // Action for CV download
-                  },
+                Row(
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        // Handle download resume action
+                      },
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 15),
+                        backgroundColor: Colors.black,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.0),
+                          side: BorderSide(color: Colors.white),
+                        ),
+                      ),
+                      child: const Text('Download Resume'),
+                    ),
+                    const SizedBox(width: 20),
+                    ElevatedButton(
+                      onPressed: () {
+                        // Handle see project action
+                      },
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 15),
+                        backgroundColor: Colors.blue,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                      ),
+                      child: const Text('See Project'),
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 20),
-                const SocialLinks(),
+                Row(
+                  children: [
+                    IconButton(
+                      onPressed: () {
+                        // Handle LinkedIn action
+                      },
+                      icon: Icon(Icons.linked_camera), // Replace with LinkedIn icon
+                      color: Colors.white,
+                    ),
+                    const SizedBox(width: 10),
+                    IconButton(
+                      onPressed: () {
+                        // Handle GitHub action
+                      },
+                      icon: Icon(Icons.code), // Replace with GitHub icon
+                      color: Colors.white,
+                    ),
+                    const SizedBox(width: 10),
+                    IconButton(
+                      onPressed: () {
+                        // Handle Twitter/X action
+                      },
+                      icon: Icon(Icons.alternate_email), // Replace with Twitter/X icon
+                      color: Colors.white,
+                    ),
+                  ],
+                ),
               ],
             ),
           ),
-        ),
-      ],
+
+          // Right Section: Image
+          Expanded(
+            flex: 1,
+            child: Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle, // Change to circle for circular shadow
+                color: Colors.blue
+              ),
+              child: ClipOval( // Use ClipOval for circular image
+                child: Image.asset(
+                  'assets/images/pyapril15.png', // Ensure the correct image path
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
