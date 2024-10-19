@@ -1,7 +1,5 @@
-import 'package:dev_icons/dev_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../widgets/navbar.dart';
 
 class SkillsScreen extends StatelessWidget {
@@ -16,7 +14,8 @@ class SkillsScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Skills', style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold)),
+            Text('Skills',
+                style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold)),
             SizedBox(height: 20),
             Text('- Flutter Development'),
             Text('- Java Programming'),
@@ -72,7 +71,7 @@ class SkillsSection extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
-                    child: SkillContainer(
+                    child: _SkillContainer(
                       title: 'Frontend',
                       icon: Icons.web,
                       skills: [
@@ -86,7 +85,7 @@ class SkillsSection extends StatelessWidget {
                   ),
                   const SizedBox(width: 10),
                   Expanded(
-                    child: SkillContainer(
+                    child: _SkillContainer(
                       title: 'Backend',
                       icon: Icons.storage,
                       skills: [
@@ -104,7 +103,7 @@ class SkillsSection extends StatelessWidget {
                   ),
                   const SizedBox(width: 10),
                   Expanded(
-                    child: SkillContainer(
+                    child: _SkillContainer(
                       title: 'Other Tools',
                       icon: Icons.build,
                       skills: [
@@ -113,7 +112,8 @@ class SkillsSection extends StatelessWidget {
                         Skill('NumPy', 'assets/icons/NumPy.svg'),
                         Skill('Git', 'assets/icons/Git.svg'),
                         Skill('Github', 'assets/icons/GitHub.svg'),
-                        Skill('Github Action', 'assets/icons/github-actions.svg'),
+                        Skill(
+                            'Github Action', 'assets/icons/github-actions.svg'),
                       ],
                     ),
                   ),
@@ -128,12 +128,12 @@ class SkillsSection extends StatelessWidget {
   }
 }
 
-class SkillContainer extends StatelessWidget {
+class _SkillContainer extends StatelessWidget {
   final String title;
   final IconData icon;
   final List<Skill> skills;
 
-  const SkillContainer({super.key,
+  const _SkillContainer({
     required this.title,
     required this.icon,
     required this.skills,
@@ -152,7 +152,7 @@ class SkillContainer extends StatelessWidget {
           BoxShadow(
             color: Colors.blue.withOpacity(0.5),
             blurRadius: 10,
-            offset: Offset(0, 5),
+            offset: const Offset(0, 5),
           ),
         ],
       ),
@@ -199,6 +199,7 @@ class SkillItem extends StatelessWidget {
   final String iconPath;
 
   const SkillItem({
+    super.key,
     required this.skillName,
     required this.iconPath,
   });
@@ -235,4 +236,3 @@ class Skill {
 
   Skill(this.name, this.iconPath);
 }
-

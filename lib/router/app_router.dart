@@ -1,9 +1,11 @@
 import 'package:go_router/go_router.dart';
-import '../screens/home_screen.dart';
-import '../screens/about_screen.dart';
-import '../screens/skills_screen.dart';
-import '../screens/projects_screen.dart';
-import '../screens/contact_screen.dart';
+import 'package:portfolio_website/features/project_screen.dart';
+
+import '../features/about_screen.dart';
+import '../features/contact_screen.dart';
+import '../features/home/home_screen.dart';
+import '../features/skills_screen.dart';
+
 
 final GoRouter router = GoRouter(
   routes: [
@@ -21,7 +23,7 @@ final GoRouter router = GoRouter(
     ),
     GoRoute(
       path: '/projects',
-      builder: (context, state) => const ProjectsScreen(),
+      builder: (context, state) => const ProjectScreen(),
     ),
     GoRoute(
       path: '/contact',

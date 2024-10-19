@@ -8,7 +8,7 @@ class Navbar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: const Text('Portfolio', style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold, letterSpacing: 1.2),),
+      title: const Text('PY', style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold, letterSpacing: 1.2),),
       actions: [
         TextButton.icon(
           onPressed: () => context.go('/'),

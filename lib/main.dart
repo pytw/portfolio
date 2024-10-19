@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:portfolio_website/router/app_router.dart';
+import 'package:portfolio_website/theme/theme.dart';
 
 import 'firebase/firebase_options.dart';
 
@@ -21,11 +21,7 @@ class PortfolioApp extends StatelessWidget {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       title: 'Portfolio - Praveen Yadav',
-      theme: ThemeData(
-        scaffoldBackgroundColor: Colors.black,
-        appBarTheme: const AppBarTheme(backgroundColor: Colors.black, foregroundColor: Colors.white),
-        textTheme: GoogleFonts.latoTextTheme(),
-      ),
+      theme: appTheme(),
       routerConfig: router, // GoRouter config from router.dart
     );
   }
