@@ -1,56 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:portfolio_website/theme/theme.dart';
+import 'package:portfolio_website/widgets/social_button.dart';
 import 'package:url_launcher/url_launcher_string.dart';
-import '../widgets/navbar.dart';
-import '../widgets/social_button.dart';
 
-class ContactScreen extends StatelessWidget {
-  const ContactScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold(
-      appBar: Navbar(),
-      body: Padding(
-        padding: EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Contact Me', style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold)),
-            SizedBox(height: 20),
-            Text('Email: praveen885127@gmail.com'),
-            Text('LinkedIn: linkedin.com/in/pyapril1507'),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class ContactSection extends StatelessWidget{
+class ContactSection extends StatelessWidget {
   const ContactSection({super.key});
 
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
-
     return Padding(
-      padding: EdgeInsets.all(screenWidth < 600 ? 10 : 20),
+      padding: EdgeInsets.symmetric(horizontal: AppSizes.paddingLarge.w, vertical: AppSizes.paddingLarge.h),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             "Let's get to know each other better.",
-            style: TextStyle(
-              fontSize: screenWidth < 600 ? 24 : 32,
-              fontWeight: FontWeight.bold,
-              color: Colors.blue,
-            ),
+            style: Theme.of(context).textTheme.headlineLarge,
           ),
-          const SizedBox(height: 20),
+          SizedBox(height: AppSizes.largeSpacing.h),
 
-          // Row for SVG and text with 50% width each
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -62,36 +33,29 @@ class ContactSection extends StatelessWidget{
                 ),
               ),
 
-              const SizedBox(width: 20), // Space between SVG and text
+              SizedBox(width: AppSizes.largeSpacing.w),
 
-              // Text with 50% width
               Expanded(
                 flex: 1,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: EdgeInsets.symmetric(horizontal: AppSizes.paddingSmall.w, vertical: AppSizes.paddingSmall.h),
                       child: Text(
                         "Thank you for visiting! This is your direct line to reach me. Whether you have a project in mind, a question about web development, or just want to say hello, I'm here and eager to connect with you.",
-                        style: TextStyle(
-                            fontSize: screenWidth < 600 ? 14 : 20,
-                            color: const Color(0xff9ca3af),
-                            height: 3),
+                        style: Theme.of(context).textTheme.bodyLarge!.copyWith(height: AppSizes.lineHeightExtraLarge.h, letterSpacing: AppSizes.letterSpacingLarge.w),
                       ),
                     ),
-                    const SizedBox(height: 40),
+                    SizedBox(height: AppSizes.extraLargeSpacing.h),
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 8.h),
                       child: Text(
                         "Reach me out:-",
-                        style: TextStyle(
-                          fontSize: screenWidth < 600 ? 14 : 20,
-                          color: const Color(0xff9ca3af),
-                        ),
+                        style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: const Color(0xff9ca3af)),
                       ),
                     ),
-                    const SizedBox(height: 5),
+                    SizedBox(height: AppSizes.smallSpacing.h),
                     // Email Button
                     SocialButton(
                       label: 'praveen885127@gmail.com',
@@ -100,11 +64,11 @@ class ContactSection extends StatelessWidget{
                         launchUrlString('mailto:praveen885127@gmail.com');
                       },
                     ),
-                    const SizedBox(height: 40),
+                    SizedBox(height: 50.h),
 
                     // Social Links as buttons
                     Wrap(
-                      spacing: screenWidth < 600 ? 10 : 20,
+                      spacing: 20.w,
                       runSpacing: 10,
                       children: [
                         SocialButton(
@@ -118,21 +82,24 @@ class ContactSection extends StatelessWidget{
                           label: 'LinkedIn',
                           icon: FontAwesomeIcons.linkedin,
                           onPressed: () {
-                            launchUrlString("https://www.linkedin.com/pyapril1507");
+                            launchUrlString(
+                                "https://www.linkedin.com/pyapril1507");
                           },
                         ),
                         SocialButton(
                           label: 'Twitter',
                           icon: FontAwesomeIcons.twitter,
                           onPressed: () {
-                            launchUrlString("https://www.twitter.com/pyapril15");
+                            launchUrlString(
+                                "https://www.twitter.com/pyapril15");
                           },
                         ),
                         SocialButton(
                           label: 'Discord',
                           icon: FontAwesomeIcons.discord,
                           onPressed: () {
-                            launchUrlString('https://www.discord.com/pyapril15');
+                            launchUrlString(
+                                'https://www.discord.com/pyapril15');
                           },
                         ),
                         SocialButton(

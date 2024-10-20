@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SocialButton extends StatefulWidget {
   final String label;
@@ -38,8 +39,8 @@ class _SocialButtonState extends State<SocialButton> {
           decoration: BoxDecoration(
             border: Border(
               bottom: BorderSide(
-                color: _isHovering ? Colors.blue : Colors.transparent,
-                width: 2.0,
+                color: _isHovering ? Theme.of(context).primaryColor : Colors.transparent,
+                width: 3.h,
               ),
             ),
           ),
@@ -47,7 +48,7 @@ class _SocialButtonState extends State<SocialButton> {
             onPressed: widget.onPressed,
             style: ButtonStyle(
               backgroundColor: WidgetStateProperty.all<Color>(Colors.transparent), // Transparent background
-              padding: WidgetStateProperty.all<EdgeInsets>(const EdgeInsets.all(8)),
+              padding: WidgetStateProperty.all<EdgeInsets>(EdgeInsets.symmetric(horizontal: 8.w, vertical: 8.h)),
               shadowColor: WidgetStateProperty.all<Color>(Colors.transparent), // No shadow
             ),
             icon: Icon(
