@@ -1,29 +1,55 @@
 import 'package:flutter/material.dart';
+import 'package:portfolio_website/widgets/image.dart';
+import 'package:portfolio_website/widgets/text.dart';
 
 class ProjectSection extends StatelessWidget {
   const ProjectSection({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16),
+    return const Padding(
+      padding: EdgeInsets.all(20.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Projects',
-            style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+          Text(
+            'Here is a glimpse of what I have done.',
+            style: TextStyle(
+              fontSize: 28,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
           ),
-          const SizedBox(height: 16),
-          ProjectItem(
-            title: 'Project 1',
-            description: 'This is a description of project 1.',
-            onTap: () {},
+          SizedBox(height: 20),
+          // First project: Image on the left, Text on the right
+          _ProjectCard(
+            title: 'Dashboard',
+            description:
+            'Our MERN dashboard: The all-in-one command center for managing and visualizing data, simplified for you.',
+            imagePath: 'assets/images/admin-dashboard.webp',
+            // Placeholder path for the image
+            features: [
+              'CRUD operation',
+              'JWT auth',
+              'Forget/Reset password',
+              'Admin and User based access'
+            ],
+            isImageLeft: true,
           ),
-          ProjectItem(
-            title: 'Project 2',
-            description: 'This is a description of project 2.',
-            onTap: () {},
+          SizedBox(height: 30),
+          // Second project: Text on the left, Image on the right
+          _ProjectCard(
+            title: 'Chat App',
+            description:
+            'Discover our Chat App — an uncomplicated chat app for straightforward conversations, powered by the latest technologies.',
+            imagePath:
+            'assets/images/chat-app.webp', // Placeholder path for the image
+            features: [
+              'Quick login with Google',
+              'Add friend with Email',
+              'Send messages in real-time'
+            ],
+            isImageLeft: false,
           ),
         ],
       ),
@@ -31,41 +57,39 @@ class ProjectSection extends StatelessWidget {
   }
 }
 
-class ProjectItem extends StatelessWidget {
+class _ProjectCard extends StatelessWidget {
   final String title;
   final String description;
-  final VoidCallback onTap;
+  final String imagePath;
+  final List<String> features;
+  final bool isImageLeft;
 
-  const ProjectItem({
-    super.key,
-    required this.title,
-    required this.description,
-    required this.onTap,
-  });
+  const _ProjectCard(
+      {required this.title,
+        required this.description,
+        required this.imagePath,
+        required this.features,
+        this.isImageLeft = true});
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Card(
-        elevation: 3,
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                title,
-                style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                description,
-                style: TextStyle(fontSize: 16, color: Colors.grey[700]),
-              ),
-            ],
-          ),
-        ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: isImageLeft
+            ? [
+          // Image on the Left
+          assetImage(imagePath),
+          const SizedBox(width: 20), // Space between image and text
+          listDetail(title, description, features),
+        ]
+            : [
+          // Text on the Left
+          listDetail(title, description, features),
+          const SizedBox(width: 20), // Space between text and image
+          assetImage(imagePath),
+        ],
       ),
     );
   }

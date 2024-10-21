@@ -16,7 +16,7 @@ class Footer extends StatelessWidget {
             '\u00A9 2024 Praveen Yadav. All rights reserved.',
             style: Theme.of(context).textTheme.bodyLarge,
           ),
-          SizedBox(height: AppSizes.mediumSpacing.h),
+          SizedBox(height: AppSizes.mediumSpaceBtwItems.h),
           Text(
             'Made with Flutter',
             style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: Colors.grey[500]),

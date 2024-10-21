@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:portfolio_website/theme/theme.dart';
 
 class SocialButton extends StatefulWidget {
   final String label;
@@ -23,7 +24,9 @@ class _SocialButtonState extends State<SocialButton> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: EdgeInsets.symmetric(
+          horizontal: AppSizes.paddingSmall.w,
+          vertical: AppSizes.paddingSmall.h),
       child: MouseRegion(
         onEnter: (_) {
           setState(() {
@@ -39,28 +42,35 @@ class _SocialButtonState extends State<SocialButton> {
           decoration: BoxDecoration(
             border: Border(
               bottom: BorderSide(
-                color: _isHovering ? Theme.of(context).primaryColor : Colors.transparent,
-                width: 3.h,
+                color: _isHovering
+                    ? Theme.of(context).primaryColor
+                    : Colors.transparent,
+                width: AppSizes.borderSmall.h,
               ),
             ),
           ),
           child: ElevatedButton.icon(
             onPressed: widget.onPressed,
             style: ButtonStyle(
-              backgroundColor: WidgetStateProperty.all<Color>(Colors.transparent), // Transparent background
-              padding: WidgetStateProperty.all<EdgeInsets>(EdgeInsets.symmetric(horizontal: 8.w, vertical: 8.h)),
-              shadowColor: WidgetStateProperty.all<Color>(Colors.transparent), // No shadow
+              overlayColor: WidgetStateProperty.all<Color>(Colors.transparent),
+              backgroundColor: WidgetStateProperty.all<Color>(
+                  Colors.transparent), // Transparent background
+              padding: WidgetStateProperty.all<EdgeInsets>(EdgeInsets.symmetric(
+                  horizontal: AppSizes.paddingSmall.w,
+                  vertical: AppSizes.paddingSmall.h)),
+              shadowColor: WidgetStateProperty.all<Color>(
+                  Colors.transparent), // No shadow
             ),
             icon: Icon(
               widget.icon,
-              size: _isHovering ? 28 : 24, // Increase icon size on hover
-              color: _isHovering ? Colors.blue : Colors.white, // Change color on hover
+              size: _isHovering? AppSizes.iconSizeMedium: AppSizes.iconSizeSmall, // Increase icon size on hover
+              color: _isHovering? Theme.of(context).primaryColor: Theme.of(context).colorScheme.onPrimary, // Change color on hover
             ),
             label: Text(
               widget.label,
               style: TextStyle(
-                fontSize: _isHovering ? 24 : 20, // Increase text size on hover
-                color: _isHovering ? Colors.blue : Colors.white, // Change text color on hover
+                fontSize: _isHovering?AppSizes.extraMediumFontSize:AppSizes.smallFontSize, // Increase text size on hover
+                color: _isHovering?Theme.of(context).primaryColor:Theme.of(context).colorScheme.onPrimary, // Change text color on hover
               ),
             ),
           ),

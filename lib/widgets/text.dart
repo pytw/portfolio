@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 Widget listDetail(String title, String description,
-    List<String> features, double screenWidth) {
+    List<String> features) {
   return Expanded(
     flex: 1,
     child: Column(
@@ -9,8 +9,8 @@ Widget listDetail(String title, String description,
       children: [
         Text(
           title,
-          style: TextStyle(
-            fontSize: screenWidth < 600 ? 18 : 22,
+          style: const TextStyle(
+            fontSize: 22,
             fontWeight: FontWeight.bold,
             color: Colors.blue,
           ),
@@ -18,8 +18,8 @@ Widget listDetail(String title, String description,
         const SizedBox(height: 10),
         Text(
           description,
-          style: TextStyle(
-            fontSize: screenWidth < 600 ? 14 : 16,
+          style: const TextStyle(
+            fontSize: 16,
             color: Colors.white,
           ),
         ),
@@ -33,8 +33,8 @@ Widget listDetail(String title, String description,
                 const SizedBox(width: 5),
                 Text(
                   feature,
-                  style: TextStyle(
-                    fontSize: screenWidth < 600 ? 12 : 14,
+                  style: const TextStyle(
+                    fontSize: 14,
                     color: Colors.white,
                   ),
                 ),

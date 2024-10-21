@@ -39,23 +39,27 @@ class _NavbarState extends State<Navbar> {
     return AppBar(
       backgroundColor: Colors.black87,
       elevation: 0,
-      title: Row(
-        children: [
-          const Text(
-            'PY',
-            style: TextStyle(
-              color: Colors.blue,
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
+      title: Container(
+        margin: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width*0.025),
+        width: MediaQuery.of(context).size.width*0.95,
+        child: Row(
+          children: [
+            const Text(
+              'PY',
+              style: TextStyle(
+                color: Colors.blue,
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-          ),
-          const Spacer(),
-          _buildNavItem(Icons.home, 'Home'),
-          _buildNavItem(Icons.work, 'Projects'),
-          _buildNavItem(Icons.code, 'Skills'),
-          _buildNavItem(Icons.person, 'About'),
-          _buildNavItem(Icons.contact_mail, 'Contact'),
-        ],
+            const Spacer(),
+            _buildNavItem(Icons.home, 'Home'),
+            _buildNavItem(Icons.work, 'Projects'),
+            _buildNavItem(Icons.code, 'Skills'),
+            _buildNavItem(Icons.person, 'About'),
+            _buildNavItem(Icons.contact_mail, 'Contact'),
+          ],
+        ),
       ),
     );
   }
