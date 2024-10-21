@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:portfolio_website/animations/slide_in_animation.dart';
 
 class SkillsSection extends StatelessWidget {
   const SkillsSection({super.key});
@@ -43,50 +44,62 @@ class SkillsSection extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
-                    child: _SkillContainer(
-                      title: 'Frontend',
-                      icon: Icons.web,
-                      skills: [
-                        Skill('Flutter', 'assets/icons/Flutter.svg'),
-                        Skill('Tkinter', 'assets/icons/Python.svg'),
-                        Skill('Qt', 'assets/icons/Qt-Framework.svg'),
-                        Skill('HTML', 'assets/icons/HTML5.svg'),
-                        Skill('CSS', 'assets/icons/css3.svg'),
-                      ],
+                    child: CustomAnimation(
+                      animationType: AnimationType.slide,
+                      begin: const Offset(-1.0, 0.0),
+                      child: _SkillContainer(
+                        title: 'Frontend',
+                        icon: Icons.web,
+                        skills: [
+                          Skill('Flutter', 'assets/icons/Flutter.svg'),
+                          Skill('Tkinter', 'assets/icons/Python.svg'),
+                          Skill('Qt', 'assets/icons/Qt-Framework.svg'),
+                          Skill('HTML', 'assets/icons/HTML5.svg'),
+                          Skill('CSS', 'assets/icons/css3.svg'),
+                        ],
+                      ),
                     ),
                   ),
                   const SizedBox(width: 10),
                   Expanded(
-                    child: _SkillContainer(
-                      title: 'Backend',
-                      icon: Icons.storage,
-                      skills: [
-                        Skill('Firebase', 'assets/icons/Firebase.svg'),
-                        Skill('Dart', 'assets/icons/Dart.svg'),
-                        Skill('Python', 'assets/icons/Python.svg'),
-                        Skill('Java', 'assets/icons/Java.svg'),
-                        Skill('Django', 'assets/icons/Django.svg'),
-                        Skill('Django Rest', 'assets/icons/django-rest.svg'),
-                        Skill('MySQL', 'assets/icons/MySQl.svg'),
-                        Skill('SQLite', 'assets/icons/SQLite.svg'),
-                        Skill('Postman', 'assets/icons/Postman.svg'),
-                      ],
+                    child: CustomAnimation(
+                      animationType: AnimationType.slide,
+                      begin: const Offset(0.0, -1.0),
+                      child: _SkillContainer(
+                        title: 'Backend',
+                        icon: Icons.storage,
+                        skills: [
+                          Skill('Firebase', 'assets/icons/Firebase.svg'),
+                          Skill('Dart', 'assets/icons/Dart.svg'),
+                          Skill('Python', 'assets/icons/Python.svg'),
+                          Skill('Java', 'assets/icons/Java.svg'),
+                          Skill('Django', 'assets/icons/Django.svg'),
+                          Skill('Django Rest', 'assets/icons/django-rest.svg'),
+                          Skill('MySQL', 'assets/icons/MySQl.svg'),
+                          Skill('SQLite', 'assets/icons/SQLite.svg'),
+                          Skill('Postman', 'assets/icons/Postman.svg'),
+                        ],
+                      ),
                     ),
                   ),
                   const SizedBox(width: 10),
                   Expanded(
-                    child: _SkillContainer(
-                      title: 'Other Tools',
-                      icon: Icons.build,
-                      skills: [
-                        Skill('Matplotlib', 'assets/icons/Matplotlib.svg'),
-                        Skill('Pandas', 'assets/icons/pandas.svg'),
-                        Skill('NumPy', 'assets/icons/NumPy.svg'),
-                        Skill('Git', 'assets/icons/Git.svg'),
-                        Skill('Github', 'assets/icons/GitHub.svg'),
-                        Skill(
-                            'Github Action', 'assets/icons/github-actions.svg'),
-                      ],
+                    child: CustomAnimation(
+                      animationType: AnimationType.slide,
+                      begin: const Offset(1.0, 0.0),
+                      child: _SkillContainer(
+                        title: 'Other Tools',
+                        icon: Icons.build,
+                        skills: [
+                          Skill('Matplotlib', 'assets/icons/Matplotlib.svg'),
+                          Skill('Pandas', 'assets/icons/pandas.svg'),
+                          Skill('NumPy', 'assets/icons/NumPy.svg'),
+                          Skill('Git', 'assets/icons/Git.svg'),
+                          Skill('Github', 'assets/icons/GitHub.svg'),
+                          Skill(
+                              'Github Action', 'assets/icons/github-actions.svg'),
+                        ],
+                      ),
                     ),
                   ),
                 ],
