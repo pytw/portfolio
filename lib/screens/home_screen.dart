@@ -54,6 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
         appBar: Navbar(
@@ -83,34 +84,50 @@ class _HomeScreenState extends State<HomeScreen> {
           child: SingleChildScrollView(
             controller: _scrollController,
             child: Container(
-              margin: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width*0.025),
-              width: MediaQuery.of(context).size.width*0.95,
+              margin: EdgeInsets.symmetric(horizontal: mediaQuery.width*0.025),
+              width: mediaQuery.width*0.95,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Container(
                     key: _homeKey,
+                    margin: EdgeInsets.symmetric(vertical: mediaQuery.height*0.025),
+                    height: mediaQuery.height*0.95,
                     child: const HeroSection(), // Home Section
                   ),
-                  SizedBox(height: AppSizes.spaceBtwSections.h),
+                  SizedBox(height: AppSizes.mediumSpaceBtwItems.h),
                   Container(
                     key: _projectsKey,
+                    margin: EdgeInsets.symmetric(vertical: mediaQuery.height*0.025),
+                    height: mediaQuery.height*0.95,
                     child: const ProjectSection(), // Project Section
                   ),
-                  SizedBox(height: AppSizes.spaceBtwSections.h),
+                  SizedBox(height: AppSizes.mediumSpaceBtwItems.h),
                   Container(
                     key: _skillsKey,
+                    margin: EdgeInsets.symmetric(vertical: mediaQuery.height*0.025),
+                    height: mediaQuery.height*0.95,
                     child: const SkillsSection(), // Skills Section
                   ),
-                  SizedBox(height: AppSizes.spaceBtwSections.h),
-                  Container(
-                    key: _aboutKey,
-                    child: const AboutSection(), // About Section
+                  SizedBox(height: AppSizes.mediumSpaceBtwItems.h),
+                  ColoredBox(
+                    color: Colors.green,
+                    child: Container(
+                      key: _aboutKey,
+                      margin: EdgeInsets.symmetric(vertical: mediaQuery.height*0.025),
+                      height: mediaQuery.height*0.95,
+                      child: const AboutSection(), // About Section
+                    ),
                   ),
-                  SizedBox(height: AppSizes.spaceBtwSections.h),
-                  Container(
-                    key: _contactKey,
-                    child: const ContactSection(), // Contact Section
+                  SizedBox(height: AppSizes.mediumSpaceBtwItems.h),
+                  ColoredBox(
+                    color: Colors.red,
+                    child: Container(
+                      key: _contactKey,
+                      margin: EdgeInsets.symmetric(vertical: mediaQuery.height*0.025),
+                      height: mediaQuery.height*0.95,
+                      child: const ContactSection(), // Contact Section
+                    ),
                   ),
                   const Footer(), // Footer
                 ],

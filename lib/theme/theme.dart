@@ -35,7 +35,6 @@ class AppSizes {
   static const double smallSpaceBtwItems= 8.0;
   static const double mediumSpaceBtwItems = 16.0;
   static const double largeSpaceBtwItems = 48.0;
-  static const double spaceBtwSections = 64.0;
 
   // border
   static const double borderSmall = 4.0;
