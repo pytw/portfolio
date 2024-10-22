@@ -110,24 +110,18 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: const SkillsSection(), // Skills Section
                   ),
                   SizedBox(height: AppSizes.mediumSpaceBtwItems.h),
-                  ColoredBox(
-                    color: Colors.green,
-                    child: Container(
-                      key: _aboutKey,
-                      margin: EdgeInsets.symmetric(vertical: mediaQuery.height*0.025),
-                      height: mediaQuery.height*0.95,
-                      child: const AboutSection(), // About Section
-                    ),
+                  Container(
+                    key: _aboutKey,
+                    margin: EdgeInsets.symmetric(vertical: mediaQuery.height*0.025),
+                    height: mediaQuery.height*0.95,
+                    child: const AboutSection(), // About Section
                   ),
                   SizedBox(height: AppSizes.mediumSpaceBtwItems.h),
-                  ColoredBox(
-                    color: Colors.red,
-                    child: Container(
-                      key: _contactKey,
-                      margin: EdgeInsets.symmetric(vertical: mediaQuery.height*0.025),
-                      height: mediaQuery.height*0.95,
-                      child: const ContactSection(), // Contact Section
-                    ),
+                  Container(
+                    key: _contactKey,
+                    margin: EdgeInsets.symmetric(vertical: mediaQuery.height*0.025),
+                    height: mediaQuery.height*0.95,
+                    child: const ContactSection(), // Contact Section
                   ),
                   const Footer(), // Footer
                 ],
