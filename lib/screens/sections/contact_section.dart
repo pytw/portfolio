@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:portfolio_website/animations/slide_in_animation.dart';
 import 'package:portfolio_website/theme/theme.dart';
+import 'package:portfolio_website/widgets/custom_header.dart';
 import 'package:portfolio_website/widgets/social_button.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
@@ -20,17 +21,17 @@ class ContactSection extends StatelessWidget {
       child: LayoutBuilder(
         builder: (context, constraints) {
           double bodyFontSize = AppSizes.largeFontSize.sp;
-          double headingFontSize = 48.sp;
+          double headingFontSize = AppSizes.headingFontSize.sp;
 
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                "Let's get to know each other better.",
-                style: Theme.of(context)
-                    .textTheme
-                    .headlineMedium
-                    ?.copyWith(fontSize: headingFontSize),
+              CustomHeader(
+                titleText: "Let's get ",
+                titleColor: Theme.of(context).primaryColor,
+                subtitleText: 'to know each other better.',
+                subtitleColor: Theme.of(context).colorScheme.onPrimary,
+                headingFontSize: headingFontSize,
               ),
               SizedBox(height: AppSizes.largeSpaceBtwItems.h),
               Expanded(

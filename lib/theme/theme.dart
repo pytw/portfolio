@@ -24,6 +24,8 @@ class AppSizes {
   static const double largeFontSize = 24.0;
   static const double extraLargeFontSize = 28.0;
 
+  static const double headingFontSize = 36.0;
+
   // padding
   static const double paddingExtraSmall = 4.0;
   static const double paddingSmall = 8.0;
@@ -32,7 +34,7 @@ class AppSizes {
   static const double paddingExtraLarge = 32.0;
 
   // spacing
-  static const double smallSpaceBtwItems= 8.0;
+  static const double smallSpaceBtwItems = 8.0;
   static const double mediumSpaceBtwItems = 16.0;
   static const double largeSpaceBtwItems = 48.0;
 
@@ -117,6 +119,12 @@ class AppTextStyles {
   );
 }
 
+final scrollbarThemeData = ScrollbarThemeData(
+  thumbColor: WidgetStateProperty.all(Colors.blue),
+  thickness: WidgetStateProperty.all(AppSizes.borderRadiusSmall),
+  radius: const Radius.circular(AppSizes.borderRadiusMedium),
+);
+
 // InputDecoration Theme
 final inputDecorationTheme = InputDecorationTheme(
   filled: true,
@@ -133,21 +141,24 @@ final inputDecorationTheme = InputDecorationTheme(
     borderRadius: BorderRadius.circular(AppSizes.borderRadiusMedium),
     borderSide: const BorderSide(color: AppColors.primaryColor, width: 2),
   ),
-  hintStyle: GoogleFonts.poppins(color: AppColors.onBackground.withOpacity(0.5)),
+  hintStyle:
+      GoogleFonts.poppins(color: AppColors.onBackground.withOpacity(0.5)),
 );
 
 // Button Themes
 final elevatedButtonTheme = ElevatedButtonThemeData(
   style: ElevatedButton.styleFrom(
     backgroundColor: AppColors.primaryColor,
-    padding: const EdgeInsets.symmetric(horizontal: AppSizes.paddingMedium, vertical: AppSizes.paddingSmall),
+    padding: const EdgeInsets.symmetric(
+        horizontal: AppSizes.paddingMedium, vertical: AppSizes.paddingSmall),
     textStyle: AppTextStyles.buttonText,
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(AppSizes.borderRadiusLarge),
     ),
   ).copyWith(
     elevation: ButtonStyleButton.allOrNull(5),
-    shadowColor: WidgetStateProperty.all(AppColors.primaryColor.withOpacity(0.2)),
+    shadowColor:
+        WidgetStateProperty.all(AppColors.primaryColor.withOpacity(0.2)),
   ),
 );
 
@@ -155,7 +166,8 @@ final outlinedButtonTheme = OutlinedButtonThemeData(
   style: OutlinedButton.styleFrom(
     foregroundColor: AppColors.primaryColor,
     side: const BorderSide(color: AppColors.primaryColor),
-    padding: const EdgeInsets.symmetric(horizontal: AppSizes.paddingMedium, vertical: AppSizes.paddingSmall),
+    padding: const EdgeInsets.symmetric(
+        horizontal: AppSizes.paddingMedium, vertical: AppSizes.paddingSmall),
     textStyle: AppTextStyles.buttonText,
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(AppSizes.borderRadiusMedium),
@@ -168,7 +180,8 @@ final outlinedButtonTheme = OutlinedButtonThemeData(
 final textButtonTheme = TextButtonThemeData(
   style: TextButton.styleFrom(
     foregroundColor: AppColors.primaryColor,
-    padding: const EdgeInsets.symmetric(horizontal: AppSizes.paddingMedium, vertical: AppSizes.paddingSmall),
+    padding: const EdgeInsets.symmetric(
+        horizontal: AppSizes.paddingMedium, vertical: AppSizes.paddingSmall),
     textStyle: AppTextStyles.buttonText,
   ).copyWith(
     elevation: ButtonStyleButton.allOrNull(0),
@@ -194,7 +207,8 @@ final cardTheme = CardTheme(
 // Snack bar Theme
 final snackBarTheme = SnackBarThemeData(
   backgroundColor: AppColors.primaryColor,
-  contentTextStyle: AppTextStyles.bodyText2.copyWith(color: AppColors.onPrimary),
+  contentTextStyle:
+      AppTextStyles.bodyText2.copyWith(color: AppColors.onPrimary),
 );
 
 // Define the Overall Theme Data
@@ -209,6 +223,7 @@ ThemeData appTheme() {
     outlinedButtonTheme: outlinedButtonTheme,
     textButtonTheme: textButtonTheme,
     appBarTheme: appBarTheme,
+    scrollbarTheme: scrollbarThemeData,
     textTheme: TextTheme(
       headlineLarge: AppTextStyles.headline1,
       headlineMedium: AppTextStyles.headline2,

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:portfolio_website/animations/slide_in_animation.dart';
+import 'package:portfolio_website/theme/theme.dart';
 import 'package:portfolio_website/widgets/custom_button.dart';
 
 class ProjectSection extends StatelessWidget {
@@ -9,72 +10,36 @@ class ProjectSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ProjectDetail project = _singleProject();
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.h),
+      padding: EdgeInsets.symmetric(
+        horizontal: AppSizes.paddingLarge.w,
+        vertical: AppSizes.paddingLarge.h,
+      ),
       child: LayoutBuilder(
         builder: (context, constraints) {
+          double bodyFontSize = AppSizes.mediumFontSize.sp;
+          double mediumHeadingFontSize = AppSizes.extraLargeFontSize.sp;
+          double iconSize = AppSizes.iconSizeMedium.sp;
+
           return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                'Project Section',
-                style: TextStyle(
-                  fontSize: 36.sp,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
-              SizedBox(height: 16.h), // Space between title and grid
-              Expanded(
-                child: Column(
-                  children: [
-                    // First Row
-                    Expanded(
-                      child: Row(
-                        children: [
-                          _Quadrant(
-                            content: Image.asset(
-                              'assets/images/admin-dashboard.webp', // First image path
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                          _Quadrant(
-                            content: _OverviewContent(), // Overview content
-                          ),
-                        ],
+              _buildHeader(context),
+              SizedBox(height: AppSizes.largeSpaceBtwItems.h),
+              _buildProjectRow(
+                  project, context, mediumHeadingFontSize, bodyFontSize),
+              SizedBox(height: AppSizes.largeSpaceBtwItems.h),
+              Align(
+                alignment: Alignment.centerRight,
+                child: CustomButton(
+                  onPressed: () {},
+                  label: "More projects",
+                  icon: Icons.read_more_outlined,
+                  iconFirst: false,
+                  iconSize: iconSize,
+                  textStyle: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                        fontSize: bodyFontSize,
                       ),
-                    ),
-                    // Second Row
-                    Expanded(
-                      child: Row(
-                        children: [
-                          _Quadrant(
-                            content: _TechnologiesContent(), // Technologies content
-                          ),
-                          _Quadrant(
-                            content: Image.asset(
-                              'assets/images/chat-app.webp', // Second image path
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: CustomButton(
-                        onPressed: () {},
-                        label: "More projects",
-                        icon: FontAwesomeIcons.link,
-                        iconFirst: false,
-                        iconSize: 24,
-                        textStyle: Theme.of(context)
-                            .textTheme
-                            .bodyLarge!
-                            .copyWith(fontSize: 24),
-                      ),
-                    ),
-                  ],
                 ),
               ),
             ],
@@ -83,74 +48,22 @@ class ProjectSection extends StatelessWidget {
       ),
     );
   }
-}
 
-// Reusable Quadrant Widget
-class _Quadrant extends StatelessWidget {
-  final Widget content; // Content of the quadrant
-
-  const _Quadrant({required this.content});
-
-  @override
-  Widget build(BuildContext context) {
+  Expanded _buildProjectRow(ProjectDetail project, BuildContext context,
+      double mediumHeadingFontSize, double bodyFontSize) {
     return Expanded(
-      child: Container(
-        padding: EdgeInsets.all(20.w),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15),
-          border: Border.all(color: Colors.blue),
-          color: Colors.black.withOpacity(0.7),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.blue.withOpacity(0.5),
-              blurRadius: 10,
-              offset: const Offset(0, 5),
-            ),
-          ],
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(15),
-          child: content, // Use the content passed
-        ),
-      ),
-    );
-  }
-}
-
-// Overview Content Widget
-class _OverviewContent extends StatelessWidget {
-  const _OverviewContent();
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.blue.withOpacity(0.7), // Color for the overview content
-        borderRadius: BorderRadius.circular(15),
-      ),
-      padding: EdgeInsets.all(16.w),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text(
-            'Project Overview',
-            style: TextStyle(
-              fontSize: 24.sp,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
-          ),
-          SizedBox(height: 10.h),
+          _buildSvgImage(project),
+          SizedBox(width: AppSizes.largeSpaceBtwItems.w),
           Expanded(
-            child: SingleChildScrollView(
-              child: Text(
-                "This project is designed to showcase the integration of various technologies in creating an effective application. The goal is to develop a user-friendly interface while ensuring robust backend support. Key features include real-time data synchronization, responsive design, and seamless user experience. The project aims to bridge the gap between front-end and back-end functionalities.",
-                style: TextStyle(
-                  fontSize: 16.sp,
-                  color: Colors.white,
-                  height: 1.5, // Line height for better readability
-                ),
-                textAlign: TextAlign.left,
+            flex: 1,
+            child: CustomAnimation(
+              animationType: AnimationType.scale,
+              child: SingleChildScrollView(
+                child: _buildWrapTexts(
+                    project, context, mediumHeadingFontSize, bodyFontSize),
               ),
             ),
           ),
@@ -158,99 +71,86 @@ class _OverviewContent extends StatelessWidget {
       ),
     );
   }
-}
 
-// Technologies Content Widget
-class _TechnologiesContent extends StatelessWidget {
-  const _TechnologiesContent();
+  Wrap _buildWrapTexts(ProjectDetail project, BuildContext context,
+      double mediumHeadingFontSize, double bodyFontSize) {
+    return Wrap(
+      spacing: AppSizes.mediumSpaceBtwItems.w,
+      runSpacing: AppSizes.mediumSpaceBtwItems.h,
+      alignment: WrapAlignment.center,
+      children: [
+        Text(
+          project.title,
+          style: Theme.of(context).textTheme.headlineSmall!.copyWith(
+                fontSize: mediumHeadingFontSize,
+              ),
+        ),
+        Text(
+          project.overView,
+          style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                height: AppSizes.lineHeightLarge.h,
+                letterSpacing: AppSizes.letterSpacingLarge.w,
+                color: Theme.of(context).colorScheme.onSecondary,
+                fontSize: bodyFontSize,
+              ),
+        ),
+        _buildWrapChipSvgImage(project),
+      ],
+    );
+  }
 
-  @override
-  Widget build(BuildContext context) {
-    final technologies = [
-      Technology('Flutter', 'assets/icons/flutter.svg'),
-      Technology('Dart', 'assets/icons/dart.svg'),
-      Technology('Firebase', 'assets/icons/firebase.svg'),
-      Technology('Git', 'assets/icons/git.svg'),
-    ];
-
-    return Container(
-      padding: EdgeInsets.all(16.w),
-      decoration: BoxDecoration(
-        color: Colors.blue.withOpacity(0.7), // Color for the technologies content
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            'Technologies Used',
-            style: TextStyle(
-              fontSize: 24.sp,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
+  Wrap _buildWrapChipSvgImage(ProjectDetail project) {
+    return Wrap(
+      spacing: AppSizes.mediumSpaceBtwItems.w,
+      children: project.skills.map((skill) {
+        return Chip(
+          label: Text(skill.name),
+          avatar: SvgPicture.asset(
+            skill.iconPath,
+            fit: BoxFit.cover,
           ),
-          SizedBox(height: 10.h),
-          Expanded(
-            child: ListView(
-              children: technologies.map((tech) {
-                return TechnologyItem(
-                  techName: tech.name,
-                  iconPath: tech.iconPath,
-                );
-              }).toList(),
-            ),
+        );
+      }).toList(),
+    );
+  }
+
+  Expanded _buildSvgImage(ProjectDetail project) {
+    return Expanded(
+      flex: 1,
+      child: CustomAnimation(
+        animationType: AnimationType.scale,
+        child: AspectRatio(
+          aspectRatio: 1,
+          child: Image.asset(
+            project.imagePath,
+            fit: BoxFit.contain,
           ),
-        ],
+        ),
       ),
     );
   }
-}
 
-// Technology Item Widget
-class TechnologyItem extends StatelessWidget {
-  final String techName;
-  final String iconPath;
-
-  const TechnologyItem({
-    super.key,
-    required this.techName,
-    required this.iconPath,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: 5.h), // Adjusted padding for smaller size
-      child: Container(
-        padding: EdgeInsets.all(10.w), // Smaller padding
-        decoration: BoxDecoration(
-          color: Colors.grey[800]?.withOpacity(0.8),
-          borderRadius: BorderRadius.circular(10),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.blue.withOpacity(0.3),
-              blurRadius: 5,
-              offset: const Offset(0, 2),
-            ),
-          ],
-        ),
-        child: Row(
+  Widget _buildHeader(BuildContext context) {
+    double headingFontSize = AppSizes.headingFontSize.sp;
+    return Align(
+      alignment: Alignment.topLeft,
+      child: RichText(
+        text: TextSpan(
           children: [
-            SvgPicture.asset(
-              iconPath,
-              width: 30.w, // Smaller icon size
-              height: 30.h,
-              fit: BoxFit.cover,
+            TextSpan(
+              text: 'Here is a glimpse of what ',
+              style: TextStyle(
+                fontSize: headingFontSize,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
             ),
-            SizedBox(width: 10.w),
-            Expanded(
-              child: Text(
-                techName,
-                style: TextStyle(
-                  fontSize: 18.sp, // Smaller text size
-                  color: const Color(0xff9ca3af),
-                ),
+            TextSpan(
+              text: 'I have done.',
+              style: TextStyle(
+                fontSize: headingFontSize,
+                fontWeight: FontWeight.bold,
+                color: Colors.blue,
               ),
             ),
           ],
@@ -260,10 +160,37 @@ class TechnologyItem extends StatelessWidget {
   }
 }
 
-// Technology Class
-class Technology {
+ProjectDetail _singleProject() {
+  return ProjectDetail(
+    "Dashboard",
+    "assets/images/admin-dashboard.webp",
+    "An admin dashboard serves multiple crucial functions, enhancing operational efficiency, decision-making, and user management. It provides a centralized platform for overseeing components, making informed decisions, and managing user interactions. The dashboard presents real-time data and analytics, enabling prompt responses to emerging trends and issues. It empowers data-driven decision-making, efficient user management, and content oversight. The dashboard also monitors system health, ensures security and compliance, and facilitates communication among team members. Its scalability supports long-term growth, adapting to changing business environments. It's a vital tool for effective management, strategic decision-making, and operational excellence.",
+    _technicalSkills(),
+  );
+}
+
+List<TechnicalSkill> _technicalSkills() {
+  return [
+    TechnicalSkill('Flutter', 'assets/icons/Flutter.svg'),
+    TechnicalSkill('Tkinter', 'assets/icons/Python.svg'),
+    TechnicalSkill('Qt', 'assets/icons/Qt-Framework.svg'),
+    TechnicalSkill('HTML', 'assets/icons/HTML5.svg'),
+    TechnicalSkill('CSS', 'assets/icons/css3.svg'),
+  ];
+}
+
+class ProjectDetail {
+  final String title;
+  final String imagePath;
+  final String overView;
+  final List<TechnicalSkill> skills;
+
+  ProjectDetail(this.title, this.imagePath, this.overView, this.skills);
+}
+
+class TechnicalSkill {
   final String name;
   final String iconPath;
 
-  Technology(this.name, this.iconPath);
+  TechnicalSkill(this.name, this.iconPath);
 }

@@ -5,6 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:portfolio_website/animations/slide_in_animation.dart';
 import 'package:portfolio_website/theme/theme.dart';
 import 'package:portfolio_website/widgets/custom_button.dart';
+import 'package:portfolio_website/widgets/custom_header.dart';
 
 class AboutSection extends StatelessWidget {
   const AboutSection({super.key});
@@ -19,14 +20,17 @@ class AboutSection extends StatelessWidget {
       child: LayoutBuilder(
         builder: (context, constraints) {
           double bodyFontSize = AppSizes.largeFontSize.sp;
-          double headingFontSize = 48.sp;
+          double headingFontSize = AppSizes.headingFontSize.sp;
 
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                'But wait.. Who am I...',
-                style: Theme.of(context).textTheme.headlineMedium!.copyWith(fontSize: headingFontSize),
+              CustomHeader(
+                titleText: 'But wait.. ',
+                titleColor: Theme.of(context).colorScheme.onPrimary,
+                subtitleText: 'Who am I...',
+                subtitleColor: Theme.of(context).primaryColor,
+                headingFontSize: headingFontSize,
               ),
               SizedBox(height: AppSizes.largeSpaceBtwItems.h),
               Expanded(
@@ -42,12 +46,18 @@ class AboutSection extends StatelessWidget {
                             children: [
                               Text(
                                 "Hello, I'm Praveen Yadav, a dedicated undergraduate student with a profound interest in web development. Currently pursuing my Bachelor of Computer Applications (BCA) degree, my goal is to master both front-end and back-end technologies, aiming to become a versatile and skilled developer. I thrive on the creativity and problem-solving that web development offers. Let's connect and exchange ideas in the dynamic world of web development. I'm always open to new connections and exciting opportunities. Feel free to reach out, and let's embark on this journey together.",
-                                style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                                  height: AppSizes.lineHeightLarge.h,
-                                  letterSpacing: AppSizes.letterSpacingLarge.w,
-                                  color: Theme.of(context).colorScheme.onSecondary,
-                                  fontSize: bodyFontSize,
-                                ),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyLarge!
+                                    .copyWith(
+                                      height: AppSizes.lineHeightLarge.h,
+                                      letterSpacing:
+                                          AppSizes.letterSpacingLarge.w,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSecondary,
+                                      fontSize: bodyFontSize,
+                                    ),
                                 textAlign: TextAlign.center,
                               ),
                             ],
@@ -80,7 +90,10 @@ class AboutSection extends StatelessWidget {
                   icon: FontAwesomeIcons.link,
                   iconFirst: false,
                   iconSize: bodyFontSize,
-                  textStyle: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: bodyFontSize),
+                  textStyle: Theme.of(context)
+                      .textTheme
+                      .bodyLarge!
+                      .copyWith(fontSize: bodyFontSize),
                 ),
               ),
             ],

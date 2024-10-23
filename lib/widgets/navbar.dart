@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 
 class Navbar extends StatefulWidget implements PreferredSizeWidget {
   final Function(String section) onSectionSelected;
+  final String activeSection; // Add activeSection to Navbar
 
   const Navbar({
     super.key,
     required this.onSectionSelected,
+    required this.activeSection, // Pass the active section from HomeScreen
   });
 
   @override
@@ -16,7 +18,6 @@ class Navbar extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _NavbarState extends State<Navbar> {
-  String activeSection = 'Home'; // Default active section
   String hoveredSection = '';
   final Map<String, GlobalKey> keys = {
     'Home': GlobalKey(),
@@ -30,7 +31,6 @@ class _NavbarState extends State<Navbar> {
   @override
   void initState() {
     super.initState();
-    // Measure the width of the 'Home' button after the first frame
     WidgetsBinding.instance.addPostFrameCallback((_) => _measureButton('Home'));
   }
 
@@ -40,8 +40,9 @@ class _NavbarState extends State<Navbar> {
       backgroundColor: Colors.black87,
       elevation: 0,
       title: Container(
-        margin: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width*0.025),
-        width: MediaQuery.of(context).size.width*0.95,
+        margin: EdgeInsets.symmetric(
+            horizontal: MediaQuery.of(context).size.width * 0.025),
+        width: MediaQuery.of(context).size.width * 0.95,
         child: Row(
           children: [
             const Text(
@@ -64,9 +65,8 @@ class _NavbarState extends State<Navbar> {
     );
   }
 
-  // Method to create a navigation item with icon and label
   Widget _buildNavItem(IconData icon, String label) {
-    bool isActive = activeSection == label;
+    bool isActive = widget.activeSection == label; // Highlight active section
     bool isHovered = hoveredSection == label;
 
     return Padding(
@@ -76,16 +76,13 @@ class _NavbarState extends State<Navbar> {
         splashColor: Colors.transparent,
         highlightColor: Colors.transparent,
         onTap: () {
-          setState(() {
-            activeSection = label; // Set the clicked section as active
-          });
           widget.onSectionSelected(label);
-          _measureButton(label); // Measure button width on click
+          _measureButton(label);
         },
         onHover: (hovering) {
           setState(() {
             hoveredSection = hovering ? label : '';
-            if (hovering) _measureButton(label); // Measure button width on hover
+            if (hovering) _measureButton(label);
           });
         },
         child: Column(
@@ -94,7 +91,8 @@ class _NavbarState extends State<Navbar> {
             Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(icon, color: isActive || isHovered ? Colors.blue : Colors.white),
+                Icon(icon,
+                    color: isActive || isHovered ? Colors.blue : Colors.white),
                 const SizedBox(width: 4),
                 Text(
                   label,
@@ -119,13 +117,12 @@ class _NavbarState extends State<Navbar> {
     );
   }
 
-  // Measure the button width using the GlobalKey
   void _measureButton(String label) {
     final keyContext = keys[label]?.currentContext;
     if (keyContext != null) {
       final box = keyContext.findRenderObject() as RenderBox;
       setState(() {
-        widths[label] = box.size.width; // Save the button width
+        widths[label] = box.size.width;
       });
     }
   }

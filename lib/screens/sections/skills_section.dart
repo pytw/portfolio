@@ -30,6 +30,7 @@ class SkillsSection extends StatelessWidget {
   }
 
   Widget _buildHeader(BuildContext context) {
+    double headingFontSize = AppSizes.headingFontSize.sp;
     return Center(
       child: RichText(
         text: TextSpan(
@@ -37,7 +38,7 @@ class SkillsSection extends StatelessWidget {
             TextSpan(
               text: 'What ',
               style: TextStyle(
-                fontSize: 36.sp,
+                fontSize: headingFontSize,
                 fontWeight: FontWeight.bold,
                 color: Colors.blue,
               ),
@@ -45,7 +46,7 @@ class SkillsSection extends StatelessWidget {
             TextSpan(
               text: 'I Bring to the Table.',
               style: TextStyle(
-                fontSize: 36.sp,
+                fontSize: headingFontSize,
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
               ),
@@ -149,10 +150,12 @@ class _SkillContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(20.w),
+      padding: EdgeInsets.symmetric(
+          horizontal: AppSizes.paddingLarge.w,
+          vertical: AppSizes.paddingLarge.h),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(15),
-        border: Border.all(color: Colors.blue),
+        borderRadius: BorderRadius.circular(AppSizes.borderExtraLarge.sp),
+        border: Border.all(color: Theme.of(context).primaryColor),
         color: Colors.black.withOpacity(0.7),
         boxShadow: [
           BoxShadow(
@@ -168,9 +171,9 @@ class _SkillContainer extends StatelessWidget {
           CustomAnimation(
             animationType: AnimationType.bounce,
             delay: const Duration(milliseconds: 100),
-            child: _buildHeader(title, icon),
+            child: _buildHeader(context, title, icon),
           ),
-          const SizedBox(height: 20),
+          SizedBox(height: AppSizes.mediumSpaceBtwItems.h),
           Expanded(
             child: SingleChildScrollView(
               child: Column(
@@ -180,7 +183,9 @@ class _SkillContainer extends StatelessWidget {
                     duration: const Duration(milliseconds: 600),
                     delay: const Duration(milliseconds: 200),
                     child: SkillItem(
-                        skillName: skill.name, iconPath: skill.iconPath),
+                      skillName: skill.name,
+                      iconPath: skill.iconPath,
+                    ),
                   );
                 }).toList(),
               ),
@@ -191,18 +196,18 @@ class _SkillContainer extends StatelessWidget {
     );
   }
 
-  Widget _buildHeader(String title, IconData icon) {
+  Widget _buildHeader(BuildContext context, String title, IconData icon) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Icon(icon, color: Colors.blue, size: 36.sp),
-        SizedBox(width: 10.w),
+        Icon(icon, color: Colors.blue, size: AppSizes.iconSizeMedium.sp),
+        SizedBox(width: AppSizes.smallSpaceBtwItems.w),
         Text(
           title,
           style: TextStyle(
-            fontSize: 32.sp,
+            fontSize: AppSizes.largeFontSize.sp,
             fontWeight: FontWeight.bold,
-            color: Colors.white,
+            color: Theme.of(context).colorScheme.onPrimary,
           ),
         ),
       ],
@@ -223,12 +228,15 @@ class SkillItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 10.h),
+      padding: EdgeInsets.symmetric(vertical: AppSizes.paddingSmall.h),
       child: Container(
-        padding: EdgeInsets.all(15.w),
+        margin: EdgeInsets.symmetric(horizontal: AppSizes.paddingMedium.w),
+        padding: EdgeInsets.symmetric(
+            horizontal: AppSizes.paddingMedium.w,
+            vertical: AppSizes.paddingMedium.h),
         decoration: BoxDecoration(
           color: Colors.grey[800]?.withOpacity(0.8),
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(AppSizes.borderRadiusMedium),
           boxShadow: [
             BoxShadow(
               color: Colors.blue.withOpacity(0.3),
@@ -241,17 +249,17 @@ class SkillItem extends StatelessWidget {
           children: [
             SvgPicture.asset(
               iconPath,
-              width: 40.w,
-              height: 40.h,
+              width: AppSizes.iconSizeLarge.w,
+              height: AppSizes.iconSizeLarge.h,
               fit: BoxFit.cover,
             ),
-            SizedBox(width: 10.w),
+            SizedBox(width: AppSizes.smallSpaceBtwItems.w),
             Expanded(
               child: Text(
                 skillName,
                 style: TextStyle(
-                  fontSize: 22.sp,
-                  color: const Color(0xff9ca3af),
+                  fontSize: AppSizes.mediumFontSize.sp,
+                  color: Theme.of(context).colorScheme.onSecondary,
                 ),
               ),
             ),
