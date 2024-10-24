@@ -93,7 +93,11 @@ class AboutSection extends StatelessWidget {
                   textStyle: Theme.of(context)
                       .textTheme
                       .bodyLarge!
-                      .copyWith(fontSize: bodyFontSize),
+                      .copyWith(fontSize: bodyFontSize,
+                  ),
+                  hoverEffects: const [HoverEffect.scale],
+                  clickBackgroundColor: Theme.of(context).primaryColor.withOpacity(0.8),
+                  clickEffects: const [ClickEffect.backgroundColor],
                 ),
               ),
             ],

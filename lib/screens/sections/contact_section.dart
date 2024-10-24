@@ -4,8 +4,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:portfolio_website/animations/slide_in_animation.dart';
 import 'package:portfolio_website/theme/theme.dart';
+import 'package:portfolio_website/widgets/custom_button.dart';
 import 'package:portfolio_website/widgets/custom_header.dart';
-import 'package:portfolio_website/widgets/social_button.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class ContactSection extends StatelessWidget {
@@ -20,7 +20,7 @@ class ContactSection extends StatelessWidget {
       ),
       child: LayoutBuilder(
         builder: (context, constraints) {
-          double bodyFontSize = AppSizes.largeFontSize.sp;
+          double bodyFontSize = AppSizes.mediumFontSize.sp;
           double headingFontSize = AppSizes.headingFontSize.sp;
 
           return Column(
@@ -70,11 +70,14 @@ class ContactSection extends StatelessWidget {
                                     .textTheme
                                     .bodyLarge
                                     ?.copyWith(
-                                  height: AppSizes.lineHeightExtraLarge.h,
-                                  letterSpacing: AppSizes.letterSpacingLarge.w,
-                                  color: Theme.of(context).colorScheme.onSecondary,
-                                  fontSize: bodyFontSize,
-                                ),
+                                      height: AppSizes.lineHeightExtraLarge.h,
+                                      letterSpacing:
+                                          AppSizes.letterSpacingMedium.w,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSecondary,
+                                      fontSize: bodyFontSize,
+                                    ),
                               ),
                             ),
                             SizedBox(height: AppSizes.largeSpaceBtwItems.h),
@@ -85,20 +88,31 @@ class ContactSection extends StatelessWidget {
                               ),
                               child: Text(
                                 "Reach me out:-",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyLarge
+                                style: Theme.of(context).textTheme.bodyLarge
                                     ?.copyWith(
-                                  color: Theme.of(context).colorScheme.onSecondary,
-                                ),
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSecondary,
+                                    ),
                               ),
                             ),
                             SizedBox(height: AppSizes.smallSpaceBtwItems.h),
-                            SocialButton(
+                            CustomButton(
                               label: 'praveen885127@gmail.com',
-                              icon: Icons.mail_outline,
+                              icon: FontAwesomeIcons.mailchimp,
+                              iconSize: AppSizes.iconSizeSmall,
+                              iconColor: Theme.of(context).primaryColor,
+                              hoverLabelColor: Theme.of(context).primaryColor,
+                              hoverUnderlineColor:
+                                  Theme.of(context).primaryColor,
+                              hoverEffects: const [
+                                HoverEffect.labelColor,
+                                HoverEffect.underline,
+                              ],
                               onPressed: () {
-                                launchUrlString('mailto:praveen885127@gmail.com');
+                                launchUrlString(
+                                  'mailto:praveen885127@gmail.com',
+                                );
                               },
                             ),
                             SizedBox(height: AppSizes.largeSpaceBtwItems.h),
@@ -107,40 +121,36 @@ class ContactSection extends StatelessWidget {
                               runSpacing: AppSizes.mediumSpaceBtwItems.h,
                               alignment: WrapAlignment.start,
                               children: [
-                                SocialButton(
-                                  label: 'Github',
+                                _buildSocialButton(
+                                  context: context,
+                                  label: 'GitHub',
                                   icon: FontAwesomeIcons.github,
-                                  onPressed: () {
-                                    launchUrlString("https://www.github.com/pyapril15");
-                                  },
+                                  url: 'https://www.github.com/pyapril15',
                                 ),
-                                SocialButton(
+                                _buildSocialButton(
+                                  context: context,
                                   label: 'LinkedIn',
                                   icon: FontAwesomeIcons.linkedin,
-                                  onPressed: () {
-                                    launchUrlString("https://www.linkedin.com/in/pyapril15");
-                                  },
+                                  url: 'https://www.linkedin.com/in/pyapril15',
                                 ),
-                                SocialButton(
+                                _buildSocialButton(
+                                  context: context,
                                   label: 'Twitter',
                                   icon: FontAwesomeIcons.twitter,
-                                  onPressed: () {
-                                    launchUrlString("https://www.twitter.com/pyapril15");
-                                  },
+                                  url: 'https://www.twitter.com/pyapril15',
                                 ),
-                                SocialButton(
+                                _buildSocialButton(
+                                  context: context,
                                   label: 'Discord',
                                   icon: FontAwesomeIcons.discord,
-                                  onPressed: () {
-                                    launchUrlString('https://www.discord.com/pyapril15');
-                                  },
+                                  url: 'https://www.discord.com/pyapril15',
                                 ),
-                                SocialButton(
+                                _buildSocialButton(
+                                  context: context,
                                   label: 'Instagram',
                                   icon: FontAwesomeIcons.instagram,
-                                  onPressed: () {
-                                    launchUrlString('https://www.instagram.com/__pyapril15.py__');
-                                  },
+                                  url:
+                                      'https://www.instagram.com/__pyapril15.py__',
                                 ),
                               ],
                             ),
@@ -155,6 +165,33 @@ class ContactSection extends StatelessWidget {
           );
         },
       ),
+    );
+  }
+
+  CustomButton _buildSocialButton({
+    required BuildContext context,
+    required String label,
+    required IconData icon,
+    required String url,
+  }) {
+    return CustomButton(
+      onPressed: () {
+        launchUrlString(url);
+      },
+      label: label,
+      icon: icon,
+      hoverBackgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      hoverUnderlineColor: Theme.of(context).primaryColor,
+      hoverLabelColor: Theme.of(context).primaryColor,
+      hoverIconColor: Theme.of(context).primaryColor,
+      iconSize: AppSizes.iconSizeSmall,
+      hoverEffects: const [
+        HoverEffect.backgroundColor,
+        HoverEffect.underline,
+        HoverEffect.labelColor,
+        HoverEffect.iconColor,
+        HoverEffect.scale,
+      ],
     );
   }
 }

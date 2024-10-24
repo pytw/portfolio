@@ -130,7 +130,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       key: _contactKey,
                       margin: EdgeInsets.symmetric(
                           vertical: mediaQuery.height * 0.025),
-                      height: mediaQuery.height * 0.95,
+                      height: mediaQuery.height * 0.7,
                       child: const ContactSection(),
                     ),
                     const Footer(),

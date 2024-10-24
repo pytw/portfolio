@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-/// Enum for defining hover effects on the button.
 enum HoverEffect {
   none,
   scale,
@@ -10,9 +9,9 @@ enum HoverEffect {
   iconColor,
   elevation,
   shadow,
+  underline,
 }
 
-/// Enum for defining click effects on the button.
 enum ClickEffect {
   none,
   scale,
@@ -24,34 +23,11 @@ enum ClickEffect {
   shadow,
 }
 
-/// Enum for defining the position of the icon relative to the label.
 enum IconPosition {
   isLeft,
   isRight,
 }
 
-/// A customizable button widget that supports hover and click effects.
-///
-/// This button can display either an icon, a label, or both, and provides various
-/// visual effects on hover and click events.
-///
-/// ### Usage:
-///
-/// To use the `CustomButton`, you need to provide either an icon, a label, or both.
-///
-/// ```dart
-/// CustomButton(
-///   onPressed: () {
-///     print('Button pressed');
-///   },
-///   label: 'Submit',
-///   icon: Icons.check,
-///   iconPosition: IconPosition.isLeft,
-///   hoverEffects: [HoverEffect.backgroundColor, HoverEffect.labelColor],
-///   clickEffects: [ClickEffect.backgroundColor],
-/// )
-/// ```
-///
 class CustomButton extends StatefulWidget {
   final String? label;
   final IconData? icon;
@@ -68,6 +44,10 @@ class CustomButton extends StatefulWidget {
   final Color hoverBorderColor;
   final Color hoverLabelColor;
   final Color hoverIconColor;
+  final Color clickBackgroundColor;
+  final Color clickBorderColor;
+  final Color clickLabelColor;
+  final Color clickIconColor;
   final TextStyle textStyle;
   final IconPosition iconPosition;
   final List<HoverEffect> hoverEffects;
@@ -81,6 +61,8 @@ class CustomButton extends StatefulWidget {
   final Widget? loadingIndicator;
   final MouseCursor cursor;
   final MouseCursor loadingCursor;
+  final Color hoverUnderlineColor;
+  final double hoverUnderlineWidth;
 
   const CustomButton({
     super.key,
@@ -89,17 +71,22 @@ class CustomButton extends StatefulWidget {
     this.icon,
     this.iconColor = Colors.white,
     this.iconSize = 16.0,
-    this.textStyle = const TextStyle(color: Colors.white, fontSize: 16),
+    this.textStyle = const TextStyle(
+        color: Colors.white, fontSize: 16),
     this.elevation = 4.0,
-    this.padding = const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+    this.padding = const EdgeInsets.all(6.0),
     this.borderRadius = const BorderRadius.all(Radius.circular(8.0)),
-    this.backgroundColor = Colors.blue,
+    this.backgroundColor = Colors.transparent,
     this.borderColor = Colors.transparent,
-    this.borderWidth = 0.0,
-    this.hoverBackgroundColor = Colors.blueAccent,
-    this.hoverBorderColor = Colors.blueAccent,
-    this.hoverLabelColor = Colors.black,
-    this.hoverIconColor = Colors.yellow,
+    this.borderWidth = 1.0,
+    this.hoverBackgroundColor = Colors.transparent,
+    this.hoverBorderColor = Colors.white,
+    this.hoverLabelColor = Colors.white,
+    this.hoverIconColor = Colors.white,
+    this.clickBackgroundColor = Colors.transparent,
+    this.clickBorderColor = Colors.white,
+    this.clickLabelColor = Colors.white,
+    this.clickIconColor = Colors.white,
     this.iconPosition = IconPosition.isLeft,
     this.hoverEffects = const [HoverEffect.none],
     this.clickEffects = const [ClickEffect.none],
@@ -112,6 +99,8 @@ class CustomButton extends StatefulWidget {
     this.loadingIndicator,
     this.cursor = SystemMouseCursors.click,
     this.loadingCursor = SystemMouseCursors.wait,
+    this.hoverUnderlineColor = Colors.white,
+    this.hoverUnderlineWidth = 2.0
   }) : assert(label != null || icon != null,
             'Either label or icon must be provided.');
 
@@ -128,12 +117,14 @@ class _CustomButtonState extends State<CustomButton>
   Widget build(BuildContext context) {
     Color effectiveBackgroundColor = widget.backgroundColor;
     Color effectiveBorderColor = widget.borderColor;
-    Color effectiveLabelColor = widget.textStyle.color ?? Colors.white;
+    Color effectiveLabelColor =
+        widget.textStyle.color ?? Colors.white; // Default label color
     Color effectiveIconColor = widget.iconColor;
+    double scale = 1.0;
+    bool showUnderline = false;
 
-    double effectiveElevation = widget.elevation;
-
-    if (widget.isEnabled && _isHovering) {
+    // Handle hover effects (if not clicked)
+    if (widget.isEnabled && _isHovering && !_isPressed) {
       if (widget.hoverEffects.contains(HoverEffect.backgroundColor)) {
         effectiveBackgroundColor = widget.hoverBackgroundColor;
       }
@@ -146,26 +137,32 @@ class _CustomButtonState extends State<CustomButton>
       if (widget.hoverEffects.contains(HoverEffect.iconColor)) {
         effectiveIconColor = widget.hoverIconColor;
       }
-      if (widget.hoverEffects.contains(HoverEffect.elevation)) {
-        effectiveElevation += 2.0;
+      if (widget.hoverEffects.contains(HoverEffect.elevation)) {}
+      if (widget.hoverEffects.contains(HoverEffect.scale)) {
+        scale = 1.1; // Increased scale on hover
+      }
+      if (widget.hoverEffects.contains(HoverEffect.underline)) {
+        showUnderline = true;
       }
     }
 
+    // Handle click effects
     if (widget.isEnabled && _isPressed) {
       if (widget.clickEffects.contains(ClickEffect.backgroundColor)) {
-        effectiveBackgroundColor = Colors.red;
+        effectiveBackgroundColor = widget.clickBackgroundColor;
       }
       if (widget.clickEffects.contains(ClickEffect.borderColor)) {
-        effectiveBorderColor = Colors.red;
+        effectiveBorderColor = widget.clickBorderColor;
       }
       if (widget.clickEffects.contains(ClickEffect.labelColor)) {
-        effectiveLabelColor = Colors.white;
+        effectiveLabelColor = widget.clickLabelColor;
       }
       if (widget.clickEffects.contains(ClickEffect.iconColor)) {
-        effectiveIconColor = Colors.red;
+        effectiveIconColor = widget.clickIconColor;
       }
-      if (widget.clickEffects.contains(ClickEffect.elevation)) {
-        effectiveElevation += 4.0;
+      if (widget.clickEffects.contains(ClickEffect.elevation)) {}
+      if (widget.clickEffects.contains(ClickEffect.scale)) {
+        scale = 0.9; // Scale-down slightly on click
       }
     }
 
@@ -187,42 +184,40 @@ class _CustomButtonState extends State<CustomButton>
         },
         onTapCancel: () => setState(() => _isPressed = false),
         child: AnimatedScale(
-          scale: _isPressed && widget.clickEffects.contains(ClickEffect.scale)
-              ? 0.95
-              : 1.0,
+          scale: scale,
           duration: const Duration(milliseconds: 200),
-          child: SizedBox(
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
             width: widget.width,
             height: widget.height,
-            child: Material(
-              elevation: effectiveElevation,
+            decoration: BoxDecoration(
+              color: effectiveBackgroundColor,
               borderRadius: widget.borderRadius,
-              shadowColor: _isHovering &&
-                      widget.hoverEffects.contains(HoverEffect.shadow)
-                  ? Colors.black54
-                  : Colors.transparent,
-              child: ElevatedButton(
-                onPressed: widget.isEnabled && !widget.showLoadingIndicator
+              border: Border.all(
+                  color: effectiveBorderColor, width: widget.borderWidth),
+              boxShadow: [
+                if (widget.hoverEffects.contains(HoverEffect.shadow) &&
+                    _isHovering &&
+                    !_isPressed)
+                  const BoxShadow(
+                    color: Colors.black54,
+                    blurRadius: 10,
+                    offset: Offset(0, 4),
+                  ),
+              ],
+            ),
+            child: Material(
+              color: Colors.transparent,
+              child: InkWell(
+                onTap: widget.isEnabled && !widget.showLoadingIndicator
                     ? widget.onPressed
                     : null,
-                style: ButtonStyle(
-                  elevation: WidgetStateProperty.all(effectiveElevation),
-                  padding: WidgetStateProperty.all(widget.padding),
-                  shape: WidgetStateProperty.all(
-                    RoundedRectangleBorder(
-                      borderRadius: widget.borderRadius,
-                      side: BorderSide(
-                        color: effectiveBorderColor,
-                        width: widget.borderWidth,
-                      ),
-                    ),
-                  ),
-                  backgroundColor:
-                      WidgetStateProperty.all(effectiveBackgroundColor),
-                  overlayColor: WidgetStateProperty.all(Colors.transparent),
+                borderRadius: widget.borderRadius,
+                child: Padding(
+                  padding: widget.padding,
+                  child: _buildButtonContent(
+                      effectiveLabelColor, effectiveIconColor, showUnderline),
                 ),
-                child: _buildButtonContent(
-                    effectiveLabelColor, effectiveIconColor),
               ),
             ),
           ),
@@ -232,7 +227,7 @@ class _CustomButtonState extends State<CustomButton>
   }
 
   Widget _buildButtonContent(
-      Color effectiveLabelColor, Color effectiveIconColor) {
+      Color effectiveLabelColor, Color effectiveIconColor, bool showUnderline) {
     if (widget.showLoadingIndicator) {
       return Row(
         mainAxisSize: MainAxisSize.min,
@@ -253,10 +248,7 @@ class _CustomButtonState extends State<CustomButton>
     }
 
     if (widget.label != null && widget.icon == null) {
-      return Text(
-        widget.label!,
-        style: widget.textStyle.copyWith(color: effectiveLabelColor),
-      );
+      return _buildLabel(effectiveLabelColor, showUnderline);
     }
 
     return Row(
@@ -273,10 +265,7 @@ class _CustomButtonState extends State<CustomButton>
               size: widget.iconSize,
             ),
           ),
-        Text(
-          widget.label!,
-          style: widget.textStyle.copyWith(color: effectiveLabelColor),
-        ),
+        _buildLabel(effectiveLabelColor, showUnderline),
         if (widget.icon != null && widget.iconPosition == IconPosition.isRight)
           Padding(
             padding: const EdgeInsets.only(left: 8.0),
@@ -289,6 +278,28 @@ class _CustomButtonState extends State<CustomButton>
             ),
           ),
       ],
+    );
+  }
+
+  Widget _buildLabel(Color effectiveLabelColor, bool showUnderline) {
+    return Container(
+      decoration: showUnderline
+          ? BoxDecoration(
+              border: Border(
+                bottom: BorderSide(
+                  color: widget.hoverUnderlineColor,
+                  width: widget.hoverUnderlineWidth,
+                ),
+              ),
+            )
+          : null,
+      child: Text(
+        widget.label!,
+        style: widget.textStyle.copyWith(
+          color:
+              widget.isEnabled ? effectiveLabelColor : widget.disabledTextColor,
+        ),
+      ),
     );
   }
 }
