@@ -175,9 +175,7 @@ class ContactSection extends StatelessWidget {
     required String url,
   }) {
     return CustomButton(
-      onPressed: () {
-        launchUrlString(url);
-      },
+      onPressed: () { launchUrlString(url);},
       label: label,
       icon: icon,
       hoverBackgroundColor: Theme.of(context).scaffoldBackgroundColor,

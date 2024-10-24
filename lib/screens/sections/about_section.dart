@@ -19,7 +19,7 @@ class AboutSection extends StatelessWidget {
       ),
       child: LayoutBuilder(
         builder: (context, constraints) {
-          double bodyFontSize = AppSizes.largeFontSize.sp;
+          double bodyFontSize = AppSizes.mediumFontSize.sp;
           double headingFontSize = AppSizes.headingFontSize.sp;
 
           return Column(
@@ -90,14 +90,12 @@ class AboutSection extends StatelessWidget {
                   icon: FontAwesomeIcons.link,
                   iconPosition: IconPosition.isLeft,
                   iconSize: bodyFontSize,
-                  textStyle: Theme.of(context)
-                      .textTheme
-                      .bodyLarge!
+                  borderColor: Theme.of(context).colorScheme.onPrimary,
+                  iconColor: Theme.of(context).primaryColor,
+                  textStyle: Theme.of(context).textTheme.bodyLarge!
                       .copyWith(fontSize: bodyFontSize,
                   ),
                   hoverEffects: const [HoverEffect.scale],
-                  clickBackgroundColor: Theme.of(context).primaryColor.withOpacity(0.8),
-                  clickEffects: const [ClickEffect.backgroundColor],
                 ),
               ),
             ],

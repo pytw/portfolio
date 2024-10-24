@@ -40,7 +40,7 @@ class SkillsSection extends StatelessWidget {
               style: TextStyle(
                 fontSize: headingFontSize,
                 fontWeight: FontWeight.bold,
-                color: Colors.blue,
+                color: Theme.of(context).primaryColor,
               ),
             ),
             TextSpan(
@@ -48,7 +48,7 @@ class SkillsSection extends StatelessWidget {
               style: TextStyle(
                 fontSize: headingFontSize,
                 fontWeight: FontWeight.bold,
-                color: Colors.white,
+                color: Theme.of(context).colorScheme.onPrimary,
               ),
             ),
           ],
@@ -59,7 +59,7 @@ class SkillsSection extends StatelessWidget {
 
   Widget _buildSkillsRow(BoxConstraints constraints) {
     return SizedBox(
-      height: constraints.maxHeight * 0.8,
+      height: constraints.maxHeight * 0.85,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -197,6 +197,7 @@ class _SkillContainer extends StatelessWidget {
   }
 
   Widget _buildHeader(BuildContext context, String title, IconData icon) {
+    double headingFontSize = AppSizes.largeFontSize.sp;
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -205,7 +206,7 @@ class _SkillContainer extends StatelessWidget {
         Text(
           title,
           style: TextStyle(
-            fontSize: AppSizes.largeFontSize.sp,
+            fontSize: headingFontSize,
             fontWeight: FontWeight.bold,
             color: Theme.of(context).colorScheme.onPrimary,
           ),

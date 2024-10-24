@@ -47,6 +47,8 @@ class CustomHeader extends StatelessWidget {
   final TextAlign textAlign;
 
   final AlignmentGeometry alignment;
+  final double? titleLetterSpacing;
+  final double? subTitleLetterSpacing;
 
   /// Constructor for [CustomHeader] widget. Requires [titleText], [subtitleText],
   /// and [headingFontSize] to be provided.
@@ -61,6 +63,8 @@ class CustomHeader extends StatelessWidget {
     required this.headingFontSize,
     this.alignment = Alignment.topLeft,
     this.textAlign = TextAlign.left,
+    this.titleLetterSpacing,
+    this.subTitleLetterSpacing,
   });
 
   @override
@@ -77,6 +81,7 @@ class CustomHeader extends StatelessWidget {
                 fontSize: headingFontSize,
                 fontWeight: FontWeight.bold,
                 color: titleColor,
+                letterSpacing: titleLetterSpacing,
               ),
             ),
             TextSpan(
@@ -85,6 +90,7 @@ class CustomHeader extends StatelessWidget {
                 fontSize: headingFontSize,
                 fontWeight: FontWeight.bold,
                 color: subtitleColor,
+                letterSpacing: subTitleLetterSpacing,
               ),
             ),
           ],

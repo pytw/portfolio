@@ -28,32 +28,21 @@ class ProjectSection extends StatelessWidget {
               SizedBox(height: AppSizes.largeSpaceBtwItems.h),
               _buildProjectRow(
                   project, context, mediumHeadingFontSize, bodyFontSize),
-              SizedBox(height: AppSizes.largeSpaceBtwItems.h),
+              SizedBox(height: AppSizes.smallSpaceBtwItems.h),
               Align(
-                alignment: Alignment.centerRight,
+                alignment: Alignment.topRight,
                 child: CustomButton(
-                  label: 'Submit',
-                  onPressed: () {
-                    print('Button pressed');
-                  },
-                  icon: Icons.send,
-                  iconColor: Colors.white,
-                  backgroundColor: Colors.blue,
-                  hoverBackgroundColor: Colors.blueAccent,
-                  iconPosition: IconPosition.isRight,
-                  hoverEffects: [
+                  onPressed: () {},
+                  label: 'More project...',
+                  textStyle: TextStyle(color: Theme.of(context).primaryColor),
+                  hoverBackgroundColor: Colors.black45,
+                  hoverBorderColor: Colors.black45,
+                  hoverUnderlineColor: Theme.of(context).primaryColor,
+                  hoverEffects: const [
+                    HoverEffect.underline,
                     HoverEffect.backgroundColor,
-                    HoverEffect.elevation,
-                    HoverEffect.shadow,
+                    HoverEffect.borderColor,
                   ],
-                  clickEffects: [
-                    ClickEffect.backgroundColor,
-                    ClickEffect.scale,
-                    ClickEffect.elevation,
-                  ],
-                  borderRadius: BorderRadius.circular(8),
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                  elevation: 4.0,
                 ),
               ),
             ],

@@ -98,15 +98,15 @@ class _HomeScreenState extends State<HomeScreen> {
                       key: _homeKey,
                       margin: EdgeInsets.symmetric(
                           vertical: mediaQuery.height * 0.025),
-                      height: mediaQuery.height * 0.95,
-                      child: const HeroSection(),
+                      height: mediaQuery.height * 0.6,
+                      child: HeroSection(onSectionSelected: (String section){scrollToSection(_projectsKey, section);}),
                     ),
                     SizedBox(height: AppSizes.mediumSpaceBtwItems.h),
                     Container(
                       key: _projectsKey,
                       margin: EdgeInsets.symmetric(
                           vertical: mediaQuery.height * 0.025),
-                      height: mediaQuery.height * 0.95,
+                      height: mediaQuery.height * 0.9,
                       child: const ProjectSection(),
                     ),
                     SizedBox(height: AppSizes.mediumSpaceBtwItems.h),
@@ -114,7 +114,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       key: _skillsKey,
                       margin: EdgeInsets.symmetric(
                           vertical: mediaQuery.height * 0.025),
-                      height: mediaQuery.height * 0.95,
+                      height: mediaQuery.height * 0.7,
                       child: const SkillsSection(),
                     ),
                     SizedBox(height: AppSizes.mediumSpaceBtwItems.h),
@@ -122,7 +122,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       key: _aboutKey,
                       margin: EdgeInsets.symmetric(
                           vertical: mediaQuery.height * 0.025),
-                      height: mediaQuery.height * 0.95,
+                      height: mediaQuery.height * 0.7,
                       child: const AboutSection(),
                     ),
                     SizedBox(height: AppSizes.mediumSpaceBtwItems.h),
