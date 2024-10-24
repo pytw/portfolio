@@ -88,7 +88,7 @@ class AboutSection extends StatelessWidget {
                   onPressed: () {},
                   label: "Connect with me",
                   icon: FontAwesomeIcons.link,
-                  iconFirst: false,
+                  iconPosition: IconPosition.isLeft,
                   iconSize: bodyFontSize,
                   textStyle: Theme.of(context)
                       .textTheme

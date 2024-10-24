@@ -44,7 +44,9 @@ class CustomHeader extends StatelessWidget {
   final double headingFontSize;
 
   /// The alignment of the text in the header. Defaults to `TextAlign.left`.
-  final TextAlign alignment;
+  final TextAlign textAlign;
+
+  final AlignmentGeometry alignment;
 
   /// Constructor for [CustomHeader] widget. Requires [titleText], [subtitleText],
   /// and [headingFontSize] to be provided.
@@ -57,15 +59,16 @@ class CustomHeader extends StatelessWidget {
     this.titleColor = Colors.white,
     this.subtitleColor = Colors.blue,
     required this.headingFontSize,
-    this.alignment = TextAlign.left,
+    this.alignment = Alignment.topLeft,
+    this.textAlign = TextAlign.left,
   });
 
   @override
   Widget build(BuildContext context) {
     return Align(
-      alignment: Alignment.topLeft,
+      alignment: alignment,
       child: RichText(
-        textAlign: alignment,
+        textAlign: textAlign,
         text: TextSpan(
           children: [
             TextSpan(

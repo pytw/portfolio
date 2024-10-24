@@ -32,14 +32,28 @@ class ProjectSection extends StatelessWidget {
               Align(
                 alignment: Alignment.centerRight,
                 child: CustomButton(
-                  onPressed: () {},
-                  label: "More projects",
-                  icon: Icons.read_more_outlined,
-                  iconFirst: false,
-                  iconSize: iconSize,
-                  textStyle: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                        fontSize: bodyFontSize,
-                      ),
+                  label: 'Submit',
+                  onPressed: () {
+                    print('Button pressed');
+                  },
+                  icon: Icons.send,
+                  iconColor: Colors.white,
+                  backgroundColor: Colors.blue,
+                  hoverBackgroundColor: Colors.blueAccent,
+                  iconPosition: IconPosition.isRight,
+                  hoverEffects: [
+                    HoverEffect.backgroundColor,
+                    HoverEffect.elevation,
+                    HoverEffect.shadow,
+                  ],
+                  clickEffects: [
+                    ClickEffect.backgroundColor,
+                    ClickEffect.scale,
+                    ClickEffect.elevation,
+                  ],
+                  borderRadius: BorderRadius.circular(8),
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                  elevation: 4.0,
                 ),
               ),
             ],
