@@ -69,12 +69,30 @@ class AppSizes {
   static const double lineHeightExtraLarge = 4.5;
 }
 
+class AppStyles {
+  static const TextStyle primaryButtonStyle = TextStyle(
+    color: AppColors.onPrimary,
+    fontWeight: FontWeight.bold,
+    fontSize: AppSizes.mediumFontSize,
+  );
+
+  static const TextStyle linkButtonStyle = TextStyle(
+    color: AppColors.onPrimary,
+    fontSize: AppSizes.mediumFontSize,
+  );
+
+  static const TextStyle headerTextStyle = TextStyle(
+    color: AppColors.onSecondary,
+    fontSize: AppSizes.headingFontSize,
+    fontWeight: FontWeight.bold,
+  );
+}
+
 final scrollbarThemeData = ScrollbarThemeData(
   thumbColor: WidgetStateProperty.all(Colors.blue),
   thickness: WidgetStateProperty.all(AppSizes.borderSmall),
   radius: const Radius.circular(AppSizes.borderRadiusMedium),
 );
-
 
 ThemeData appTheme() {
   return ThemeData(

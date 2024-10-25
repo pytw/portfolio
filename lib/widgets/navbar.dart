@@ -1,14 +1,15 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 
 class Navbar extends StatefulWidget implements PreferredSizeWidget {
   final Function(String section) onSectionSelected;
-  final String activeSection; // Add activeSection to Navbar
+  final String activeSection;
 
   const Navbar({
-    super.key,
+    Key? key,
     required this.onSectionSelected,
-    required this.activeSection, // Pass the active section from HomeScreen
-  });
+    required this.activeSection,
+  }) : super(key: key);
 
   @override
   State<Navbar> createState() => _NavbarState();
@@ -28,6 +29,30 @@ class _NavbarState extends State<Navbar> {
   };
   final Map<String, double> widths = {};
 
+  final List<Map<String, dynamic>> sections = [
+    {'label': 'Home', 'icon': Icons.home},
+    {'label': 'Projects', 'icon': Icons.work},
+    {'label': 'Skills', 'icon': Icons.code},
+    {'label': 'About', 'icon': Icons.person},
+    {'label': 'Contact', 'icon': Icons.contact_mail},
+  ];
+
+  Timer? debounceTimer;
+
+  // Styles for easy adjustments
+  static const Color activeColor = Colors.blue;
+  static const Color inactiveColor = Colors.white;
+  static const TextStyle desktopTextStyle = TextStyle(
+    color: inactiveColor,
+    fontSize: 18,
+    fontWeight: FontWeight.normal,
+  );
+  static const TextStyle tabletTextStyle = TextStyle(
+    color: inactiveColor,
+    fontSize: 16,
+    fontWeight: FontWeight.normal,
+  );
+
   @override
   void initState() {
     super.initState();
@@ -39,91 +64,161 @@ class _NavbarState extends State<Navbar> {
     return AppBar(
       backgroundColor: Colors.black87,
       elevation: 0,
-      title: Container(
-        margin: EdgeInsets.symmetric(
-            horizontal: MediaQuery.of(context).size.width * 0.025),
-        width: MediaQuery.of(context).size.width * 0.95,
-        child: Row(
-          children: [
-            const Text(
-              'PY',
-              style: TextStyle(
-                color: Colors.blue,
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const Spacer(),
-            _buildNavItem(Icons.home, 'Home'),
-            _buildNavItem(Icons.work, 'Projects'),
-            _buildNavItem(Icons.code, 'Skills'),
-            _buildNavItem(Icons.person, 'About'),
-            _buildNavItem(Icons.contact_mail, 'Contact'),
-          ],
+      title: LayoutBuilder(
+        builder: (context, constraints) {
+          if (constraints.maxWidth < 600) {
+            return _buildMobileNav();
+          } else if (constraints.maxWidth < 768) {
+            return _buildTabletNav();
+          } else {
+            return _buildDesktopNav();
+          }
+        },
+      ),
+    );
+  }
+
+  Widget _buildMobileNav() {
+    return Row(
+      children: [
+        _buildLogo(),
+        const Spacer(),
+        PopupMenuButton<String>(
+          icon: const Icon(Icons.menu, color: inactiveColor),
+          onSelected: (value) => widget.onSectionSelected(value),
+          itemBuilder: (context) => _buildMenuItems(),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildTabletNav() {
+    return Row(
+      children: [
+        _buildLogo(),
+        const Spacer(),
+        ...sections.map((section) => _buildNavItem(
+              section['icon'] as IconData,
+              section['label'] as String,
+              isTablet: true,
+            )),
+      ],
+    );
+  }
+
+  Widget _buildDesktopNav() {
+    return Row(
+      children: [
+        _buildLogo(),
+        const Spacer(),
+        ...sections.map((section) => _buildNavItem(
+              section['icon'] as IconData,
+              section['label'] as String,
+            )),
+      ],
+    );
+  }
+
+  Widget _buildLogo() {
+    return const Padding(
+      padding: EdgeInsets.symmetric(horizontal: 12.0),
+      child: Text(
+        'PY',
+        style: TextStyle(
+          color: activeColor,
+          fontSize: 24,
+          fontWeight: FontWeight.bold,
         ),
       ),
     );
   }
 
-  Widget _buildNavItem(IconData icon, String label) {
-    bool isActive = widget.activeSection == label; // Highlight active section
+  List<PopupMenuEntry<String>> _buildMenuItems() {
+    return sections
+        .map((section) => PopupMenuItem<String>(
+              value: section['label'] as String,
+              child: Text(section['label'] as String),
+            ))
+        .toList();
+  }
+
+  Widget _buildNavItem(IconData icon, String label, {bool isTablet = false}) {
+    bool isActive = widget.activeSection == label;
     bool isHovered = hoveredSection == label;
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12.0),
-      child: InkWell(
-        key: keys[label],
-        splashColor: Colors.transparent,
-        highlightColor: Colors.transparent,
-        onTap: () {
-          widget.onSectionSelected(label);
-          _measureButton(label);
-        },
-        onHover: (hovering) {
-          setState(() {
-            hoveredSection = hovering ? label : '';
-            if (hovering) _measureButton(label);
-          });
-        },
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(icon,
-                    color: isActive || isHovered ? Colors.blue : Colors.white),
-                const SizedBox(width: 4),
-                Text(
-                  label,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
+    return Tooltip(
+      message: label,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12.0),
+        child: InkWell(
+          key: keys[label],
+          splashColor: Colors.transparent,
+          highlightColor: Colors.transparent,
+          onTap: () {
+            widget.onSectionSelected(label);
+            _measureButton(label);
+          },
+          onHover: (hovering) {
+            setState(() {
+              hoveredSection = hovering ? label : '';
+              if (hovering) _measureButton(label);
+            });
+          },
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    icon,
+                    color: isActive || isHovered ? activeColor : inactiveColor,
+                    size: isTablet ? 18 : 24,
                   ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 4),
-            AnimatedContainer(
-              duration: const Duration(milliseconds: 300),
-              height: 2,
-              width: (isActive || isHovered) ? widths[label] ?? 0.0 : 0,
-              color: Colors.blue,
-            ),
-          ],
+                  if (!isTablet) const SizedBox(width: 4),
+                  if (!isTablet)
+                    Text(
+                      label,
+                      style: isTablet
+                          ? tabletTextStyle.copyWith(
+                              color: isActive ? activeColor : inactiveColor,
+                              fontWeight: isActive
+                                  ? FontWeight.bold
+                                  : FontWeight.normal,
+                            )
+                          : desktopTextStyle.copyWith(
+                              color: isActive ? activeColor : inactiveColor,
+                              fontWeight: isActive
+                                  ? FontWeight.bold
+                                  : FontWeight.normal,
+                            ),
+                    ),
+                ],
+              ),
+              const SizedBox(height: 4),
+              AnimatedContainer(
+                duration: const Duration(milliseconds: 300),
+                height: 2,
+                width: (isActive || isHovered) ? widths[label] ?? 0.0 : 0,
+                color: activeColor,
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
   void _measureButton(String label) {
-    final keyContext = keys[label]?.currentContext;
-    if (keyContext != null) {
-      final box = keyContext.findRenderObject() as RenderBox;
-      setState(() {
-        widths[label] = box.size.width;
-      });
-    }
+    debounceTimer?.cancel();
+    debounceTimer = Timer(const Duration(milliseconds: 50), () {
+      final keyContext = keys[label]?.currentContext;
+      if (keyContext != null) {
+        final box = keyContext.findRenderObject() as RenderBox;
+        setState(() {
+          widths[label] = box.size.width;
+        });
+      }
+    });
   }
 }

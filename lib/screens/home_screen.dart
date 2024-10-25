@@ -99,7 +99,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       margin: EdgeInsets.symmetric(
                           vertical: mediaQuery.height * 0.025),
                       height: mediaQuery.height * 0.6,
-                      child: HeroSection(onSectionSelected: (String section){scrollToSection(_projectsKey, section);}),
+                      child: HeroSection(onSectionSelected: (String section) {
+                        scrollToSection(_projectsKey, section);
+                      }),
                     ),
                     SizedBox(height: AppSizes.mediumSpaceBtwItems.h),
                     Container(
