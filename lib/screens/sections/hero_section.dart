@@ -24,43 +24,42 @@ class HeroSection extends StatelessWidget {
 
     // Check screen type
     final screenType = getScreenType(context);
-
     return screenType == ScreenType.mobile
         ? Column(
-      children: buildHeroContent(
-        context,
-        smallSpaceHeight,
-        mediumSpaceWidth,
-        largeSpaceHeight,
-        screenType,
-      ),
-    )
+            children: buildHeroContent(
+              context,
+              smallSpaceHeight,
+              mediumSpaceWidth,
+              largeSpaceHeight,
+              screenType,
+            ),
+          )
         : Row(
-      children: [
-        Expanded(
-          child: Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: AppSizes.paddingMedium.w,
-              vertical: AppSizes.paddingMedium.h,
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: buildHeroContent(
-                context,
-                smallSpaceHeight,
-                mediumSpaceWidth,
-                largeSpaceHeight,
-                screenType,
+            children: [
+              Expanded(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: AppSizes.paddingMedium.w,
+                    vertical: AppSizes.paddingMedium.h,
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: buildHeroContent(
+                      context,
+                      smallSpaceHeight,
+                      mediumSpaceWidth,
+                      largeSpaceHeight,
+                      screenType,
+                    ),
+                  ),
+                ),
               ),
-            ),
-          ),
-        ),
-        const Expanded(
-          child: Center(child: CircularImage()),
-        ),
-      ],
-    );
+              const Expanded(
+                child: Center(child: CircularImage()),
+              ),
+            ],
+          );
   }
 
   List<Widget> buildHeroContent(BuildContext context, double smallSpaceHeight,
@@ -94,12 +93,13 @@ class HeroSection extends StatelessWidget {
         ),
       ),
       SizedBox(height: largeSpaceHeight),
-      Row(
+      Wrap(
         children: [
           CustomButton(
             onPressed: () {},
             label: "Download Resume",
-            textStyle: AppStyles.linkButtonStyle,
+            textStyle:
+                TextStyle(color: Theme.of(context).colorScheme.onPrimary),
             borderColor: Theme.of(context).colorScheme.onPrimary,
             borderWidth: 2,
             hoverBorderColor: Theme.of(context).primaryColor,
@@ -113,7 +113,10 @@ class HeroSection extends StatelessWidget {
               onSectionSelected("Projects");
             },
             label: "See Projects",
-            textStyle: AppStyles.primaryButtonStyle,
+            textStyle: TextStyle(
+              color: Theme.of(context).colorScheme.onPrimary,
+              fontWeight: FontWeight.bold,
+            ),
             backgroundColor: Theme.of(context).primaryColor,
             hoverEffects: const [HoverEffect.scale],
           ),
@@ -125,31 +128,37 @@ class HeroSection extends StatelessWidget {
   }
 
   Widget buildSocialIcons(BuildContext context, double smallSpaceWidth) {
-    return Row(
+    return Wrap(
+      spacing: AppSizes.mediumSpaceBtwItems.w,
+      runSpacing: AppSizes.mediumSpaceBtwItems.h,
+      alignment: WrapAlignment.start,
       children: [
         IconButton(
-          onPressed: () => _launchUrl('https://www.linkedin.com/in/pyapril1507'),
+          onPressed: () =>
+              _launchUrl('https://www.linkedin.com/in/pyapril1507'),
           icon: const Icon(FontAwesomeIcons.linkedin),
+          iconSize: 32.sp,
         ),
-        SizedBox(width: smallSpaceWidth),
         IconButton(
           onPressed: () => _launchUrl('https://www.github.com/pyapril15'),
           icon: const Icon(FontAwesomeIcons.github),
+          iconSize: 32.sp,
         ),
-        SizedBox(width: smallSpaceWidth),
         IconButton(
           onPressed: () => _launchUrl('https://www.x.com/pyapril15'),
           icon: const Icon(FontAwesomeIcons.twitter),
+          iconSize: 32.sp,
         ),
-        SizedBox(width: smallSpaceWidth),
         IconButton(
-          onPressed: () => _launchUrl('https://www.instagram.com/__pyapril15.py__'),
+          onPressed: () =>
+              _launchUrl('https://www.instagram.com/__pyapril15.py__'),
           icon: const Icon(FontAwesomeIcons.instagram),
+          iconSize: 32.sp,
         ),
-        SizedBox(width: smallSpaceWidth),
         IconButton(
           onPressed: () => _launchUrl('https://www.discord.com/pyapril15'),
           icon: const Icon(FontAwesomeIcons.discord),
+          iconSize: 32.sp,
         ),
       ],
     );
