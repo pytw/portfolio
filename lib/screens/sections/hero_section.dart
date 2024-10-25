@@ -12,8 +12,107 @@ class HeroSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<String> welcome = getGreetingMessage().split(" ");
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        if (constraints.maxWidth >= 600) {
+          return HeroSectionDesktopTablet(onSectionSelected: onSectionSelected);
+        } else {
+          return HeroSectionMobile(onSectionSelected: onSectionSelected);
+        }
+      },
+    );
+  }
+}
 
+// Widget for Desktop/Tablet Layout
+class HeroSectionDesktopTablet extends StatelessWidget {
+  final Function(String section) onSectionSelected;
+  const HeroSectionDesktopTablet({super.key, required this.onSectionSelected});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          child: _IntroSection(onSectionSelected: onSectionSelected),
+        ),
+        const Expanded(
+          child: Center(child: CircularImage(isDesktop: true)),
+        ),
+      ],
+    );
+  }
+}
+
+// Widget for Mobile Layout
+class HeroSectionMobile extends StatelessWidget {
+  final Function(String section) onSectionSelected;
+  const HeroSectionMobile({super.key, required this.onSectionSelected});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Padding(
+          padding: EdgeInsets.symmetric(
+            horizontal: AppSizes.paddingSmall.w,
+            vertical: AppSizes.paddingSmall.h,
+          ),
+          child: _IntroSection(onSectionSelected: onSectionSelected),
+        ),
+        const Center(child: CircularImage(isDesktop: false)),
+      ],
+    );
+  }
+}
+
+// CircularImage widget with responsive constraints
+class CircularImage extends StatelessWidget {
+  final bool isDesktop;
+  const CircularImage({super.key, required this.isDesktop});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: isDesktop ? double.infinity : 150.w,
+      height: isDesktop ? double.infinity : 150.w,
+      decoration: const BoxDecoration(
+        shape: BoxShape.circle,
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black26,
+            blurRadius: AppSizes.borderRadiusMedium,
+            spreadRadius: 2,
+            offset: Offset(0, 5),
+          ),
+        ],
+      ),
+      child: FittedBox(
+        child: ClipOval(
+          child: Image.asset(
+            'assets/images/pyapril15.png',
+            fit: BoxFit.cover,
+            errorBuilder: (context, error, stackTrace) => Image.asset(
+              'assets/images/placeholder.png',
+              fit: BoxFit.cover,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// Shared Intro Section Widget (no changes from before)
+class _IntroSection extends StatelessWidget {
+  final Function(String section) onSectionSelected;
+  const _IntroSection({required this.onSectionSelected});
+
+  @override
+  Widget build(BuildContext context) {
+    List<String> welcome = getGreetingMessage().split(" ");
     double mediumHeadingFontSize = AppSizes.headingFontSize.sp;
     double headingFontSize = 64.sp;
 
@@ -21,131 +120,108 @@ class HeroSection extends StatelessWidget {
     double mediumSpaceWidth = AppSizes.mediumSpaceBtwItems.w;
     double smallSpaceWidth = AppSizes.smallSpaceBtwItems.w;
     double smallSpaceHeight = AppSizes.smallSpaceBtwItems.h;
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        return Row(
+    double iconSize = AppSizes.iconSizeLarge.sp;
+
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        CustomHeader(
+          titleText: "${welcome.elementAt(0)} ",
+          titleColor: Theme.of(context).primaryColor,
+          titleLetterSpacing: 2.w,
+          subtitleText: "${welcome.elementAt(1)} ${welcome.elementAt(2)}!",
+          subtitleColor: Theme.of(context).colorScheme.onPrimary,
+          subTitleLetterSpacing: 2.w,
+          headingFontSize: mediumHeadingFontSize,
+        ),
+        SizedBox(height: smallSpaceHeight),
+        CustomHeader(
+          titleText: "I'm ",
+          titleColor: Theme.of(context).colorScheme.onPrimary,
+          titleLetterSpacing: 2.w,
+          subtitleText: 'Praveen Yadav',
+          subtitleColor: Theme.of(context).primaryColor,
+          subTitleLetterSpacing: 2.w,
+          headingFontSize: headingFontSize,
+        ),
+        SizedBox(height: smallSpaceHeight),
+        Text(
+          "Your aspiring Software or UI/UX developer",
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.onSecondary,
+            fontSize: AppSizes.mediumFontSize.sp,
+          ),
+        ),
+        SizedBox(height: largeSpaceHeight),
+        Wrap(
           children: [
-            Expanded(
-              child: Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: AppSizes.paddingMedium.w,
-                  vertical: AppSizes.paddingMedium.h,
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    CustomHeader(
-                      titleText: "${welcome.elementAt(0)} ",
-                      titleColor: Theme.of(context).primaryColor,
-                      titleLetterSpacing: 2.w,
-                      subtitleText:
-                          "${welcome.elementAt(1)} ${welcome.elementAt(2)}!",
-                      subtitleColor: Theme.of(context).colorScheme.onPrimary,
-                      subTitleLetterSpacing: 2.w,
-                      headingFontSize: mediumHeadingFontSize,
-                    ),
-                    SizedBox(height: smallSpaceHeight),
-                    CustomHeader(
-                      titleText: "I'm ",
-                      titleColor: Theme.of(context).colorScheme.onPrimary,
-                      titleLetterSpacing: 2.w,
-                      subtitleText: 'Praveen Yadav',
-                      subtitleColor: Theme.of(context).primaryColor,
-                      subTitleLetterSpacing: 2.w,
-                      headingFontSize: headingFontSize,
-                    ),
-                    SizedBox(height: smallSpaceHeight),
-                    Text(
-                      "Your aspiring Software or UI/UX developer",
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.onSecondary,
-                        fontSize: AppSizes.mediumFontSize.sp,
-                      ),
-                    ),
-                    SizedBox(height: largeSpaceHeight),
-                    Row(
-                      children: [
-                        CustomButton(
-                          onPressed: () {},
-                          label: "Download Resume",
-                          textStyle: TextStyle(
-                              color: Theme.of(context).colorScheme.onPrimary),
-                          borderColor: Theme.of(context).colorScheme.onPrimary,
-                          borderWidth: 2,
-                          hoverBorderColor: Theme.of(context).primaryColor,
-                          clickBorderColor: Theme.of(context).primaryColor,
-                          hoverEffects: const [HoverEffect.borderColor],
-                          clickEffects: const [ClickEffect.borderColor],
-                        ),
-                        SizedBox(width: mediumSpaceWidth),
-                        CustomButton(
-                          onPressed: () {
-                            onSectionSelected("Projects");
-                          },
-                          label: "See Projects",
-                          textStyle: TextStyle(
-                            color: Theme.of(context).colorScheme.onPrimary,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          backgroundColor: Theme.of(context).primaryColor,
-                          hoverEffects: const [HoverEffect.scale],
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: smallSpaceHeight),
-                    Row(
-                      children: [
-                        IconButton(
-                          onPressed: () {
-                            launchUrlString(
-                                'https://www.linkedin.com/in/pyapril1507');
-                          },
-                          icon: const Icon(FontAwesomeIcons.linkedin),
-                        ),
-                        SizedBox(width: smallSpaceWidth),
-                        IconButton(
-                          onPressed: () {
-                            launchUrlString('https://www.github.com/pyapril15');
-                          },
-                          icon: const Icon(FontAwesomeIcons.github),
-                        ),
-                        SizedBox(width: smallSpaceWidth),
-                        IconButton(
-                          onPressed: () {
-                            launchUrlString('https://www.x.com/pyapril15');
-                          },
-                          icon: const Icon(FontAwesomeIcons.twitter),
-                        ),
-                        SizedBox(width: smallSpaceWidth),
-                        IconButton(
-                          onPressed: () {
-                            launchUrlString(
-                                'https://www.instagram.com/__pyapril15.py__');
-                          },
-                          icon: const Icon(FontAwesomeIcons.instagram),
-                        ),
-                        SizedBox(width: smallSpaceWidth),
-                        IconButton(
-                          onPressed: () {
-                            launchUrlString(
-                                'https://www.discord.com/pyapril15');
-                          },
-                          icon: const Icon(FontAwesomeIcons.discord),
-                        )
-                      ],
-                    ),
-                  ],
-                ),
-              ),
+            CustomButton(
+              onPressed: () async {
+                const resumeUrl = 'https://example.com/resume.pdf';
+                if (await canLaunchUrlString(resumeUrl)) {
+                  await launchUrlString(resumeUrl);
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Failed to download resume.')),
+                  );
+                }
+              },
+              label: "Download Resume",
+              textStyle:
+                  TextStyle(color: Theme.of(context).colorScheme.onPrimary),
+              borderColor: Theme.of(context).colorScheme.onPrimary,
+              borderWidth: 2,
+              hoverBorderColor: Theme.of(context).primaryColor,
+              clickBorderColor: Theme.of(context).primaryColor,
+              hoverEffects: const [HoverEffect.borderColor],
+              clickEffects: const [ClickEffect.borderColor],
             ),
-            // Right side: Circular Image with Decoration
-            const Expanded(
-              child: Center(child: CircularImage()),
+            SizedBox(width: mediumSpaceWidth),
+            CustomButton(
+              onPressed: () {
+                onSectionSelected("Projects");
+              },
+              label: "See Projects",
+              textStyle: TextStyle(
+                color: Theme.of(context).colorScheme.onPrimary,
+                fontWeight: FontWeight.bold,
+              ),
+              backgroundColor: Theme.of(context).primaryColor,
+              hoverEffects: const [HoverEffect.scale],
             ),
           ],
-        );
-      },
+        ),
+        SizedBox(height: smallSpaceHeight),
+        Row(
+          children: [
+            _buildSocialIconButton(
+                icon: FontAwesomeIcons.linkedin,
+                url: 'https://www.linkedin.com/in/pyapril1507',
+                iconSize: iconSize),
+            SizedBox(width: smallSpaceWidth),
+            _buildSocialIconButton(
+                icon: FontAwesomeIcons.github,
+                url: 'https://www.github.com/pyapril15',
+                iconSize: iconSize),
+            SizedBox(width: smallSpaceWidth),
+            _buildSocialIconButton(
+                icon: FontAwesomeIcons.twitter,
+                url: 'https://www.x.com/pyapril15',
+                iconSize: iconSize),
+            SizedBox(width: smallSpaceWidth),
+            _buildSocialIconButton(
+                icon: FontAwesomeIcons.instagram,
+                url: 'https://www.instagram.com/__pyapril15.py__',
+                iconSize: iconSize),
+            SizedBox(width: smallSpaceWidth),
+            _buildSocialIconButton(
+                icon: FontAwesomeIcons.discord,
+                url: 'https://www.discord.com/pyapril15',
+                iconSize: iconSize),
+          ],
+        ),
+      ],
     );
   }
 
@@ -157,36 +233,22 @@ class HeroSection extends StatelessWidget {
     if (hour < 21) return "Hey Good Evening";
     return "Hey Good Night";
   }
-}
 
-class CircularImage extends StatelessWidget {
-  const CircularImage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      height: double.infinity,
-      decoration: const BoxDecoration(
-        shape: BoxShape.circle,
-        color: Colors.white, // Background color behind the image
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black26,
-            blurRadius: AppSizes.borderRadiusMedium,
-            spreadRadius: 2,
-            offset: Offset(0, 5), // Shadow position
-          ),
-        ],
-      ),
-      child: FittedBox(
-        child: ClipOval(
-          child: Image.asset(
-            'assets/images/pyapril15.png', // Replace with your image path
-            fit: BoxFit.cover, // Ensure the image covers the circle
-          ),
-        ),
-      ),
+  Widget _buildSocialIconButton({
+    required IconData icon,
+    required String url,
+    required double iconSize,
+  }) {
+    return IconButton(
+      onPressed: () async {
+        if (await canLaunchUrlString(url)) {
+          await launchUrlString(url);
+        } else {
+          print('Could not launch $url');
+        }
+      },
+      icon: Icon(icon),
+      iconSize: iconSize,
     );
   }
 }
