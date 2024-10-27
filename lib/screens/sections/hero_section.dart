@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:portfolio_website/helpers/responsive_helper.dart';
 import 'package:portfolio_website/theme/theme.dart';
 import 'package:portfolio_website/widgets/custom_button.dart';
 import 'package:portfolio_website/widgets/custom_header.dart';
@@ -17,7 +18,7 @@ class HeroSection extends StatelessWidget {
         if (constraints.maxWidth >= 600) {
           return HeroSectionDesktopTablet(onSectionSelected: onSectionSelected);
         } else {
-          return HeroSectionMobile(onSectionSelected: onSectionSelected);
+          return HeroSectionDesktopTablet(onSectionSelected: onSectionSelected);
         }
       },
     );
@@ -112,6 +113,7 @@ class _IntroSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ScreenType screenType = getScreenType(context);
     List<String> welcome = getGreetingMessage().split(" ");
     double mediumHeadingFontSize = AppSizes.headingFontSize.sp;
     double headingFontSize = 64.sp;
@@ -124,7 +126,7 @@ class _IntroSection extends StatelessWidget {
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         CustomHeader(
           titleText: "${welcome.elementAt(0)} ",
@@ -133,9 +135,10 @@ class _IntroSection extends StatelessWidget {
           subtitleText: "${welcome.elementAt(1)} ${welcome.elementAt(2)}!",
           subtitleColor: Theme.of(context).colorScheme.onPrimary,
           subTitleLetterSpacing: 2.w,
-          headingFontSize: mediumHeadingFontSize,
+          headingFontSize: 32.sp,
+          alignment: Alignment.center,
         ),
-        SizedBox(height: smallSpaceHeight),
+        SizedBox(height: 10.h),
         CustomHeader(
           titleText: "I'm ",
           titleColor: Theme.of(context).colorScheme.onPrimary,
@@ -143,17 +146,18 @@ class _IntroSection extends StatelessWidget {
           subtitleText: 'Praveen Yadav',
           subtitleColor: Theme.of(context).primaryColor,
           subTitleLetterSpacing: 2.w,
-          headingFontSize: headingFontSize,
+          headingFontSize: 56.sp,
+          alignment: Alignment.center,
         ),
-        SizedBox(height: smallSpaceHeight),
+        SizedBox(height: 10.h),
         Text(
           "Your aspiring Software or UI/UX developer",
           style: TextStyle(
             color: Theme.of(context).colorScheme.onSecondary,
-            fontSize: AppSizes.mediumFontSize.sp,
+            fontSize: 20.sp,
           ),
         ),
-        SizedBox(height: largeSpaceHeight),
+        SizedBox(height: 64.h),
         Wrap(
           children: [
             CustomButton(
@@ -169,7 +173,9 @@ class _IntroSection extends StatelessWidget {
               },
               label: "Download Resume",
               textStyle:
-                  TextStyle(color: Theme.of(context).colorScheme.onPrimary),
+                  TextStyle(color: Theme.of(context).colorScheme.onPrimary,
+                    fontSize: 20.sp
+                  ),
               borderColor: Theme.of(context).colorScheme.onPrimary,
               borderWidth: 2,
               hoverBorderColor: Theme.of(context).primaryColor,
@@ -177,7 +183,7 @@ class _IntroSection extends StatelessWidget {
               hoverEffects: const [HoverEffect.borderColor],
               clickEffects: const [ClickEffect.borderColor],
             ),
-            SizedBox(width: mediumSpaceWidth),
+            SizedBox(width: 16.h),
             CustomButton(
               onPressed: () {
                 onSectionSelected("Projects");
@@ -186,39 +192,40 @@ class _IntroSection extends StatelessWidget {
               textStyle: TextStyle(
                 color: Theme.of(context).colorScheme.onPrimary,
                 fontWeight: FontWeight.bold,
+                fontSize: 20.sp
               ),
               backgroundColor: Theme.of(context).primaryColor,
               hoverEffects: const [HoverEffect.scale],
             ),
           ],
         ),
-        SizedBox(height: smallSpaceHeight),
-        Row(
+        SizedBox(height: 10.h),
+        Wrap(
           children: [
             _buildSocialIconButton(
                 icon: FontAwesomeIcons.linkedin,
                 url: 'https://www.linkedin.com/in/pyapril1507',
-                iconSize: iconSize),
+                iconSize: 32.sp),
             SizedBox(width: smallSpaceWidth),
             _buildSocialIconButton(
                 icon: FontAwesomeIcons.github,
                 url: 'https://www.github.com/pyapril15',
-                iconSize: iconSize),
+                iconSize: 32.sp),
             SizedBox(width: smallSpaceWidth),
             _buildSocialIconButton(
                 icon: FontAwesomeIcons.twitter,
                 url: 'https://www.x.com/pyapril15',
-                iconSize: iconSize),
+                iconSize: 32.sp),
             SizedBox(width: smallSpaceWidth),
             _buildSocialIconButton(
                 icon: FontAwesomeIcons.instagram,
                 url: 'https://www.instagram.com/__pyapril15.py__',
-                iconSize: iconSize),
+                iconSize: 32.sp),
             SizedBox(width: smallSpaceWidth),
             _buildSocialIconButton(
                 icon: FontAwesomeIcons.discord,
                 url: 'https://www.discord.com/pyapril15',
-                iconSize: iconSize),
+                iconSize: 32.sp),
           ],
         ),
       ],

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:portfolio_website/helpers/responsive_helper.dart';
 import 'package:portfolio_website/screens/sections/about_section.dart';
 import 'package:portfolio_website/screens/sections/contact_section.dart';
 import 'package:portfolio_website/screens/sections/footer_section.dart';
@@ -55,6 +56,8 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context).size;
+    final screenHeight = ScreenUtil().screenHeight;
+    final ScreenType screenType = getScreenType(context);
     return SafeArea(
       child: Scaffold(
         appBar: Navbar(
@@ -98,7 +101,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       key: _homeKey,
                       margin: EdgeInsets.symmetric(
                           vertical: mediaQuery.height * 0.025),
-                      height: mediaQuery.height * 0.6,
+                      height: ((screenType == ScreenType.mobile?0.6:0.8)*screenHeight).h,
                       child: HeroSection(onSectionSelected: (String section) {
                         scrollToSection(_projectsKey, section);
                       }),
