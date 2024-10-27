@@ -138,10 +138,10 @@ class _IntroSection extends StatelessWidget {
           subtitleText: "${welcome.elementAt(1)} ${welcome.elementAt(2)}!",
           subtitleColor: Theme.of(context).colorScheme.onPrimary,
           subTitleLetterSpacing: 2.w,
-          headingFontSize: 32.sp,
+          headingFontSize: screenType==ScreenType.mobile?64.sp:32.sp,
           alignment: Alignment.center,
         ),
-        SizedBox(height: 10.h),
+        SizedBox(height: screenType==ScreenType.mobile?5.h:10.h),
         CustomHeader(
           titleText: "I'm ",
           titleColor: Theme.of(context).colorScheme.onPrimary,
@@ -149,18 +149,18 @@ class _IntroSection extends StatelessWidget {
           subtitleText: 'Praveen Yadav',
           subtitleColor: Theme.of(context).primaryColor,
           subTitleLetterSpacing: 2.w,
-          headingFontSize: 56.sp,
+          headingFontSize: screenType==ScreenType.mobile?112.sp:56.sp,
           alignment: Alignment.center,
         ),
-        SizedBox(height: 10.h),
+        SizedBox(height: screenType==ScreenType.mobile?5.h:10.h),
         Text(
           "Your aspiring Software or UI/UX developer",
           style: TextStyle(
             color: Theme.of(context).colorScheme.onSecondary,
-            fontSize: 20.sp,
+            fontSize: screenType==ScreenType.mobile?40.sp:20.sp,
           ),
         ),
-        SizedBox(height: 64.h),
+        SizedBox(height: screenType==ScreenType.mobile?24.h:48.h),
         Wrap(
           children: [
             CustomButton(
@@ -177,7 +177,7 @@ class _IntroSection extends StatelessWidget {
               label: "Download Resume",
               textStyle:
                   TextStyle(color: Theme.of(context).colorScheme.onPrimary,
-                    fontSize: 20.sp
+                    fontSize: screenType==ScreenType.mobile?36.sp:20.sp,
                   ),
               borderColor: Theme.of(context).colorScheme.onPrimary,
               borderWidth: 2,
@@ -186,7 +186,7 @@ class _IntroSection extends StatelessWidget {
               hoverEffects: const [HoverEffect.borderColor],
               clickEffects: const [ClickEffect.borderColor],
             ),
-            SizedBox(width: 16.h),
+            SizedBox(width: screenType==ScreenType.mobile?8.w:16.w),
             CustomButton(
               onPressed: () {
                 onSectionSelected("Projects");
@@ -195,40 +195,40 @@ class _IntroSection extends StatelessWidget {
               textStyle: TextStyle(
                 color: Theme.of(context).colorScheme.onPrimary,
                 fontWeight: FontWeight.bold,
-                fontSize: 20.sp
+                fontSize: screenType==ScreenType.mobile?36.sp:20.sp,
               ),
               backgroundColor: Theme.of(context).primaryColor,
               hoverEffects: const [HoverEffect.scale],
             ),
           ],
         ),
-        SizedBox(height: 10.h),
+        SizedBox(height: screenType==ScreenType.mobile?5.h:10.h),
         Wrap(
           children: [
             _buildSocialIconButton(
                 icon: FontAwesomeIcons.linkedin,
                 url: 'https://www.linkedin.com/in/pyapril1507',
-                iconSize: 32.sp),
+                iconSize: screenType==ScreenType.mobile?48.sp:32.sp),
             SizedBox(width: smallSpaceWidth),
             _buildSocialIconButton(
                 icon: FontAwesomeIcons.github,
                 url: 'https://www.github.com/pyapril15',
-                iconSize: 32.sp),
+                iconSize: screenType==ScreenType.mobile?48.sp:32.sp),
             SizedBox(width: smallSpaceWidth),
             _buildSocialIconButton(
                 icon: FontAwesomeIcons.twitter,
                 url: 'https://www.x.com/pyapril15',
-                iconSize: 32.sp),
+                iconSize: screenType==ScreenType.mobile?48.sp:32.sp),
             SizedBox(width: smallSpaceWidth),
             _buildSocialIconButton(
                 icon: FontAwesomeIcons.instagram,
                 url: 'https://www.instagram.com/__pyapril15.py__',
-                iconSize: 32.sp),
+                iconSize: screenType==ScreenType.mobile?48.sp:32.sp),
             SizedBox(width: smallSpaceWidth),
             _buildSocialIconButton(
                 icon: FontAwesomeIcons.discord,
                 url: 'https://www.discord.com/pyapril15',
-                iconSize: 32.sp),
+                iconSize: screenType==ScreenType.mobile?48.sp:32.sp),
           ],
         ),
       ],
