@@ -7,7 +7,7 @@ import 'package:portfolio_website/widgets/custom_button.dart';
 import 'package:portfolio_website/widgets/custom_header.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
-// mobile constants
+// Mobile constants
 double mSmallSpaceHeight = 2.h;
 double mSmallSpaceWidth = 4.w;
 double mLargeSpaceWidth = 24.w;
@@ -19,7 +19,7 @@ double mLargeParaFontSize = 112.sp;
 
 double mIconSize = 52.sp;
 
-// desktop and tablet constants
+// Desktop and tablet constants
 double dSmallSpaceHeight = 10.h;
 double dSmallSpaceWidth = 8.w;
 double dLargeSpaceWidth = 16.w;
@@ -39,11 +39,11 @@ class HeroSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        if (constraints.maxWidth >= 600) {
-          return HeroSectionDesktopTablet(onSectionSelected: onSectionSelected);
-        } else {
-          return HeroSectionDesktopTablet(onSectionSelected: onSectionSelected);
-        }
+        return SizedBox(
+          width: double.infinity,
+          height: double.infinity,
+          child: HeroSectionDesktopTablet(onSectionSelected: onSectionSelected),
+        );
       },
     );
   }
@@ -81,26 +81,28 @@ class _IntroSection extends StatelessWidget {
     final ScreenType screenType = getScreenType(context);
     List<String> welcome = getGreetingMessage().split(" ");
 
-    // common
     double smallSpaceHeight =
         screenType == ScreenType.mobile ? mSmallSpaceHeight : dSmallSpaceHeight;
     double largeSpaceHeight =
         screenType == ScreenType.mobile ? mLargeSpaceHeight : dLargeSpaceHeight;
-
     double smallSpaceWidth =
         screenType == ScreenType.mobile ? mSmallSpaceWidth : dSmallSpaceWidth;
     double largeSpaceWidth =
         screenType == ScreenType.mobile ? mLargeSpaceWidth : dLargeSpaceWidth;
-
-    double paraFontSize = screenType == ScreenType.mobile ? mSmallParaFontSize : dSmallParaFontSize;
-    double headingFontSize = screenType == ScreenType.mobile ? mLargeParaFontSize : dLargeParaFontSize;
-    double subHeadingFontSize = screenType == ScreenType.mobile ? mMediumParaFontSize : dMediumParaFontSize;
-
+    double paraFontSize = screenType == ScreenType.mobile
+        ? mSmallParaFontSize
+        : dSmallParaFontSize;
+    double headingFontSize = screenType == ScreenType.mobile
+        ? mLargeParaFontSize
+        : dLargeParaFontSize;
+    double subHeadingFontSize = screenType == ScreenType.mobile
+        ? mMediumParaFontSize
+        : dMediumParaFontSize;
     double iconSize = screenType == ScreenType.mobile ? mIconSize : dIconSize;
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         CustomHeader(
           titleText: "${welcome.elementAt(0)} ",
@@ -110,7 +112,6 @@ class _IntroSection extends StatelessWidget {
           subtitleColor: Theme.of(context).colorScheme.onPrimary,
           subTitleLetterSpacing: 2.w,
           headingFontSize: subHeadingFontSize,
-          alignment: Alignment.center,
         ),
         SizedBox(height: smallSpaceHeight),
         CustomHeader(
@@ -121,7 +122,6 @@ class _IntroSection extends StatelessWidget {
           subtitleColor: Theme.of(context).primaryColor,
           subTitleLetterSpacing: 2.w,
           headingFontSize: headingFontSize,
-          alignment: Alignment.center,
         ),
         SizedBox(height: smallSpaceHeight),
         Text(
@@ -133,6 +133,7 @@ class _IntroSection extends StatelessWidget {
         ),
         SizedBox(height: largeSpaceHeight),
         Wrap(
+          spacing: smallSpaceWidth,
           children: [
             CustomButton(
               onPressed: () async {
@@ -175,35 +176,28 @@ class _IntroSection extends StatelessWidget {
         ),
         SizedBox(height: smallSpaceHeight),
         Wrap(
+          spacing: smallSpaceWidth,
           children: [
             _buildSocialIconButton(
-              icon: FontAwesomeIcons.linkedin,
-              url: 'https://www.linkedin.com/in/pyapril1507',
-              iconSize: iconSize,
-            ),
-            SizedBox(width: smallSpaceWidth),
+                icon: FontAwesomeIcons.linkedin,
+                url: 'https://www.linkedin.com/in/pyapril1507',
+                iconSize: iconSize),
             _buildSocialIconButton(
-              icon: FontAwesomeIcons.github,
-              url: 'https://www.github.com/pyapril15',
-              iconSize: iconSize,
-            ),
-            SizedBox(width: smallSpaceWidth),
+                icon: FontAwesomeIcons.github,
+                url: 'https://www.github.com/pyapril15',
+                iconSize: iconSize),
             _buildSocialIconButton(
                 icon: FontAwesomeIcons.twitter,
                 url: 'https://www.x.com/pyapril15',
                 iconSize: iconSize),
-            SizedBox(width: smallSpaceWidth),
             _buildSocialIconButton(
-              icon: FontAwesomeIcons.instagram,
-              url: 'https://www.instagram.com/__pyapril15.py__',
-              iconSize: iconSize,
-            ),
-            SizedBox(width: smallSpaceWidth),
+                icon: FontAwesomeIcons.instagram,
+                url: 'https://www.instagram.com/__pyapril15.py__',
+                iconSize: iconSize),
             _buildSocialIconButton(
-              icon: FontAwesomeIcons.discord,
-              url: 'https://www.discord.com/pyapril15',
-              iconSize: iconSize,
-            ),
+                icon: FontAwesomeIcons.discord,
+                url: 'https://www.discord.com/pyapril15',
+                iconSize: iconSize),
           ],
         ),
       ],
@@ -219,11 +213,8 @@ class _IntroSection extends StatelessWidget {
     return "Hey Good Night";
   }
 
-  Widget _buildSocialIconButton({
-    required IconData icon,
-    required String url,
-    required double iconSize,
-  }) {
+  Widget _buildSocialIconButton(
+      {required IconData icon, required String url, required double iconSize}) {
     return IconButton(
       onPressed: () async {
         if (await canLaunchUrlString(url)) {
@@ -236,7 +227,6 @@ class _IntroSection extends StatelessWidget {
   }
 }
 
-// CircularImage widget with responsive constraints
 class CircularImage extends StatelessWidget {
   final bool isDesktop;
   const CircularImage({super.key, required this.isDesktop});
