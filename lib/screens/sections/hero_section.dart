@@ -1,3 +1,4 @@
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -6,6 +7,7 @@ import 'package:portfolio_website/theme/theme.dart';
 import 'package:portfolio_website/widgets/custom_button.dart';
 import 'package:portfolio_website/widgets/custom_header.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+import 'dart:html' as html;
 
 // Mobile constants
 double mSmallSpaceHeight = 2.h;
@@ -58,6 +60,7 @@ class HeroSectionDesktopTablet extends StatelessWidget {
   Widget build(BuildContext context) {
     final ScreenType screenType = getScreenType(context);
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Expanded(
           flex: screenType == ScreenType.mobile ? 2 : 1,
@@ -72,9 +75,40 @@ class HeroSectionDesktopTablet extends StatelessWidget {
   }
 }
 
-class _IntroSection extends StatelessWidget {
+class _IntroSection extends StatefulWidget {
   final Function(String section) onSectionSelected;
   const _IntroSection({required this.onSectionSelected});
+
+  @override
+  State<_IntroSection> createState() => _IntroSectionState();
+}
+
+class _IntroSectionState extends State<_IntroSection> {
+  // Function to download the resume from Firebase Storage
+  Future<void> downloadResume(BuildContext context) async {
+    String filePath =
+        'gs://portfolio-1952e.appspot.com/praveen_yadav(RESUME).pdf';
+
+    try {
+      // Get the download URL from Firebase Storage
+      String downloadUrl =
+          await FirebaseStorage.instance.ref(filePath).getDownloadURL();
+      html.AnchorElement(href: downloadUrl)
+        ..setAttribute(
+            'download',
+            'praveen_yadav_resume'
+                .toLowerCase()) // Name for the downloaded file
+        ..click(); // Trigger the download
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Download started!')),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Download failed. Please try again.')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -138,15 +172,8 @@ class _IntroSection extends StatelessWidget {
           spacing: smallSpaceWidth,
           children: [
             CustomButton(
-              onPressed: () async {
-                const resumeUrl = 'https://example.com/resume.pdf';
-                if (await canLaunchUrlString(resumeUrl)) {
-                  await launchUrlString(resumeUrl);
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Failed to download resume.')),
-                  );
-                }
+              onPressed: () {
+                downloadResume(context);
               },
               label: "Download Resume",
               textStyle: TextStyle(
@@ -163,7 +190,7 @@ class _IntroSection extends StatelessWidget {
             SizedBox(width: largeSpaceWidth),
             CustomButton(
               onPressed: () {
-                onSectionSelected("Projects");
+                widget.onSectionSelected("Projects");
               },
               label: "See Projects",
               textStyle: TextStyle(

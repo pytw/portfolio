@@ -60,7 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     final EdgeInsetsGeometry responsiveMargin = screenType == ScreenType.desktop
         ? EdgeInsets.symmetric(horizontal: mediaQuery.width * 0.05)
-        : EdgeInsets.zero;
+        : const EdgeInsets.all(5);
 
     return SafeArea(
       child: Scaffold(
