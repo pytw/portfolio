@@ -101,7 +101,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     margin: EdgeInsets.symmetric(
                         vertical:
                             screenType == ScreenType.mobile ? 0 : 0.025.sh),
-                    height: ((screenType == ScreenType.mobile ? 1 : 0.8) *
+                    height: ((screenType == ScreenType.mobile ? 0.3 : 0.8) *
                             screenHeight)
                         .h,
                     width: double.infinity,
