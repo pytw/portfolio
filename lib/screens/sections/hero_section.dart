@@ -102,7 +102,7 @@ class _IntroSection extends StatelessWidget {
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         CustomHeader(
           titleText: "${welcome.elementAt(0)} ",
@@ -112,6 +112,7 @@ class _IntroSection extends StatelessWidget {
           subtitleColor: Theme.of(context).colorScheme.onPrimary,
           subTitleLetterSpacing: 2.w,
           headingFontSize: subHeadingFontSize,
+          alignment: Alignment.center,
         ),
         SizedBox(height: smallSpaceHeight),
         CustomHeader(
@@ -122,6 +123,7 @@ class _IntroSection extends StatelessWidget {
           subtitleColor: Theme.of(context).primaryColor,
           subTitleLetterSpacing: 2.w,
           headingFontSize: headingFontSize,
+          alignment: Alignment.center,
         ),
         SizedBox(height: smallSpaceHeight),
         Text(
