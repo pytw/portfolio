@@ -103,7 +103,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         key: _homeKey,
                         margin: EdgeInsets.symmetric(
                             vertical: 0.025.sh.h),
-                        height: ((screenType == ScreenType.mobile?0.4:0.8)*screenHeight).h,
+                        height: ((screenType == ScreenType.mobile?0.3:0.8)*screenHeight).h,
                         child: ColoredBox(
                           color: Colors.red,
                           child: HeroSection(onSectionSelected: (String section) {

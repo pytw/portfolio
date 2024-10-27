@@ -141,7 +141,7 @@ class _IntroSection extends StatelessWidget {
           headingFontSize: screenType==ScreenType.mobile?64.sp:32.sp,
           alignment: Alignment.center,
         ),
-        SizedBox(height: screenType==ScreenType.mobile?4.h:10.h),
+        SizedBox(height: screenType==ScreenType.mobile?2.h:10.h),
         CustomHeader(
           titleText: "I'm ",
           titleColor: Theme.of(context).colorScheme.onPrimary,
@@ -152,7 +152,7 @@ class _IntroSection extends StatelessWidget {
           headingFontSize: screenType==ScreenType.mobile?112.sp:56.sp,
           alignment: Alignment.center,
         ),
-        SizedBox(height: screenType==ScreenType.mobile?4.h:10.h),
+        SizedBox(height: screenType==ScreenType.mobile?2.h:10.h),
         Text(
           "Your aspiring Software or UI/UX developer",
           style: TextStyle(
@@ -160,7 +160,7 @@ class _IntroSection extends StatelessWidget {
             fontSize: screenType==ScreenType.mobile?40.sp:20.sp,
           ),
         ),
-        SizedBox(height: screenType==ScreenType.mobile?24.h:48.h),
+        SizedBox(height: screenType==ScreenType.mobile?28.h:48.h),
         Wrap(
           children: [
             CustomButton(
@@ -186,7 +186,7 @@ class _IntroSection extends StatelessWidget {
               hoverEffects: const [HoverEffect.borderColor],
               clickEffects: const [ClickEffect.borderColor],
             ),
-            SizedBox(width: 16.w),
+            SizedBox(width: screenType==ScreenType.mobile?24.w:16.w),
             CustomButton(
               onPressed: () {
                 onSectionSelected("Projects");
@@ -202,7 +202,7 @@ class _IntroSection extends StatelessWidget {
             ),
           ],
         ),
-        SizedBox(height: screenType==ScreenType.mobile?4.h:10.h),
+        SizedBox(height: screenType==ScreenType.mobile?2.h:10.h),
         Wrap(
           children: [
             _buildSocialIconButton(
