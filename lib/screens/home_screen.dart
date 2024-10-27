@@ -102,6 +102,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       margin: EdgeInsets.symmetric(
                           vertical: 0.025.sh.h),
                       height: ((screenType == ScreenType.mobile?0.3:0.8)*screenHeight).h,
+                    width: double.infinity,
                       child: HeroSection(onSectionSelected: (String section) {
                         scrollToSection(_projectsKey, section);
                       }),

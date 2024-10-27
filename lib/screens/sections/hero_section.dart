@@ -228,8 +228,6 @@ class _IntroSection extends StatelessWidget {
       onPressed: () async {
         if (await canLaunchUrlString(url)) {
           await launchUrlString(url);
-        } else {
-          print('Could not launch $url');
         }
       },
       icon: Icon(icon),
@@ -246,8 +244,8 @@ class CircularImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: isDesktop ? double.infinity : 150.w,
-      height: isDesktop ? double.infinity : 150.w,
+      width: double.infinity,
+      height: double.infinity,
       decoration: const BoxDecoration(
         shape: BoxShape.circle,
         color: Colors.white,
