@@ -32,12 +32,15 @@ class HeroSectionDesktopTablet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ScreenType screenType = getScreenType(context);
     return Row(
       children: [
         Expanded(
+          flex: screenType==ScreenType.mobile?2:1,
           child: _IntroSection(onSectionSelected: onSectionSelected),
         ),
         const Expanded(
+          flex: 1,
           child: Center(child: CircularImage(isDesktop: true)),
         ),
       ],
