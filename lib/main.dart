@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:portfolio_website/helpers/responsive_helper.dart';
 import 'package:portfolio_website/screens/home_screen.dart';
 import 'package:portfolio_website/theme/theme.dart'; // Custom app theme
 import 'firebase/firebase_options.dart'; // Firebase options

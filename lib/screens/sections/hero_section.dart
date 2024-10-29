@@ -1,4 +1,3 @@
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -7,53 +6,47 @@ import 'package:portfolio_website/theme/theme.dart';
 import 'package:portfolio_website/widgets/custom_button.dart';
 import 'package:portfolio_website/widgets/custom_header.dart';
 import 'package:url_launcher/url_launcher_string.dart';
-import 'dart:html' as html;
+import '../../download_manager.dart';
 
-// Mobile constants
-double mSmallSpaceHeight = 2.h;
-double mSmallSpaceWidth = 4.w;
-double mLargeSpaceWidth = 24.w;
-double mLargeSpaceHeight = 28.h;
-
-double mSmallParaFontSize = 40.sp;
-double mMediumParaFontSize = 64.sp;
-double mLargeParaFontSize = 112.sp;
-
-double mIconSize = 52.sp;
-
-// Desktop and tablet constants
-double dSmallSpaceHeight = 10.h;
-double dSmallSpaceWidth = 8.w;
-double dLargeSpaceWidth = 16.w;
-double dLargeSpaceHeight = 48.h;
-
-double dSmallParaFontSize = 20.sp;
-double dMediumParaFontSize = 32.sp;
-double dLargeParaFontSize = 56.sp;
-
-double dIconSize = 32.sp;
+// Constants for Mobile and Desktop layouts
+double mSmallSpaceHeight = 2.h,
+    mSmallSpaceWidth = 4.w,
+    mLargeSpaceWidth = 24.w,
+    mLargeSpaceHeight = 28.h;
+double mSmallParaFontSize = 40.sp,
+    mMediumParaFontSize = 64.sp,
+    mLargeParaFontSize = 112.sp,
+    mIconSize = 52.sp;
+double dSmallSpaceHeight = 10.h,
+    dSmallSpaceWidth = 8.w,
+    dLargeSpaceWidth = 16.w,
+    dLargeSpaceHeight = 48.h;
+double dSmallParaFontSize = 20.sp,
+    dMediumParaFontSize = 32.sp,
+    dLargeParaFontSize = 56.sp,
+    dIconSize = 32.sp;
 
 class HeroSection extends StatelessWidget {
   final Function(String section) onSectionSelected;
+
   const HeroSection({super.key, required this.onSectionSelected});
 
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
-      builder: (context, constraints) {
-        return SizedBox(
-          width: double.infinity,
-          height: double.infinity,
-          child: HeroSectionDesktopTablet(onSectionSelected: onSectionSelected),
-        );
-      },
+      builder: (context, constraints) => SizedBox(
+        width: double.infinity,
+        height: double.infinity,
+        child: HeroSectionDesktopTablet(onSectionSelected: onSectionSelected),
+      ),
     );
   }
 }
 
-// Widget for Desktop/Tablet Layout
+// Desktop/Tablet Layout Widget
 class HeroSectionDesktopTablet extends StatelessWidget {
   final Function(String section) onSectionSelected;
+
   const HeroSectionDesktopTablet({super.key, required this.onSectionSelected});
 
   @override
@@ -63,13 +56,11 @@ class HeroSectionDesktopTablet extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Expanded(
-          flex: screenType == ScreenType.mobile ? 2 : 1,
-          child: _IntroSection(onSectionSelected: onSectionSelected),
-        ),
+            flex: screenType == ScreenType.mobile ? 2 : 1,
+            child: Center(
+                child: _IntroSection(onSectionSelected: onSectionSelected))),
         const Expanded(
-          flex: 1,
-          child: Center(child: CircularImage(isDesktop: true)),
-        ),
+            flex: 1, child: Center(child: CircularImage(isDesktop: true))),
       ],
     );
   }
@@ -77,6 +68,7 @@ class HeroSectionDesktopTablet extends StatelessWidget {
 
 class _IntroSection extends StatefulWidget {
   final Function(String section) onSectionSelected;
+
   const _IntroSection({required this.onSectionSelected});
 
   @override
@@ -84,37 +76,50 @@ class _IntroSection extends StatefulWidget {
 }
 
 class _IntroSectionState extends State<_IntroSection> {
-  // Function to download the resume from Firebase Storage
-  Future<void> downloadResume(BuildContext context) async {
-    String filePath =
-        'gs://portfolio-1952e.appspot.com/praveen_yadav(RESUME).pdf';
+  DownloadState? downloadState;
+  final Map<String, String> downloadLinks = {
+    'PDF': 'assets/documents/resume/resume.pdf',
+    'DOCX': 'assets/documents/resume/resume.docx',
+    'Image': 'assets/documents/resume/resume.png',
+  };
 
-    try {
-      // Get the download URL from Firebase Storage
-      String downloadUrl =
-          await FirebaseStorage.instance.ref(filePath).getDownloadURL();
-      html.AnchorElement(href: downloadUrl)
-        ..setAttribute(
-            'download',
-            'praveen_yadav_resume'
-                .toLowerCase()) // Name for the downloaded file
-        ..click(); // Trigger the download
+  Future<void> startDownload(String format) async {
+    String? filepath = downloadLinks[format];
+    setState(() => downloadState = DownloadState.started);
+    final result = await downloadResume(context, filepath!);
+    setState(() => downloadState = result);
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Download started!')),
-      );
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Download failed. Please try again.')),
-      );
+    if (result == DownloadState.completed || result == DownloadState.failed) {
+      await Future.delayed(const Duration(seconds: 2));
+      setState(() => downloadState = null);
     }
+  }
+
+  void _showDownloadOptions(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (_) => Container(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: downloadLinks.keys.map((String format) {
+            return ListTile(
+              title: Text(format),
+              onTap: () {
+                startDownload(format);
+                Navigator.pop(context);
+              },
+            );
+          }).toList(),
+        ),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     final ScreenType screenType = getScreenType(context);
     List<String> welcome = getGreetingMessage().split(" ");
-
     double smallSpaceHeight =
         screenType == ScreenType.mobile ? mSmallSpaceHeight : dSmallSpaceHeight;
     double largeSpaceHeight =
@@ -136,13 +141,12 @@ class _IntroSectionState extends State<_IntroSection> {
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         CustomHeader(
-          titleText: "${welcome.elementAt(0)} ",
+          titleText: "${welcome[0]} ",
           titleColor: Theme.of(context).primaryColor,
           titleLetterSpacing: 2.w,
-          subtitleText: "${welcome.elementAt(1)} ${welcome.elementAt(2)}!",
+          subtitleText: "${welcome[1]} ${welcome[2]}!",
           subtitleColor: Theme.of(context).colorScheme.onPrimary,
           subTitleLetterSpacing: 2.w,
           headingFontSize: subHeadingFontSize,
@@ -152,10 +156,8 @@ class _IntroSectionState extends State<_IntroSection> {
         CustomHeader(
           titleText: "I'm ",
           titleColor: Theme.of(context).colorScheme.onPrimary,
-          titleLetterSpacing: 2.w,
           subtitleText: 'Praveen Yadav',
           subtitleColor: Theme.of(context).primaryColor,
-          subTitleLetterSpacing: 2.w,
           headingFontSize: headingFontSize,
           alignment: Alignment.center,
         ),
@@ -163,43 +165,40 @@ class _IntroSectionState extends State<_IntroSection> {
         Text(
           "Your aspiring Software or UI/UX developer",
           style: TextStyle(
-            color: Theme.of(context).colorScheme.onSecondary,
-            fontSize: paraFontSize,
-          ),
+              color: Theme.of(context).colorScheme.onSecondary,
+              fontSize: paraFontSize),
         ),
         SizedBox(height: largeSpaceHeight),
         Wrap(
           spacing: smallSpaceWidth,
           children: [
             CustomButton(
-              onPressed: () {
-                downloadResume(context);
-              },
+              onPressed: () => _showDownloadOptions(context),
               label: "Download Resume",
               textStyle: TextStyle(
-                color: Theme.of(context).colorScheme.onPrimary,
-                fontSize: paraFontSize,
-              ),
+                  color: Theme.of(context).colorScheme.onPrimary,
+                  fontSize: paraFontSize),
               borderColor: Theme.of(context).colorScheme.onPrimary,
               borderWidth: 2,
               hoverBorderColor: Theme.of(context).primaryColor,
               clickBorderColor: Theme.of(context).primaryColor,
-              hoverEffects: const [HoverEffect.borderColor],
-              clickEffects: const [ClickEffect.borderColor],
             ),
+            if (downloadState != null) SizedBox(width: smallSpaceWidth),
+            if (downloadState == DownloadState.started)
+              const CircularProgressIndicator(),
+            if (downloadState == DownloadState.completed)
+              Icon(Icons.check_circle, color: Colors.green, size: dIconSize),
+            if (downloadState == DownloadState.failed)
+              Icon(Icons.error, color: Colors.red, size: dIconSize),
             SizedBox(width: largeSpaceWidth),
             CustomButton(
-              onPressed: () {
-                widget.onSectionSelected("Projects");
-              },
+              onPressed: () => widget.onSectionSelected("Projects"),
               label: "See Projects",
               textStyle: TextStyle(
-                color: Theme.of(context).colorScheme.onPrimary,
-                fontWeight: FontWeight.bold,
-                fontSize: paraFontSize,
-              ),
+                  color: Theme.of(context).colorScheme.onPrimary,
+                  fontWeight: FontWeight.bold,
+                  fontSize: paraFontSize),
               backgroundColor: Theme.of(context).primaryColor,
-              hoverEffects: const [HoverEffect.scale],
             ),
           ],
         ),
@@ -238,8 +237,7 @@ class _IntroSectionState extends State<_IntroSection> {
     if (hour < 5) return "Hey Good Night";
     if (hour < 12) return "Hey Good Morning";
     if (hour < 17) return "Hey Good Afternoon";
-    if (hour < 21) return "Hey Good Evening";
-    return "Hey Good Night";
+    return hour < 21 ? "Hey Good Evening" : "Hey Good Night";
   }
 
   Widget _buildSocialIconButton(
@@ -258,6 +256,7 @@ class _IntroSectionState extends State<_IntroSection> {
 
 class CircularImage extends StatelessWidget {
   final bool isDesktop;
+
   const CircularImage({super.key, required this.isDesktop});
 
   @override
@@ -282,7 +281,7 @@ class CircularImage extends StatelessWidget {
           child: Image.asset(
             'assets/images/pyapril15.png',
             fit: BoxFit.cover,
-            errorBuilder: (context, error, stackTrace) => Image.asset(
+            errorBuilder: (_, __, ___) => Image.asset(
               'assets/images/placeholder.png',
               fit: BoxFit.cover,
             ),
