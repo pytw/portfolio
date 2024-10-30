@@ -95,7 +95,7 @@ class ProjectSectionMobile extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           _buildSvgImage(project),
-          SizedBox(width: AppSizes.largeSpaceBtwItems.h),
+          SizedBox(height: 2.h,),
           Expanded(
             flex: 1,
             child: CustomAnimation(
