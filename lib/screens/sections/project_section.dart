@@ -92,12 +92,11 @@ class ProjectSectionMobile extends StatelessWidget {
 
     return Expanded(
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           _buildSvgImage(project),
           SizedBox(height: 2.h,),
           Expanded(
-            flex: 1,
+            flex: 2,
             child: CustomAnimation(
               animationType: AnimationType.scale,
               child: SingleChildScrollView(
