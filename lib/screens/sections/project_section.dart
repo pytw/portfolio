@@ -95,7 +95,11 @@ class ProjectSectionMobile extends StatelessWidget {
     return Expanded(
       child: Column(
         children: [
-          _buildSvgImage(project),
+          Row(
+            children: [
+              _buildSvgImage(project),
+            ],
+          ),
           SizedBox(height: 28.h,),
           Expanded(
             flex: 2,
