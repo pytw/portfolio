@@ -94,15 +94,18 @@ class ProjectSectionMobile extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          _buildSvgImage(project),
+          ColoredBox(color: Colors.orange, child: _buildSvgImage(project)),
           SizedBox(height: 2.h,),
-          Expanded(
-            flex: 1,
-            child: CustomAnimation(
-              animationType: AnimationType.scale,
-              child: SingleChildScrollView(
-                child: _buildWrapTexts(
-                    project, context, mediumHeadingFontSize, bodyFontSize),
+          ColoredBox(
+            color: Colors.green,
+            child: Expanded(
+              flex: 1,
+              child: CustomAnimation(
+                animationType: AnimationType.scale,
+                child: SingleChildScrollView(
+                  child: _buildWrapTexts(
+                      project, context, mediumHeadingFontSize, bodyFontSize),
+                ),
               ),
             ),
           ),
