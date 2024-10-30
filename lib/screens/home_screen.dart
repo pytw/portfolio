@@ -108,13 +108,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       scrollToSection(_projectsKey, section);
                     }),
                   ),
-                  SizedBox(height: 108.h),
+                  SizedBox(height: screenType==ScreenType.mobile?62.h:108.h),
                   Container(
                     key: _projectsKey,
                     margin: EdgeInsets.symmetric(
                         vertical: screenType == ScreenType.mobile ? 0 : 15.h),
-                    height: ((screenType == ScreenType.mobile ? 0.8 : 1.3)*screenHeight).h,
-                    child: ProjectSection(),
+                    height: (screenType == ScreenType.mobile ? null : (1.3*screenHeight).h),
+                    child: const ProjectSection(),
                   ),
                   SizedBox(height: AppSizes.mediumSpaceBtwItems.h),
                   Container(
