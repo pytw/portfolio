@@ -24,6 +24,36 @@
 #          channelId: live
 #          projectId: portfolio-1952e
 
+#name: Deploy to Firebase Hosting on merge
+#on:
+#  push:
+#    branches:
+#      - main
+#jobs:
+#  build_and_deploy:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v4
+#
+#      - name: Set up Flutter
+#        uses: subosito/flutter-action@v2
+#        with:
+#          flutter-version: '3.24.3'  # or specify a version like '3.0.0'
+#
+#      - name: Install dependencies
+#        run: npm ci
+#
+#      - name: Build the project
+#        run: flutter build web
+#
+#      - uses: FirebaseExtended/action-hosting-deploy@v0
+#        with:
+#          repoToken: ${{ secrets.GITHUB_TOKEN }}
+#          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_PORTFOLIO_1952E }}
+#          channelId: live
+#          projectId: portfolio-1952e
+#
+
 name: Deploy to Firebase Hosting on merge
 on:
   push:
@@ -41,7 +71,7 @@ jobs:
           flutter-version: '3.24.3'  # or specify a version like '3.0.0'
 
       - name: Install dependencies
-        run: npm ci
+        run: npm ci && flutter pub get
 
       - name: Build the project
         run: flutter build web
