@@ -16,7 +16,7 @@ class ProjectSection extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) => SizedBox(
         width: double.infinity,
-        height: double.infinity,
+        height: screenType==ScreenType.mobile?null:double.infinity,
         child: Column(
           children: [
             CustomHeader(

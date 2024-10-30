@@ -108,7 +108,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       scrollToSection(_projectsKey, section);
                     }),
                   ),
-                  SizedBox(height: screenType==ScreenType.mobile?62.h:108.h),
+                  SizedBox(height: screenType==ScreenType.mobile?52.h:108.h),
                   Container(
                     key: _projectsKey,
                     margin: EdgeInsets.symmetric(
