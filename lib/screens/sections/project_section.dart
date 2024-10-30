@@ -26,11 +26,11 @@ class ProjectSection extends StatelessWidget {
               subtitleColor: Theme.of(context).primaryColor,
               headingFontSize: 36.sp,
             ),
-            SizedBox(height: 28.h),
+            SizedBox(height: screenType==ScreenType.mobile?16.h:28.h),
             screenType == ScreenType.mobile
                 ? const ProjectSectionMobile()
                 : const ProjectSectionDesktop(),
-            SizedBox(height: 28.h),
+            SizedBox(height: screenType==ScreenType.mobile?16.h:28.h),
             Align(
               alignment: Alignment.topRight,
               child: CustomButton(
