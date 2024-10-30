@@ -194,8 +194,7 @@ Expanded _buildSvgImage(ProjectDetail project) {
     flex: 1,
     child: CustomAnimation(
       animationType: AnimationType.scale,
-      child: AspectRatio(
-        aspectRatio: 1,
+      child: FittedBox(
         child: Image.asset(
           project.imagePath,
           fit: BoxFit.contain,
