@@ -16,7 +16,7 @@ class ProjectSection extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) => SizedBox(
         width: double.infinity,
-        height: screenType==ScreenType.mobile?null:double.infinity,
+        // height: screenType==ScreenType.mobile?null:double.infinity,
         child: Column(
           children: [
             CustomHeader(
@@ -152,12 +152,9 @@ class TechnicalSkill {
   TechnicalSkill(this.name, this.iconPath);
 }
 
-Wrap _buildWrapTexts(ProjectDetail project, BuildContext context,
+Column _buildWrapTexts(ProjectDetail project, BuildContext context,
     double mediumHeadingFontSize, double bodyFontSize) {
-  return Wrap(
-    spacing: AppSizes.mediumSpaceBtwItems.w,
-    runSpacing: AppSizes.mediumSpaceBtwItems.h,
-    alignment: WrapAlignment.center,
+  return Column(
     children: [
       Text(
         project.title,
