@@ -26,9 +26,11 @@ class ProjectSection extends StatelessWidget {
               subtitleColor: Theme.of(context).primaryColor,
               headingFontSize: 36.sp,
             ),
+            SizedBox(height: 28.h),
             screenType == ScreenType.mobile
                 ? const ProjectSectionMobile()
                 : const ProjectSectionDesktop(),
+            SizedBox(height: 28.h),
             Align(
               alignment: Alignment.topRight,
               child: CustomButton(
@@ -94,7 +96,7 @@ class ProjectSectionMobile extends StatelessWidget {
       child: Column(
         children: [
           _buildSvgImage(project),
-          SizedBox(height: 2.h,),
+          SizedBox(height: 28.h,),
           Expanded(
             flex: 2,
             child: CustomAnimation(
