@@ -117,15 +117,12 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                     SizedBox(height: 15.h),
-                    ColoredBox(
-                      color: Colors.green,
-                      child: Container(
-                        key: _projectsKey,
-                        margin: EdgeInsets.symmetric(
-                            vertical: screenType == ScreenType.mobile ? 0 : 15.h),
-                        height: ((screenType == ScreenType.mobile ? 0.8 : 1.3)*screenHeight).h,
-                        child: const ColoredBox(color: Colors.purple, child: ProjectSection()),
-                      ),
+                    Container(
+                      key: _projectsKey,
+                      margin: EdgeInsets.symmetric(
+                          vertical: screenType == ScreenType.mobile ? 0 : 15.h),
+                      height: ((screenType == ScreenType.mobile ? 0.8 : 1.3)*screenHeight).h,
+                      child: ProjectSection(),
                     ),
                     SizedBox(height: AppSizes.mediumSpaceBtwItems.h),
                     Container(

@@ -24,7 +24,7 @@ class ProjectSection extends StatelessWidget {
               titleColor: Theme.of(context).colorScheme.onPrimary,
               subtitleText: 'I have done.',
               subtitleColor: Theme.of(context).primaryColor,
-              headingFontSize: screenType==ScreenType.mobile?112.sp:56.sp,
+              headingFontSize: screenType==ScreenType.mobile?92.sp:42.sp,
             ),
             SizedBox(height: screenType==ScreenType.mobile?16.h:28.h),
             screenType == ScreenType.mobile
@@ -57,8 +57,8 @@ class ProjectSectionDesktop extends StatelessWidget {
   Widget build(BuildContext context) {
     ProjectDetail project = _singleProject();
 
-    double bodyFontSize = 20.sp;
-    double mediumHeadingFontSize = 32.sp;
+    double bodyFontSize = 24.sp;
+    double mediumHeadingFontSize = 28.sp;
 
     return Expanded(
       child: Row(
@@ -89,7 +89,7 @@ class ProjectSectionMobile extends StatelessWidget {
   Widget build(BuildContext context) {
     ProjectDetail project = _singleProject();
 
-    double bodyFontSize = 40.sp;
+    double bodyFontSize = 48.sp;
     double mediumHeadingFontSize = 64.sp;
 
     return Expanded(
