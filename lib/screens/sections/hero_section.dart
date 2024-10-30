@@ -6,25 +6,31 @@ import 'package:portfolio_website/theme/theme.dart';
 import 'package:portfolio_website/widgets/custom_button.dart';
 import 'package:portfolio_website/widgets/custom_header.dart';
 import 'package:url_launcher/url_launcher_string.dart';
-import '../../download_manager.dart';
+import 'package:portfolio_website/download_manager.dart';
 
-// Constants for Mobile and Desktop layouts
-double mSmallSpaceHeight = 2.h,
-    mSmallSpaceWidth = 4.w,
-    mLargeSpaceWidth = 24.w,
-    mLargeSpaceHeight = 28.h;
-double mSmallParaFontSize = 40.sp,
-    mMediumParaFontSize = 64.sp,
-    mLargeParaFontSize = 112.sp,
-    mIconSize = 52.sp;
-double dSmallSpaceHeight = 10.h,
-    dSmallSpaceWidth = 8.w,
-    dLargeSpaceWidth = 16.w,
-    dLargeSpaceHeight = 48.h;
-double dSmallParaFontSize = 20.sp,
-    dMediumParaFontSize = 32.sp,
-    dLargeParaFontSize = 56.sp,
-    dIconSize = 32.sp;
+// mobile constants
+double mSmallSpaceHeight = 2.h;
+double mSmallSpaceWidth = 4.w;
+double mLargeSpaceWidth = 24.w;
+double mLargeSpaceHeight = 28.h;
+
+double mSmallParaFontSize = 40.sp;
+double mMediumParaFontSize = 64.sp;
+double mLargeParaFontSize = 112.sp;
+
+double mIconSize = 52.sp;
+
+// desktop and tablet constants
+double dSmallSpaceHeight = 10.h;
+double dSmallSpaceWidth = 8.w;
+double dLargeSpaceWidth = 16.w;
+double dLargeSpaceHeight = 48.h;
+
+double dSmallParaFontSize = 20.sp;
+double dMediumParaFontSize = 32.sp;
+double dLargeParaFontSize = 56.sp;
+
+double dIconSize = 32.sp;
 
 class HeroSection extends StatelessWidget {
   final Function(String section) onSectionSelected;
@@ -120,23 +126,21 @@ class _IntroSectionState extends State<_IntroSection> {
   Widget build(BuildContext context) {
     final ScreenType screenType = getScreenType(context);
     List<String> welcome = getGreetingMessage().split(" ");
+    // common
     double smallSpaceHeight =
-        screenType == ScreenType.mobile ? mSmallSpaceHeight : dSmallSpaceHeight;
+    screenType == ScreenType.mobile ? mSmallSpaceHeight : dSmallSpaceHeight;
     double largeSpaceHeight =
-        screenType == ScreenType.mobile ? mLargeSpaceHeight : dLargeSpaceHeight;
+    screenType == ScreenType.mobile ? mLargeSpaceHeight : dLargeSpaceHeight;
+
     double smallSpaceWidth =
-        screenType == ScreenType.mobile ? mSmallSpaceWidth : dSmallSpaceWidth;
+    screenType == ScreenType.mobile ? mSmallSpaceWidth : dSmallSpaceWidth;
     double largeSpaceWidth =
-        screenType == ScreenType.mobile ? mLargeSpaceWidth : dLargeSpaceWidth;
-    double paraFontSize = screenType == ScreenType.mobile
-        ? mSmallParaFontSize
-        : dSmallParaFontSize;
-    double headingFontSize = screenType == ScreenType.mobile
-        ? mLargeParaFontSize
-        : dLargeParaFontSize;
-    double subHeadingFontSize = screenType == ScreenType.mobile
-        ? mMediumParaFontSize
-        : dMediumParaFontSize;
+    screenType == ScreenType.mobile ? mLargeSpaceWidth : dLargeSpaceWidth;
+
+    double paraFontSize = screenType == ScreenType.mobile ? mSmallParaFontSize : dSmallParaFontSize;
+    double headingFontSize = screenType == ScreenType.mobile ? mLargeParaFontSize : dLargeParaFontSize;
+    double subHeadingFontSize = screenType == ScreenType.mobile ? mMediumParaFontSize : dMediumParaFontSize;
+
     double iconSize = screenType == ScreenType.mobile ? mIconSize : dIconSize;
 
     return Column(

@@ -2,58 +2,62 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:portfolio_website/animations/slide_in_animation.dart';
+import 'package:portfolio_website/helpers/responsive_helper.dart';
 import 'package:portfolio_website/theme/theme.dart';
 import 'package:portfolio_website/widgets/custom_button.dart';
+import 'package:portfolio_website/widgets/custom_header.dart';
 
 class ProjectSection extends StatelessWidget {
   const ProjectSection({super.key});
 
   @override
   Widget build(BuildContext context) {
-    ProjectDetail project = _singleProject();
-    return Padding(
-      padding: EdgeInsets.symmetric(
-        horizontal: AppSizes.paddingLarge.w,
-        vertical: AppSizes.paddingLarge.h,
-      ),
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          double bodyFontSize = AppSizes.mediumFontSize.sp;
-          double mediumHeadingFontSize = AppSizes.extraLargeFontSize.sp;
-          double iconSize = AppSizes.iconSizeMedium.sp;
-
-          return Column(
-            children: [
-              _buildHeader(context),
-              SizedBox(height: AppSizes.largeSpaceBtwItems.h),
-              _buildProjectRow(
-                  project, context, mediumHeadingFontSize, bodyFontSize),
-              SizedBox(height: AppSizes.smallSpaceBtwItems.h),
-              Align(
-                alignment: Alignment.topRight,
-                child: CustomButton(
-                  onPressed: () {},
-                  label: 'More project...',
-                  textStyle: TextStyle(color: Theme.of(context).primaryColor),
-                  hoverBackgroundColor: Colors.black45,
-                  hoverBorderColor: Colors.black45,
-                  hoverUnderlineColor: Theme.of(context).primaryColor,
-                  hoverEffects: const [
-                    HoverEffect.underline,
-                    HoverEffect.backgroundColor,
-                    HoverEffect.borderColor,
-                  ],
-                ),
+    final ScreenType screenType = getScreenType(context);
+    return LayoutBuilder(
+      builder: (context, constraints) => SizedBox(
+        width: double.infinity,
+        height: double.infinity,
+        child: Column(
+          children: [
+            CustomHeader(
+              titleText: 'Here is a glimpse of what ',
+              titleColor: Theme.of(context).colorScheme.onPrimary,
+              subtitleText: 'I have done.',
+              subtitleColor: Theme.of(context).primaryColor,
+              headingFontSize: 36.sp,
+            ),
+            screenType == ScreenType.mobile
+                ? const ProjectSectionMobile()
+                : const ProjectSectionDesktop(),
+            Align(
+              alignment: Alignment.topRight,
+              child: CustomButton(
+                onPressed: () {},
+                label: 'More project...',
+                textStyle: TextStyle(color: Theme.of(context).primaryColor),
+                hoverUnderlineColor: Theme.of(context).primaryColor,
+                hoverEffects: const [
+                  HoverEffect.underline,
+                ],
               ),
-            ],
-          );
-        },
+            ),
+          ],
+        ),
       ),
     );
   }
+}
 
-  Expanded _buildProjectRow(ProjectDetail project, BuildContext context,
-      double mediumHeadingFontSize, double bodyFontSize) {
+class ProjectSectionDesktop extends StatelessWidget {
+  const ProjectSectionDesktop({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    ProjectDetail project = _singleProject();
+
+    double bodyFontSize = AppSizes.mediumFontSize.sp;
+    double mediumHeadingFontSize = AppSizes.extraLargeFontSize.sp;
+
     return Expanded(
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -74,90 +78,35 @@ class ProjectSection extends StatelessWidget {
       ),
     );
   }
+}
 
-  Wrap _buildWrapTexts(ProjectDetail project, BuildContext context,
-      double mediumHeadingFontSize, double bodyFontSize) {
-    return Wrap(
-      spacing: AppSizes.mediumSpaceBtwItems.w,
-      runSpacing: AppSizes.mediumSpaceBtwItems.h,
-      alignment: WrapAlignment.center,
-      children: [
-        Text(
-          project.title,
-          style: Theme.of(context).textTheme.headlineSmall!.copyWith(
-                fontSize: mediumHeadingFontSize,
-              ),
-        ),
-        Text(
-          project.overView,
-          style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                height: AppSizes.lineHeightLarge.h,
-                letterSpacing: AppSizes.letterSpacingLarge.w,
-                color: Theme.of(context).colorScheme.onSecondary,
-                fontSize: bodyFontSize,
-              ),
-        ),
-        _buildWrapChipSvgImage(project),
-      ],
-    );
-  }
+class ProjectSectionMobile extends StatelessWidget {
+  const ProjectSectionMobile({super.key});
 
-  Wrap _buildWrapChipSvgImage(ProjectDetail project) {
-    return Wrap(
-      spacing: AppSizes.mediumSpaceBtwItems.w,
-      children: project.skills.map((skill) {
-        return Chip(
-          label: Text(skill.name),
-          avatar: SvgPicture.asset(
-            skill.iconPath,
-            fit: BoxFit.cover,
-          ),
-        );
-      }).toList(),
-    );
-  }
+  @override
+  Widget build(BuildContext context) {
+    ProjectDetail project = _singleProject();
 
-  Expanded _buildSvgImage(ProjectDetail project) {
+    double bodyFontSize = AppSizes.mediumFontSize.sp;
+    double mediumHeadingFontSize = AppSizes.extraLargeFontSize.sp;
+
     return Expanded(
-      flex: 1,
-      child: CustomAnimation(
-        animationType: AnimationType.scale,
-        child: AspectRatio(
-          aspectRatio: 1,
-          child: Image.asset(
-            project.imagePath,
-            fit: BoxFit.contain,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          _buildSvgImage(project),
+          SizedBox(width: AppSizes.largeSpaceBtwItems.h),
+          Expanded(
+            flex: 1,
+            child: CustomAnimation(
+              animationType: AnimationType.scale,
+              child: SingleChildScrollView(
+                child: _buildWrapTexts(
+                    project, context, mediumHeadingFontSize, bodyFontSize),
+              ),
+            ),
           ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildHeader(BuildContext context) {
-    double headingFontSize = AppSizes.headingFontSize.sp;
-    return Align(
-      alignment: Alignment.topLeft,
-      child: RichText(
-        text: TextSpan(
-          children: [
-            TextSpan(
-              text: 'Here is a glimpse of what ',
-              style: TextStyle(
-                fontSize: headingFontSize,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
-            ),
-            TextSpan(
-              text: 'I have done.',
-              style: TextStyle(
-                fontSize: headingFontSize,
-                fontWeight: FontWeight.bold,
-                color: Colors.blue,
-              ),
-            ),
-          ],
-        ),
+        ],
       ),
     );
   }
@@ -196,4 +145,62 @@ class TechnicalSkill {
   final String iconPath;
 
   TechnicalSkill(this.name, this.iconPath);
+}
+
+Wrap _buildWrapTexts(ProjectDetail project, BuildContext context,
+    double mediumHeadingFontSize, double bodyFontSize) {
+  return Wrap(
+    spacing: AppSizes.mediumSpaceBtwItems.w,
+    runSpacing: AppSizes.mediumSpaceBtwItems.h,
+    alignment: WrapAlignment.center,
+    children: [
+      Text(
+        project.title,
+        style: Theme.of(context).textTheme.headlineSmall!.copyWith(
+              fontSize: mediumHeadingFontSize,
+            ),
+      ),
+      Text(
+        project.overView,
+        style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+              height: AppSizes.lineHeightLarge.h,
+              letterSpacing: AppSizes.letterSpacingLarge.w,
+              color: Theme.of(context).colorScheme.onSecondary,
+              fontSize: bodyFontSize,
+            ),
+      ),
+      _buildWrapChipSvgImage(project),
+    ],
+  );
+}
+
+Wrap _buildWrapChipSvgImage(ProjectDetail project) {
+  return Wrap(
+    spacing: AppSizes.mediumSpaceBtwItems.w,
+    children: project.skills.map((skill) {
+      return Chip(
+        label: Text(skill.name),
+        avatar: SvgPicture.asset(
+          skill.iconPath,
+          fit: BoxFit.cover,
+        ),
+      );
+    }).toList(),
+  );
+}
+
+Expanded _buildSvgImage(ProjectDetail project) {
+  return Expanded(
+    flex: 1,
+    child: CustomAnimation(
+      animationType: AnimationType.scale,
+      child: AspectRatio(
+        aspectRatio: 1,
+        child: Image.asset(
+          project.imagePath,
+          fit: BoxFit.contain,
+        ),
+      ),
+    ),
+  );
 }
