@@ -16,7 +16,7 @@ class ProjectSection extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) => SizedBox(
         width: double.infinity,
-        // height: screenType==ScreenType.mobile?null:double.infinity,
+        height: screenType==ScreenType.mobile?null:double.infinity,
         child: Column(
           children: [
             CustomHeader(
@@ -178,7 +178,6 @@ Column _buildWrapTexts(ProjectDetail project, BuildContext context,
 
 Wrap _buildWrapChipSvgImage(ProjectDetail project) {
   return Wrap(
-    spacing: AppSizes.mediumSpaceBtwItems.w,
     children: project.skills.map((skill) {
       return Chip(
         label: Text(skill.name),
