@@ -96,25 +96,19 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  ColoredBox(
-                    color: Colors.blue,
-                    child: Container(
-                      key: _homeKey,
-                      margin: EdgeInsets.symmetric(
-                          vertical:
-                              screenType == ScreenType.mobile ? 0 : 15.h),
-                      height: ((screenType == ScreenType.mobile ? 0.3 : 0.8) *
-                              screenHeight).h,
-                      width: double.infinity,
-                      child: ColoredBox(
-                        color: Colors.red,
-                        child: HeroSection(onSectionSelected: (String section) {
-                          scrollToSection(_projectsKey, section);
-                        }),
-                      ),
-                    ),
+                  Container(
+                    key: _homeKey,
+                    margin: EdgeInsets.symmetric(
+                        vertical:
+                            screenType == ScreenType.mobile ? 0 : 15.h),
+                    height: ((screenType == ScreenType.mobile ? 0.3 : 0.8) *
+                            screenHeight).h,
+                    width: double.infinity,
+                    child: HeroSection(onSectionSelected: (String section) {
+                      scrollToSection(_projectsKey, section);
+                    }),
                   ),
-                  SizedBox(height: 15.h),
+                  SizedBox(height: 108.h),
                   Container(
                     key: _projectsKey,
                     margin: EdgeInsets.symmetric(

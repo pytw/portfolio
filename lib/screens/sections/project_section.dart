@@ -89,7 +89,7 @@ class ProjectSectionMobile extends StatelessWidget {
   Widget build(BuildContext context) {
     ProjectDetail project = _singleProject();
 
-    double bodyFontSize = 48.sp;
+    double bodyFontSize = 52.sp;
     double mediumHeadingFontSize = 64.sp;
 
     return Expanded(
