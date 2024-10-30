@@ -123,7 +123,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         key: _projectsKey,
                         margin: EdgeInsets.symmetric(
                             vertical: screenType == ScreenType.mobile ? 0 : 15.h),
-                        height: ((screenType == ScreenType.mobile ? 0.9 : 1.3)*screenHeight).h,
+                        height: ((screenType == ScreenType.mobile ? 0.8 : 1.3)*screenHeight).h,
                         child: const ColoredBox(color: Colors.purple, child: ProjectSection()),
                       ),
                     ),
