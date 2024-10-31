@@ -171,7 +171,7 @@ Column _buildWrapTexts(BuildContext context, ProjectDetail project) {
 Wrap _buildWrapChipSvgImage(BuildContext context,ProjectDetail project) {
   ScreenType screenType = getScreenType(context);
   double space = screenType == ScreenType.mobile? 20.w :10.w;
-  double runSpace = screenType == ScreenType.mobile? 10.h :10.h;
+  double runSpace = screenType == ScreenType.mobile? 5.h :10.h;
   return Wrap(
     spacing: space,
     runSpacing: runSpace,
