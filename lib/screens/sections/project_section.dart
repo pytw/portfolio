@@ -3,9 +3,27 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:portfolio_website/animations/slide_in_animation.dart';
 import 'package:portfolio_website/helpers/responsive_helper.dart';
-import 'package:portfolio_website/theme/theme.dart';
 import 'package:portfolio_website/widgets/custom_button.dart';
 import 'package:portfolio_website/widgets/custom_header.dart';
+
+double textHeight = 3.2.h;
+double letterSpace = 1.2.w;
+
+// mobile
+double mSmallSpaceHeight = 18.h;
+double mLargeSpaceHeight = 32.h;
+
+double mHeadingFontSize = 78.sp;
+double mSubHeadingFontSize = 68.sp;
+double mBodyFontSize = 56.sp;
+
+// desktop
+double dSmallSpaceHeight = 32.h;
+double dLargeSpaceWidth = 48.w;
+
+double dHeadingFontSize = 36.sp;
+double dSubHeadingFontSize = 24.sp;
+double dBodyFontSize = 20.sp;
 
 class ProjectSection extends StatelessWidget {
   const ProjectSection({super.key});
@@ -13,6 +31,10 @@ class ProjectSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ScreenType screenType = getScreenType(context);
+
+    double spaceHeight = screenType==ScreenType.mobile?mSmallSpaceHeight:dSmallSpaceHeight;
+    double headingFontSize = screenType==ScreenType.mobile?mHeadingFontSize:dHeadingFontSize;
+
     return LayoutBuilder(
       builder: (context, constraints) => SizedBox(
         width: double.infinity,
@@ -24,13 +46,15 @@ class ProjectSection extends StatelessWidget {
               titleColor: Theme.of(context).colorScheme.onPrimary,
               subtitleText: 'I have done.',
               subtitleColor: Theme.of(context).primaryColor,
-              headingFontSize: screenType==ScreenType.mobile?78.sp:42.sp,
+              headingFontSize: headingFontSize,
+              titleLetterSpacing: letterSpace,
+              subTitleLetterSpacing: letterSpace,
             ),
-            SizedBox(height: screenType==ScreenType.mobile?16.h:28.h),
+            SizedBox(height: spaceHeight),
             screenType == ScreenType.mobile
                 ? const ProjectSectionMobile()
                 : const ProjectSectionDesktop(),
-            SizedBox(height: screenType==ScreenType.mobile?16.h:28.h),
+            SizedBox(height: spaceHeight),
             Align(
               alignment: Alignment.topRight,
               child: CustomButton(
@@ -57,22 +81,18 @@ class ProjectSectionDesktop extends StatelessWidget {
   Widget build(BuildContext context) {
     ProjectDetail project = _singleProject();
 
-    double bodyFontSize = 20.sp;
-    double mediumHeadingFontSize = 28.sp;
-
     return Expanded(
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          _buildSvgImage(project),
-          SizedBox(width: AppSizes.largeSpaceBtwItems.w),
+          _buildImage(project),
+          SizedBox(width: dLargeSpaceWidth),
           Expanded(
             flex: 1,
             child: CustomAnimation(
               animationType: AnimationType.scale,
               child: SingleChildScrollView(
-                child: _buildWrapTexts(
-                    project, context, mediumHeadingFontSize, bodyFontSize),
+                child: _buildWrapTexts(context, project),
               ),
             ),
           ),
@@ -89,25 +109,21 @@ class ProjectSectionMobile extends StatelessWidget {
   Widget build(BuildContext context) {
     ProjectDetail project = _singleProject();
 
-    double bodyFontSize = 56.sp;
-    double mediumHeadingFontSize = 68.sp;
-
     return Expanded(
       child: Column(
         children: [
           Row(
             children: [
-              _buildSvgImage(project),
+              _buildImage(project),
             ],
           ),
-          SizedBox(height: 28.h,),
+          SizedBox(height: mLargeSpaceHeight),
           Expanded(
             flex: 2,
             child: CustomAnimation(
               animationType: AnimationType.scale,
               child: SingleChildScrollView(
-                child: _buildWrapTexts(
-                    project, context, mediumHeadingFontSize, bodyFontSize),
+                child: _buildWrapTexts(context, project),
               ),
             ),
           ),
@@ -115,6 +131,76 @@ class ProjectSectionMobile extends StatelessWidget {
       ),
     );
   }
+}
+
+Column _buildWrapTexts(BuildContext context, ProjectDetail project) {
+  ScreenType screenType = getScreenType(context);
+
+  double spaceHeight = mSmallSpaceHeight;
+
+  double subHeadingFontSize = screenType==ScreenType.mobile?mSubHeadingFontSize:dSubHeadingFontSize;
+  double bodyFontSize = screenType==ScreenType.mobile?mBodyFontSize:dBodyFontSize;
+
+  return Column(
+    mainAxisAlignment: MainAxisAlignment.start,
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Text(
+          project.title,
+          style: TextStyle(
+            fontSize: subHeadingFontSize,
+            letterSpacing: letterSpace,
+          )
+      ),
+      SizedBox(height: spaceHeight),
+      Text(
+          project.overView,
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.onSecondary,
+            fontSize: bodyFontSize,
+            letterSpacing: letterSpace,
+            height: textHeight,
+          )
+      ),
+      SizedBox(height: spaceHeight),
+      _buildWrapChipSvgImage(project),
+    ],
+  );
+}
+
+Wrap _buildWrapChipSvgImage(ProjectDetail project) {
+  return Wrap(
+    spacing: 10.w,
+
+    alignment: WrapAlignment.spaceEvenly,
+    runAlignment: WrapAlignment.center,
+    crossAxisAlignment: WrapCrossAlignment.center,
+
+    children: project.skills.map((skill) {
+      return Chip(
+        label: Text(skill.name),
+        avatar: SvgPicture.asset(
+          skill.iconPath,
+          fit: BoxFit.cover,
+        ),
+      );
+    }).toList(),
+  );
+}
+
+Expanded _buildImage(ProjectDetail project) {
+  return Expanded(
+    flex: 1,
+    child: CustomAnimation(
+      animationType: AnimationType.scale,
+      child: FittedBox(
+        child: Image.asset(
+          project.imagePath,
+          fit: BoxFit.contain,
+        ),
+      ),
+    ),
+  );
 }
 
 ProjectDetail _singleProject() {
@@ -150,57 +236,4 @@ class TechnicalSkill {
   final String iconPath;
 
   TechnicalSkill(this.name, this.iconPath);
-}
-
-Column _buildWrapTexts(ProjectDetail project, BuildContext context,
-    double mediumHeadingFontSize, double bodyFontSize) {
-  return Column(
-    children: [
-      Text(
-        project.title,
-        style: Theme.of(context).textTheme.headlineSmall!.copyWith(
-              fontSize: mediumHeadingFontSize,
-            ),
-      ),
-      Text(
-        project.overView,
-        style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-              height: AppSizes.lineHeightLarge.h,
-              letterSpacing: AppSizes.letterSpacingLarge.w,
-              color: Theme.of(context).colorScheme.onSecondary,
-              fontSize: bodyFontSize,
-            ),
-      ),
-      _buildWrapChipSvgImage(project),
-    ],
-  );
-}
-
-Wrap _buildWrapChipSvgImage(ProjectDetail project) {
-  return Wrap(
-    children: project.skills.map((skill) {
-      return Chip(
-        label: Text(skill.name),
-        avatar: SvgPicture.asset(
-          skill.iconPath,
-          fit: BoxFit.cover,
-        ),
-      );
-    }).toList(),
-  );
-}
-
-Expanded _buildSvgImage(ProjectDetail project) {
-  return Expanded(
-    flex: 1,
-    child: CustomAnimation(
-      animationType: AnimationType.scale,
-      child: FittedBox(
-        child: Image.asset(
-          project.imagePath,
-          fit: BoxFit.contain,
-        ),
-      ),
-    ),
-  );
 }
