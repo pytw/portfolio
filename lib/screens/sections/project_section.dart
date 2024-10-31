@@ -143,7 +143,7 @@ Column _buildWrapTexts(BuildContext context, ProjectDetail project) {
 
   return Column(
     mainAxisAlignment: MainAxisAlignment.start,
-    crossAxisAlignment: CrossAxisAlignment.start,
+    crossAxisAlignment: CrossAxisAlignment.center,
     children: [
       Text(
           project.title,
@@ -163,17 +163,20 @@ Column _buildWrapTexts(BuildContext context, ProjectDetail project) {
           )
       ),
       SizedBox(height: spaceHeight),
-      _buildWrapChipSvgImage(project),
+      _buildWrapChipSvgImage(context, project),
     ],
   );
 }
 
-Wrap _buildWrapChipSvgImage(ProjectDetail project) {
+Wrap _buildWrapChipSvgImage(BuildContext context,ProjectDetail project) {
+  ScreenType screenType = getScreenType(context);
+  double space = screenType == ScreenType.mobile? 20.w :10.w;
+  double runSpace = screenType == ScreenType.mobile? 10.h :10.h;
   return Wrap(
-    spacing: 10.w,
-
+    spacing: space,
+    runSpacing: runSpace,
     alignment: WrapAlignment.spaceEvenly,
-    runAlignment: WrapAlignment.center,
+    runAlignment: WrapAlignment.spaceEvenly,
     crossAxisAlignment: WrapCrossAlignment.center,
 
     children: project.skills.map((skill) {
@@ -206,7 +209,7 @@ Expanded _buildImage(ProjectDetail project) {
 ProjectDetail _singleProject() {
   return ProjectDetail(
     "Dashboard",
-    "assets/images/admin-dashboard.webp",
+    "assets/gif/tmc.gif",
     "An admin dashboard serves multiple crucial functions, enhancing operational efficiency, decision-making, and user management. It provides a centralized platform for overseeing components, making informed decisions, and managing user interactions. The dashboard presents real-time data and analytics, enabling prompt responses to emerging trends and issues. It empowers data-driven decision-making, efficient user management, and content oversight. The dashboard also monitors system health, ensures security and compliance, and facilitates communication among team members. Its scalability supports long-term growth, adapting to changing business environments. It's a vital tool for effective management, strategic decision-making, and operational excellence.",
     _technicalSkills(),
   );
