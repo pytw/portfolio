@@ -2,80 +2,122 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:portfolio_website/animations/slide_in_animation.dart';
+import 'package:portfolio_website/helpers/responsive_helper.dart';
 import 'package:portfolio_website/theme/theme.dart';
+import 'package:portfolio_website/widgets/custom_header.dart';
+
+double textHeight = 3.2.h;
+double letterSpace = 1.2.w;
+
+// mobile
+double mSmallSpaceHeight = 18.h;
+double mLargeSpaceHeight = 32.h;
+
+double mHeadingFontSize = 78.sp;
+double mSubHeadingFontSize = 68.sp;
+double mBodyFontSize = 56.sp;
+
+// desktop
+double dSmallSpaceHeight = 32.h;
+double dLargeSpaceWidth = 48.w;
+
+double dHeadingFontSize = 36.sp;
+double dSubHeadingFontSize = 24.sp;
+double dBodyFontSize = 20.sp;
+
+
+List<Skill> _frontendSkills() {
+  return [
+    Skill('Flutter', 'assets/icons/Flutter.svg'),
+    Skill('Tkinter', 'assets/icons/Python.svg'),
+    Skill('Qt', 'assets/icons/Qt-Framework.svg'),
+    Skill('HTML', 'assets/icons/HTML5.svg'),
+    Skill('CSS', 'assets/icons/css3.svg'),
+  ];
+}
+
+List<Skill> _backendSkills() {
+  return [
+    Skill('Firebase', 'assets/icons/Firebase.svg'),
+    Skill('Dart', 'assets/icons/Dart.svg'),
+    Skill('Python', 'assets/icons/Python.svg'),
+    Skill('Java', 'assets/icons/Java.svg'),
+    Skill('Django', 'assets/icons/Django.svg'),
+    Skill('Django Rest', 'assets/icons/django-rest.svg'),
+    Skill('MySQL', 'assets/icons/MySQl.svg'),
+    Skill('SQLite', 'assets/icons/SQLite.svg'),
+    Skill('Postman', 'assets/icons/Postman.svg'),
+  ];
+}
+
+List<Skill> _otherToolsSkills() {
+  return [
+    Skill('Matplotlib', 'assets/icons/Matplotlib.svg'),
+    Skill('Pandas', 'assets/icons/pandas.svg'),
+    Skill('NumPy', 'assets/icons/NumPy.svg'),
+    Skill('Git', 'assets/icons/Git.svg'),
+    Skill('Github', 'assets/icons/GitHub.svg'),
+    Skill('Github Action', 'assets/icons/github-actions.svg'),
+  ];
+}
 
 class SkillsSection extends StatelessWidget {
   const SkillsSection({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(
-        horizontal: AppSizes.paddingLarge.w,
-        vertical: AppSizes.paddingLarge.h,
-      ),
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+    final ScreenType screenType = getScreenType(context);
+
+    double spaceHeight = screenType==ScreenType.mobile?mSmallSpaceHeight:dSmallSpaceHeight;
+    double headingFontSize = screenType==ScreenType.mobile?mHeadingFontSize:dHeadingFontSize;
+
+    return LayoutBuilder(
+        builder: (context, constraints) => SizedBox(
+          width: double.infinity,
+          height: screenType==ScreenType.mobile?null:double.infinity,
+          child: Column(
             children: [
-              _buildHeader(context),
-              SizedBox(height: AppSizes.largeSpaceBtwItems.h),
-              _buildSkillsRow(constraints),
+              CustomHeader(
+                titleText: 'What ',
+                titleColor: Theme.of(context).primaryColor,
+                subtitleText: 'I Bring to the Table.',
+                subtitleColor: Theme.of(context).colorScheme.onPrimary,
+                headingFontSize: headingFontSize,
+                titleLetterSpacing: letterSpace,
+                subTitleLetterSpacing: letterSpace,
+              ),
+              SizedBox(height: spaceHeight),
+              screenType == ScreenType.mobile
+                  ? const SkillSectionMobile()
+                  : const SkillSectionDesktop(),
             ],
-          );
-        },
-      ),
+          ),
+        )
     );
   }
+}
 
-  Widget _buildHeader(BuildContext context) {
-    double headingFontSize = AppSizes.headingFontSize.sp;
-    return Center(
-      child: RichText(
-        text: TextSpan(
-          children: [
-            TextSpan(
-              text: 'What ',
-              style: TextStyle(
-                fontSize: headingFontSize,
-                fontWeight: FontWeight.bold,
-                color: Theme.of(context).primaryColor,
-              ),
-            ),
-            TextSpan(
-              text: 'I Bring to the Table.',
-              style: TextStyle(
-                fontSize: headingFontSize,
-                fontWeight: FontWeight.bold,
-                color: Theme.of(context).colorScheme.onPrimary,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+class SkillSectionDesktop extends StatelessWidget {
+  const SkillSectionDesktop({super.key});
 
-  Widget _buildSkillsRow(BoxConstraints constraints) {
-    return SizedBox(
-      height: constraints.maxHeight * 0.85,
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Expanded(
             child: CustomAnimation(
               animationType: AnimationType.slide,
               begin: const Offset(-1.0, 0.0),
               child:
-                  _buildSkillColumn('Frontend', Icons.web, _frontendSkills()),
+              _buildSkillColumn('Frontend', Icons.web, _frontendSkills()),
             ),
           ),
           SizedBox(width: AppSizes.largeSpaceBtwItems.w),
           Expanded(
             child: CustomAnimation(
               child:
-                  _buildSkillColumn('Backend', Icons.storage, _backendSkills()),
+              _buildSkillColumn('Backend', Icons.storage, _backendSkills()),
             ),
           ),
           SizedBox(width: AppSizes.largeSpaceBtwItems.w),
@@ -91,50 +133,54 @@ class SkillsSection extends StatelessWidget {
       ),
     );
   }
+}
 
-  Widget _buildSkillColumn(String title, IconData icon, List<Skill> skills) {
-    return _SkillContainer(
-      title: title,
-      icon: icon,
-      skills: skills,
+class SkillSectionMobile extends StatelessWidget {
+  const SkillSectionMobile({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Column(
+        children: [
+          Expanded(
+            child: CustomAnimation(
+              animationType: AnimationType.slide,
+              begin: const Offset(-1.0, 0.0),
+              child:
+              _buildSkillColumn('Frontend', Icons.web, _frontendSkills()),
+            ),
+          ),
+          SizedBox(height: 18.h),
+          Expanded(
+            child: CustomAnimation(
+              child:
+              _buildSkillColumn('Backend', Icons.storage, _backendSkills()),
+            ),
+          ),
+          SizedBox(height: 18.h),
+          Expanded(
+            child: CustomAnimation(
+              animationType: AnimationType.slide,
+              begin: const Offset(1.0, 0.0),
+              child: _buildSkillColumn(
+                  'Other Tools', Icons.build, _otherToolsSkills()),
+            ),
+          ),
+        ],
+      ),
     );
   }
-
-  List<Skill> _frontendSkills() {
-    return [
-      Skill('Flutter', 'assets/icons/Flutter.svg'),
-      Skill('Tkinter', 'assets/icons/Python.svg'),
-      Skill('Qt', 'assets/icons/Qt-Framework.svg'),
-      Skill('HTML', 'assets/icons/HTML5.svg'),
-      Skill('CSS', 'assets/icons/css3.svg'),
-    ];
-  }
-
-  List<Skill> _backendSkills() {
-    return [
-      Skill('Firebase', 'assets/icons/Firebase.svg'),
-      Skill('Dart', 'assets/icons/Dart.svg'),
-      Skill('Python', 'assets/icons/Python.svg'),
-      Skill('Java', 'assets/icons/Java.svg'),
-      Skill('Django', 'assets/icons/Django.svg'),
-      Skill('Django Rest', 'assets/icons/django-rest.svg'),
-      Skill('MySQL', 'assets/icons/MySQl.svg'),
-      Skill('SQLite', 'assets/icons/SQLite.svg'),
-      Skill('Postman', 'assets/icons/Postman.svg'),
-    ];
-  }
-
-  List<Skill> _otherToolsSkills() {
-    return [
-      Skill('Matplotlib', 'assets/icons/Matplotlib.svg'),
-      Skill('Pandas', 'assets/icons/pandas.svg'),
-      Skill('NumPy', 'assets/icons/NumPy.svg'),
-      Skill('Git', 'assets/icons/Git.svg'),
-      Skill('Github', 'assets/icons/GitHub.svg'),
-      Skill('Github Action', 'assets/icons/github-actions.svg'),
-    ];
-  }
 }
+
+Widget _buildSkillColumn(String title, IconData icon, List<Skill> skills) {
+  return _SkillContainer(
+    title: title,
+    icon: icon,
+    skills: skills,
+  );
+}
+
 
 class _SkillContainer extends StatelessWidget {
   final String title;
@@ -166,29 +212,36 @@ class _SkillContainer extends StatelessWidget {
         ],
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CustomAnimation(
-            animationType: AnimationType.bounce,
-            delay: const Duration(milliseconds: 100),
-            child: _buildHeader(context, title, icon),
-          ),
+          _buildHeader(context, title, icon),
           SizedBox(height: AppSizes.mediumSpaceBtwItems.h),
+          // Scrollable ListView
           Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                children: skills.map((skill) {
-                  return CustomAnimation(
-                    animationType: AnimationType.fadeAndSlide,
-                    duration: const Duration(milliseconds: 600),
-                    delay: const Duration(milliseconds: 200),
-                    child: SkillItem(
-                      skillName: skill.name,
-                      iconPath: skill.iconPath,
+            child: ListView.builder(
+              itemCount: skills.length,
+              itemBuilder: (context, index) {
+                final skill = skills[index];
+                return ListTile(
+                  contentPadding: EdgeInsets.symmetric(
+                    vertical: AppSizes.paddingSmall.h,
+                    horizontal: AppSizes.paddingMedium.w,
+                  ),
+                  leading: SvgPicture.asset(
+                    skill.iconPath,
+                    width: AppSizes.iconSizeLarge.w,
+                    height: AppSizes.iconSizeLarge.h,
+                    fit: BoxFit.cover,
+                  ),
+                  title: Text(
+                    skill.name,
+                    style: TextStyle(
+                      fontSize: AppSizes.mediumFontSize.sp,
+                      color: Theme.of(context).colorScheme.onSecondary,
                     ),
-                  );
-                }).toList(),
-              ),
+                  ),
+                );
+              },
             ),
           ),
         ],
@@ -197,7 +250,6 @@ class _SkillContainer extends StatelessWidget {
   }
 
   Widget _buildHeader(BuildContext context, String title, IconData icon) {
-    double headingFontSize = AppSizes.largeFontSize.sp;
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -206,67 +258,12 @@ class _SkillContainer extends StatelessWidget {
         Text(
           title,
           style: TextStyle(
-            fontSize: headingFontSize,
+            fontSize: AppSizes.largeFontSize.sp,
             fontWeight: FontWeight.bold,
             color: Theme.of(context).colorScheme.onPrimary,
           ),
         ),
       ],
-    );
-  }
-}
-
-class SkillItem extends StatelessWidget {
-  final String skillName;
-  final String iconPath;
-
-  const SkillItem({
-    super.key,
-    required this.skillName,
-    required this.iconPath,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: AppSizes.paddingSmall.h),
-      child: Container(
-        margin: EdgeInsets.symmetric(horizontal: AppSizes.paddingMedium.w),
-        padding: EdgeInsets.symmetric(
-            horizontal: AppSizes.paddingMedium.w,
-            vertical: AppSizes.paddingMedium.h),
-        decoration: BoxDecoration(
-          color: Colors.grey[800]?.withOpacity(0.8),
-          borderRadius: BorderRadius.circular(AppSizes.borderRadiusMedium),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.blue.withOpacity(0.3),
-              blurRadius: 5,
-              offset: const Offset(0, 2),
-            ),
-          ],
-        ),
-        child: Row(
-          children: [
-            SvgPicture.asset(
-              iconPath,
-              width: AppSizes.iconSizeLarge.w,
-              height: AppSizes.iconSizeLarge.h,
-              fit: BoxFit.cover,
-            ),
-            SizedBox(width: AppSizes.smallSpaceBtwItems.w),
-            Expanded(
-              child: Text(
-                skillName,
-                style: TextStyle(
-                  fontSize: AppSizes.mediumFontSize.sp,
-                  color: Theme.of(context).colorScheme.onSecondary,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }
