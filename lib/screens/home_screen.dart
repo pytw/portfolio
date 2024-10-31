@@ -116,12 +116,12 @@ class _HomeScreenState extends State<HomeScreen> {
                     height: (screenType == ScreenType.mobile ? null : (1.3*screenHeight).h),
                     child: const ProjectSection(),
                   ),
-                  SizedBox(height: AppSizes.mediumSpaceBtwItems.h),
+                  SizedBox(height: screenType==ScreenType.mobile?52.h:108.h),
                   Container(
                     key: _skillsKey,
                     margin: EdgeInsets.symmetric(
-                        vertical: mediaQuery.height * 0.025),
-                    height: mediaQuery.height * 0.7,
+                        vertical: screenType == ScreenType.mobile ? 0 : 15.h),
+                    height: (screenType == ScreenType.mobile ? null : (1.1*screenHeight).h),
                     child: const SkillsSection(),
                   ),
                   SizedBox(height: AppSizes.mediumSpaceBtwItems.h),
