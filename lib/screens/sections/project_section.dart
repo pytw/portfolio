@@ -1,131 +1,131 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:portfolio_website/animations/slide_in_animation.dart';
-import 'package:portfolio_website/helpers/responsive_helper.dart';
-import 'package:portfolio_website/widgets/custom_button.dart';
-import 'package:portfolio_website/widgets/custom_header.dart';
-
-double textHeight = 3.2.h;
-double letterSpace = 1.2.w;
-
-// mobile
-double mSmallSpaceHeight = 18.h;
-double mLargeSpaceHeight = 32.h;
-
-double mHeadingFontSize = 78.sp;
-double mSubHeadingFontSize = 68.sp;
-double mBodyFontSize = 56.sp;
-
-// desktop
-double dSmallSpaceHeight = 32.h;
-double dLargeSpaceWidth = 48.w;
-
-double dHeadingFontSize = 36.sp;
-double dSubHeadingFontSize = 24.sp;
-double dBodyFontSize = 20.sp;
 
 class ProjectSection extends StatelessWidget {
   const ProjectSection({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final ScreenType screenType = getScreenType(context);
+    double screenWidth = MediaQuery.of(context).size.width;
+    double horizontalPadding = screenWidth > 800 ? 80.0 : 20.0;
 
-    double spaceHeight = screenType==ScreenType.mobile?mSmallSpaceHeight:dSmallSpaceHeight;
-    double headingFontSize = screenType==ScreenType.mobile?mHeadingFontSize:dHeadingFontSize;
-
-    return LayoutBuilder(
-      builder: (context, constraints) => SizedBox(
-        width: double.infinity,
-        height: screenType==ScreenType.mobile?null:double.infinity,
-        child: Column(
-          children: [
-            CustomHeader(
-              titleText: 'Here is a glimpse of what ',
-              titleColor: Theme.of(context).colorScheme.onPrimary,
-              subtitleText: 'I have done.',
-              subtitleColor: Theme.of(context).primaryColor,
-              headingFontSize: headingFontSize,
-              titleLetterSpacing: letterSpace,
-              subTitleLetterSpacing: letterSpace,
-            ),
-            SizedBox(height: spaceHeight),
-            screenType == ScreenType.mobile
-                ? const ProjectSectionMobile()
-                : const ProjectSectionDesktop(),
-            SizedBox(height: spaceHeight),
-            Align(
-              alignment: Alignment.topRight,
-              child: CustomButton(
-                onPressed: () {},
-                label: 'More project...',
-                textStyle: TextStyle(color: Theme.of(context).primaryColor),
-                hoverUnderlineColor: Theme.of(context).primaryColor,
-                hoverEffects: const [
-                  HoverEffect.underline,
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class ProjectSectionDesktop extends StatelessWidget {
-  const ProjectSectionDesktop({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    ProjectDetail project = _singleProject();
-
-    return Expanded(
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          _buildImage(project),
-          SizedBox(width: dLargeSpaceWidth),
-          Expanded(
-            flex: 1,
-            child: CustomAnimation(
-              animationType: AnimationType.scale,
-              child: SingleChildScrollView(
-                child: _buildWrapTexts(context, project),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class ProjectSectionMobile extends StatelessWidget {
-  const ProjectSectionMobile({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    ProjectDetail project = _singleProject();
-
-    return Expanded(
+    return Padding(
+      padding:
+          EdgeInsets.symmetric(horizontal: horizontalPadding, vertical: 20),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              _buildImage(project),
-            ],
+          _buildHeader(context),
+          const SizedBox(height: 20),
+          ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 1200),
+            child: screenWidth > 600
+                ? const _ProjectResponsiveLayout(isStacked: false)
+                : const _ProjectResponsiveLayout(isStacked: true),
           ),
-          SizedBox(height: mLargeSpaceHeight),
-          Expanded(
-            flex: 2,
-            child: CustomAnimation(
-              animationType: AnimationType.scale,
-              child: SingleChildScrollView(
-                child: _buildWrapTexts(context, project),
+          const Align(
+            alignment: Alignment.centerRight,
+            child: _MoreProjectsButton(),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildHeader(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'A Glimpse of My Work',
+          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                color: Theme.of(context).colorScheme.onPrimary,
               ),
-            ),
+        ),
+        Text(
+          'Selected Projects',
+          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                color: Theme.of(context).primaryColor,
+              ),
+        ),
+      ],
+    );
+  }
+}
+
+class _ProjectResponsiveLayout extends StatelessWidget {
+  final bool isStacked;
+  const _ProjectResponsiveLayout({required this.isStacked});
+
+  @override
+  Widget build(BuildContext context) {
+    final ProjectDetail project = _sampleProject();
+
+    return isStacked
+        ? Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _ProjectImage(imagePath: project.imagePath),
+              const SizedBox(height: 20),
+              _ProjectDetails(project: project),
+            ],
+          )
+        : Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Flexible(
+                  flex: 1, child: _ProjectImage(imagePath: project.imagePath)),
+              const SizedBox(width: 40),
+              Flexible(flex: 1, child: _ProjectDetails(project: project)),
+            ],
+          );
+  }
+}
+
+class _ProjectImage extends StatelessWidget {
+  final String imagePath;
+  const _ProjectImage({required this.imagePath});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      constraints: const BoxConstraints(maxHeight: 400, maxWidth: 600),
+      child: Image.asset(imagePath, fit: BoxFit.cover),
+    );
+  }
+}
+
+class _ProjectDetails extends StatelessWidget {
+  final ProjectDetail project;
+  const _ProjectDetails({required this.project});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            project.title,
+            style: Theme.of(context)
+                .textTheme
+                .headlineSmall
+                ?.copyWith(fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 16),
+          Text(
+            project.overview,
+            style:
+                Theme.of(context).textTheme.bodyMedium?.copyWith(height: 1.5),
+          ),
+          const SizedBox(height: 20),
+          Wrap(
+            spacing: 8,
+            runSpacing: 10,
+            children: project.skills
+                .map((skill) => _SkillChip(skill: skill))
+                .toList(),
           ),
         ],
       ),
@@ -133,84 +133,41 @@ class ProjectSectionMobile extends StatelessWidget {
   }
 }
 
-Column _buildWrapTexts(BuildContext context, ProjectDetail project) {
-  ScreenType screenType = getScreenType(context);
+class _SkillChip extends StatelessWidget {
+  final TechnicalSkill skill;
+  const _SkillChip({required this.skill});
 
-  double spaceHeight = mSmallSpaceHeight;
-
-  double subHeadingFontSize = screenType==ScreenType.mobile?mSubHeadingFontSize:dSubHeadingFontSize;
-  double bodyFontSize = screenType==ScreenType.mobile?mBodyFontSize:dBodyFontSize;
-
-  return Column(
-    mainAxisAlignment: MainAxisAlignment.start,
-    crossAxisAlignment: CrossAxisAlignment.center,
-    children: [
-      Text(
-          project.title,
-          style: TextStyle(
-            fontSize: subHeadingFontSize,
-            letterSpacing: letterSpace,
-          )
-      ),
-      SizedBox(height: spaceHeight),
-      Text(
-          project.overView,
-          style: TextStyle(
-            color: Theme.of(context).colorScheme.onSecondary,
-            fontSize: bodyFontSize,
-            letterSpacing: letterSpace,
-            height: textHeight,
-          )
-      ),
-      SizedBox(height: spaceHeight),
-      _buildWrapChipSvgImage(context, project),
-    ],
-  );
+  @override
+  Widget build(BuildContext context) {
+    return Chip(
+      label: Text(skill.name),
+      avatar: SvgPicture.asset(skill.iconPath, width: 20, height: 20),
+    );
+  }
 }
 
-Wrap _buildWrapChipSvgImage(BuildContext context,ProjectDetail project) {
-  ScreenType screenType = getScreenType(context);
-  double space = screenType == ScreenType.mobile? 20.w :10.w;
-  double runSpace = screenType == ScreenType.mobile? 5.h :10.h;
-  return Wrap(
-    spacing: space,
-    runSpacing: runSpace,
-    alignment: WrapAlignment.spaceEvenly,
-    runAlignment: WrapAlignment.spaceEvenly,
-    crossAxisAlignment: WrapCrossAlignment.center,
+class _MoreProjectsButton extends StatelessWidget {
+  const _MoreProjectsButton();
 
-    children: project.skills.map((skill) {
-      return Chip(
-        label: Text(skill.name),
-        avatar: SvgPicture.asset(
-          skill.iconPath,
-          fit: BoxFit.cover,
-        ),
-      );
-    }).toList(),
-  );
-}
-
-Expanded _buildImage(ProjectDetail project) {
-  return Expanded(
-    flex: 1,
-    child: CustomAnimation(
-      animationType: AnimationType.scale,
-      child: FittedBox(
-        child: Image.asset(
-          project.imagePath,
-          fit: BoxFit.contain,
-        ),
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      onPressed: () {},
+      child: Text(
+        'More Projects...',
+        style: TextStyle(
+            color: Theme.of(context).primaryColor,
+            decoration: TextDecoration.underline),
       ),
-    ),
-  );
+    );
+  }
 }
 
-ProjectDetail _singleProject() {
+ProjectDetail _sampleProject() {
   return ProjectDetail(
-    "Dashboard",
+    "Admin Dashboard",
     "assets/gif/tmc.gif",
-    "An admin dashboard serves multiple crucial functions, enhancing operational efficiency, decision-making, and user management. It provides a centralized platform for overseeing components, making informed decisions, and managing user interactions. The dashboard presents real-time data and analytics, enabling prompt responses to emerging trends and issues. It empowers data-driven decision-making, efficient user management, and content oversight. The dashboard also monitors system health, ensures security and compliance, and facilitates communication among team members. Its scalability supports long-term growth, adapting to changing business environments. It's a vital tool for effective management, strategic decision-making, and operational excellence.",
+    "An admin dashboard providing real-time data analytics, streamlined user management, and comprehensive monitoring to support decision-making and operational efficiency.",
     _technicalSkills(),
   );
 }
@@ -228,10 +185,10 @@ List<TechnicalSkill> _technicalSkills() {
 class ProjectDetail {
   final String title;
   final String imagePath;
-  final String overView;
+  final String overview;
   final List<TechnicalSkill> skills;
 
-  ProjectDetail(this.title, this.imagePath, this.overView, this.skills);
+  ProjectDetail(this.title, this.imagePath, this.overview, this.skills);
 }
 
 class TechnicalSkill {

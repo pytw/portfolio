@@ -74,7 +74,7 @@ class SkillsSection extends StatelessWidget {
     return LayoutBuilder(
         builder: (context, constraints) => SizedBox(
           width: double.infinity,
-          height: screenType==ScreenType.mobile?null:double.infinity,
+          height: double.infinity,
           child: Column(
             children: [
               CustomHeader(

@@ -6,7 +6,6 @@ import 'package:portfolio_website/theme/theme.dart';
 import 'package:portfolio_website/widgets/custom_button.dart';
 import 'package:portfolio_website/widgets/custom_header.dart';
 import 'package:url_launcher/url_launcher_string.dart';
-import 'package:portfolio_website/download_manager.dart';
 
 // mobile constants
 double mSmallSpaceHeight = 2.h;
@@ -33,124 +32,74 @@ double dLargeParaFontSize = 56.sp;
 double dIconSize = 32.sp;
 
 class HeroSection extends StatelessWidget {
-  final Function(String section) onSectionSelected;
-
-  const HeroSection({super.key, required this.onSectionSelected});
+  const HeroSection({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) => SizedBox(
-        width: double.infinity,
-        height: double.infinity,
-        child: HeroSectionDesktopTablet(onSectionSelected: onSectionSelected),
-      ),
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 20.h),
+      child: _buildDesktopTabletLayout(context),
     );
   }
-}
 
-// Desktop/Tablet Layout Widget
-class HeroSectionDesktopTablet extends StatelessWidget {
-  final Function(String section) onSectionSelected;
-
-  const HeroSectionDesktopTablet({super.key, required this.onSectionSelected});
-
-  @override
-  Widget build(BuildContext context) {
-    final ScreenType screenType = getScreenType(context);
+  // Layout for desktop and tablet screens
+  Widget _buildDesktopTabletLayout(BuildContext context) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Expanded(
-            flex: screenType == ScreenType.mobile ? 2 : 1,
-            child: Center(
-                child: _IntroSection(onSectionSelected: onSectionSelected))),
+          flex: 1,
+          child: _IntroSection(),
+        ),
+        SizedBox(width: 30.w),
         const Expanded(
-            flex: 1, child: Center(child: CircularImage(isDesktop: true))),
+          flex: 1,
+          child: Center(
+            child: _CircularImage(),
+          ),
+        ),
       ],
     );
   }
 }
 
-class _IntroSection extends StatefulWidget {
-  final Function(String section) onSectionSelected;
-
-  const _IntroSection({required this.onSectionSelected});
-
-  @override
-  State<_IntroSection> createState() => _IntroSectionState();
-}
-
-class _IntroSectionState extends State<_IntroSection> {
-  DownloadState? downloadState;
-  final Map<String, String> downloadLinks = {
-    'PDF': 'assets/documents/resume/resume.pdf',
-    'DOCX': 'assets/documents/resume/resume.docx',
-    'Image': 'assets/documents/resume/resume.png',
-  };
-
-  Future<void> startDownload(String format) async {
-    String? filepath = downloadLinks[format];
-    setState(() => downloadState = DownloadState.started);
-    final result = await downloadResume(context, filepath!);
-    setState(() => downloadState = result);
-
-    if (result == DownloadState.completed || result == DownloadState.failed) {
-      await Future.delayed(const Duration(seconds: 2));
-      setState(() => downloadState = null);
-    }
-  }
-
-  void _showDownloadOptions(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      builder: (_) => Container(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: downloadLinks.keys.map((String format) {
-            return ListTile(
-              title: Text(format),
-              onTap: () {
-                startDownload(format);
-                Navigator.pop(context);
-              },
-            );
-          }).toList(),
-        ),
-      ),
-    );
-  }
-
+class _IntroSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    List<String> welcome = _getGreetingMessage().split(" ");
     final ScreenType screenType = getScreenType(context);
-    List<String> welcome = getGreetingMessage().split(" ");
+
     // common
     double smallSpaceHeight =
-    screenType == ScreenType.mobile ? mSmallSpaceHeight : dSmallSpaceHeight;
+        screenType == ScreenType.mobile ? mSmallSpaceHeight : dSmallSpaceHeight;
     double largeSpaceHeight =
-    screenType == ScreenType.mobile ? mLargeSpaceHeight : dLargeSpaceHeight;
+        screenType == ScreenType.mobile ? mLargeSpaceHeight : dLargeSpaceHeight;
 
     double smallSpaceWidth =
-    screenType == ScreenType.mobile ? mSmallSpaceWidth : dSmallSpaceWidth;
+        screenType == ScreenType.mobile ? mSmallSpaceWidth : dSmallSpaceWidth;
     double largeSpaceWidth =
-    screenType == ScreenType.mobile ? mLargeSpaceWidth : dLargeSpaceWidth;
+        screenType == ScreenType.mobile ? mLargeSpaceWidth : dLargeSpaceWidth;
 
-    double paraFontSize = screenType == ScreenType.mobile ? mSmallParaFontSize : dSmallParaFontSize;
-    double headingFontSize = screenType == ScreenType.mobile ? mLargeParaFontSize : dLargeParaFontSize;
-    double subHeadingFontSize = screenType == ScreenType.mobile ? mMediumParaFontSize : dMediumParaFontSize;
+    double paraFontSize = screenType == ScreenType.mobile
+        ? mSmallParaFontSize
+        : dSmallParaFontSize;
+    double headingFontSize = screenType == ScreenType.mobile
+        ? mLargeParaFontSize
+        : dLargeParaFontSize;
+    double subHeadingFontSize = screenType == ScreenType.mobile
+        ? mMediumParaFontSize
+        : dMediumParaFontSize;
 
     double iconSize = screenType == ScreenType.mobile ? mIconSize : dIconSize;
 
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         CustomHeader(
-          titleText: "${welcome[0]} ",
+          titleText: "Hey ",
           titleColor: Theme.of(context).primaryColor,
           titleLetterSpacing: 2.w,
-          subtitleText: "${welcome[1]} ${welcome[2]}!",
+          subtitleText: "${welcome[0]} ${welcome[1]} !",
           subtitleColor: Theme.of(context).colorScheme.onPrimary,
           subTitleLetterSpacing: 2.w,
           headingFontSize: subHeadingFontSize,
@@ -160,92 +109,80 @@ class _IntroSectionState extends State<_IntroSection> {
         CustomHeader(
           titleText: "I'm ",
           titleColor: Theme.of(context).colorScheme.onPrimary,
-          subtitleText: 'Praveen Yadav',
+          titleLetterSpacing: 2.w,
+          subtitleText: "Praveen Yadav",
           subtitleColor: Theme.of(context).primaryColor,
+          subTitleLetterSpacing: 2.w,
           headingFontSize: headingFontSize,
           alignment: Alignment.center,
         ),
         SizedBox(height: smallSpaceHeight),
         Text(
-          "Your aspiring Software or UI/UX developer",
+          "Aspiring Software & UI/UX Developer",
           style: TextStyle(
               color: Theme.of(context).colorScheme.onSecondary,
               fontSize: paraFontSize),
+          textAlign: TextAlign.center,
         ),
         SizedBox(height: largeSpaceHeight),
-        Wrap(
-          spacing: smallSpaceWidth,
-          children: [
-            CustomButton(
-              onPressed: () => _showDownloadOptions(context),
-              label: "Download Resume",
-              textStyle: TextStyle(
-                  color: Theme.of(context).colorScheme.onPrimary,
-                  fontSize: paraFontSize),
-              borderColor: Theme.of(context).colorScheme.onPrimary,
-              borderWidth: 2,
-              hoverBorderColor: Theme.of(context).primaryColor,
-              clickBorderColor: Theme.of(context).primaryColor,
-            ),
-            if (downloadState != null) SizedBox(width: smallSpaceWidth),
-            if (downloadState == DownloadState.started)
-              const CircularProgressIndicator(),
-            if (downloadState == DownloadState.completed)
-              Icon(Icons.check_circle, color: Colors.green, size: dIconSize),
-            if (downloadState == DownloadState.failed)
-              Icon(Icons.error, color: Colors.red, size: dIconSize),
-            SizedBox(width: largeSpaceWidth),
-            CustomButton(
-              onPressed: () => widget.onSectionSelected("Projects"),
-              label: "See Projects",
-              textStyle: TextStyle(
-                  color: Theme.of(context).colorScheme.onPrimary,
-                  fontWeight: FontWeight.bold,
-                  fontSize: paraFontSize),
-              backgroundColor: Theme.of(context).primaryColor,
-            ),
-          ],
-        ),
+        _buildActionButtons(
+            context, largeSpaceWidth, smallSpaceHeight, paraFontSize),
         SizedBox(height: smallSpaceHeight),
-        Wrap(
-          spacing: smallSpaceWidth,
-          children: [
-            _buildSocialIconButton(
-                icon: FontAwesomeIcons.linkedin,
-                url: 'https://www.linkedin.com/in/pyapril1507',
-                iconSize: iconSize),
-            _buildSocialIconButton(
-                icon: FontAwesomeIcons.github,
-                url: 'https://www.github.com/pyapril15',
-                iconSize: iconSize),
-            _buildSocialIconButton(
-                icon: FontAwesomeIcons.twitter,
-                url: 'https://www.x.com/pyapril15',
-                iconSize: iconSize),
-            _buildSocialIconButton(
-                icon: FontAwesomeIcons.instagram,
-                url: 'https://www.instagram.com/__pyapril15.py__',
-                iconSize: iconSize),
-            _buildSocialIconButton(
-                icon: FontAwesomeIcons.discord,
-                url: 'https://www.discord.com/pyapril15',
-                iconSize: iconSize),
-          ],
+        _buildSocialIcons(smallSpaceWidth, iconSize),
+      ],
+    );
+  }
+
+  Widget _buildActionButtons(BuildContext context, double spacing,
+      double runSpacing, double fontSize) {
+    return Wrap(
+      spacing: spacing,
+      runSpacing: runSpacing,
+      alignment: WrapAlignment.center,
+      children: [
+        CustomButton(
+          onPressed: () => _showDownloadOptions(context),
+          label: "Download Resume",
+          textStyle: TextStyle(
+              fontSize: fontSize,
+              color: Theme.of(context).colorScheme.onPrimary),
+          borderColor: Theme.of(context).colorScheme.onPrimary,
+          borderWidth: 2,
+        ),
+        CustomButton(
+          onPressed: () {
+            // Add navigation to Projects
+          },
+          label: "See Projects",
+          textStyle: TextStyle(
+            fontSize: fontSize,
+            fontWeight: FontWeight.bold,
+            color: Theme.of(context).colorScheme.onPrimary,
+          ),
+          backgroundColor: Theme.of(context).primaryColor,
         ),
       ],
     );
   }
 
-  String getGreetingMessage() {
-    final hour = DateTime.now().hour;
-    if (hour < 5) return "Hey Good Night";
-    if (hour < 12) return "Hey Good Morning";
-    if (hour < 17) return "Hey Good Afternoon";
-    return hour < 21 ? "Hey Good Evening" : "Hey Good Night";
+  Widget _buildSocialIcons(double spacing, double iconSize) {
+    return Wrap(
+      spacing: spacing,
+      alignment: WrapAlignment.center,
+      children: [
+        _buildSocialIconButton(FontAwesomeIcons.linkedin,
+            'https://www.linkedin.com/in/pyapril1507', iconSize),
+        _buildSocialIconButton(FontAwesomeIcons.github,
+            'https://www.github.com/pyapril15', iconSize),
+        _buildSocialIconButton(
+            FontAwesomeIcons.twitter, 'https://www.x.com/pyapril15', iconSize),
+        _buildSocialIconButton(FontAwesomeIcons.instagram,
+            'https://www.instagram.com/__pyapril15.py__', iconSize),
+      ],
+    );
   }
 
-  Widget _buildSocialIconButton(
-      {required IconData icon, required String url, required double iconSize}) {
+  Widget _buildSocialIconButton(IconData icon, String url, double iconSize) {
     return IconButton(
       onPressed: () async {
         if (await canLaunchUrlString(url)) {
@@ -256,18 +193,50 @@ class _IntroSectionState extends State<_IntroSection> {
       iconSize: iconSize,
     );
   }
+
+  String _getGreetingMessage() {
+    final hour = DateTime.now().hour;
+    if (hour < 12) return "Good Morning";
+    if (hour < 17) return "Good Afternoon";
+    return "Good Evening";
+  }
+
+  void _showDownloadOptions(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return ListView(
+          padding: EdgeInsets.all(20.w),
+          shrinkWrap: true,
+          children: [
+            _buildDownloadOption(context, "PDF"),
+            _buildDownloadOption(context, "DOCX"),
+            _buildDownloadOption(context, "Image"),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildDownloadOption(BuildContext context, String format) {
+    return ListTile(
+      title: Text("Download as $format"),
+      onTap: () {
+        Navigator.pop(context);
+        // Call download functionality here
+      },
+    );
+  }
 }
 
-class CircularImage extends StatelessWidget {
-  final bool isDesktop;
-
-  const CircularImage({super.key, required this.isDesktop});
+class _CircularImage extends StatelessWidget {
+  const _CircularImage();
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: double.infinity,
-      height: double.infinity,
+      constraints:
+          BoxConstraints(maxHeight: (ScreenUtil().screenHeight * 0.8).h),
       decoration: const BoxDecoration(
         shape: BoxShape.circle,
         color: Colors.white,
@@ -280,15 +249,13 @@ class CircularImage extends StatelessWidget {
           ),
         ],
       ),
-      child: FittedBox(
-        child: ClipOval(
-          child: Image.asset(
-            'assets/images/pyapril15.png',
+      child: ClipOval(
+        child: Image.asset(
+          'assets/images/pyapril15.png',
+          fit: BoxFit.cover,
+          errorBuilder: (_, __, ___) => Image.asset(
+            'assets/images/placeholder.png',
             fit: BoxFit.cover,
-            errorBuilder: (_, __, ___) => Image.asset(
-              'assets/images/placeholder.png',
-              fit: BoxFit.cover,
-            ),
           ),
         ),
       ),

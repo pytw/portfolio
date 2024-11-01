@@ -1,11 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:portfolio_website/animations/slide_in_animation.dart';
-import 'package:portfolio_website/theme/theme.dart';
-import 'package:portfolio_website/widgets/custom_button.dart';
-import 'package:portfolio_website/widgets/custom_header.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class ContactSection extends StatelessWidget {
@@ -13,183 +8,195 @@ class ContactSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(
-        horizontal: AppSizes.paddingLarge.w,
-        vertical: AppSizes.paddingLarge.h,
-      ),
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          double bodyFontSize = AppSizes.mediumFontSize.sp;
-          double headingFontSize = AppSizes.headingFontSize.sp;
+    double screenWidth = MediaQuery.of(context).size.width;
+    double horizontalPadding = screenWidth > 800 ? 80.0 : 20.0;
+    double maxContentWidth = screenWidth > 600 ? 1200 : double.infinity;
 
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              CustomHeader(
-                titleText: "Let's get ",
-                titleColor: Theme.of(context).primaryColor,
-                subtitleText: 'to know each other better.',
-                subtitleColor: Theme.of(context).colorScheme.onPrimary,
-                headingFontSize: headingFontSize,
-              ),
-              SizedBox(height: AppSizes.largeSpaceBtwItems.h),
-              Expanded(
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Expanded(
-                      flex: 1,
-                      child: CustomAnimation(
-                        animationType: AnimationType.scale,
-                        child: AspectRatio(
-                          aspectRatio: 1,
-                          child: SvgPicture.asset(
-                            'assets/images/connect.svg', // Ensure this path is correct
-                            fit: BoxFit.contain,
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: AppSizes.largeSpaceBtwItems.w),
-                    Expanded(
-                      flex: 1,
-                      child: CustomAnimation(
-                        animationType: AnimationType.fade,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: AppSizes.paddingSmall.w,
-                                vertical: AppSizes.paddingSmall.h,
-                              ),
-                              child: Text(
-                                "Thank you for visiting! This is your direct line to reach me. Whether you have a project in mind, a question about web development, or just want to say hello, I'm here and eager to connect with you.",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyLarge
-                                    ?.copyWith(
-                                      height: AppSizes.lineHeightExtraLarge.h,
-                                      letterSpacing:
-                                          AppSizes.letterSpacingMedium.w,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onSecondary,
-                                      fontSize: bodyFontSize,
-                                    ),
-                              ),
-                            ),
-                            SizedBox(height: AppSizes.largeSpaceBtwItems.h),
-                            Padding(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: AppSizes.paddingSmall.w,
-                                vertical: AppSizes.paddingSmall.h,
-                              ),
-                              child: Text(
-                                "Reach me out:-",
-                                style: Theme.of(context).textTheme.bodyLarge
-                                    ?.copyWith(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onSecondary,
-                                    ),
-                              ),
-                            ),
-                            SizedBox(height: AppSizes.smallSpaceBtwItems.h),
-                            CustomButton(
-                              label: 'praveen885127@gmail.com',
-                              icon: FontAwesomeIcons.mailchimp,
-                              iconSize: AppSizes.iconSizeSmall,
-                              iconColor: Theme.of(context).primaryColor,
-                              hoverLabelColor: Theme.of(context).primaryColor,
-                              hoverUnderlineColor:
-                                  Theme.of(context).primaryColor,
-                              hoverEffects: const [
-                                HoverEffect.labelColor,
-                                HoverEffect.underline,
-                              ],
-                              onPressed: () {
-                                launchUrlString(
-                                  'mailto:praveen885127@gmail.com',
-                                );
-                              },
-                            ),
-                            SizedBox(height: AppSizes.largeSpaceBtwItems.h),
-                            Wrap(
-                              spacing: AppSizes.mediumSpaceBtwItems.w,
-                              runSpacing: AppSizes.mediumSpaceBtwItems.h,
-                              alignment: WrapAlignment.start,
-                              children: [
-                                _buildSocialButton(
-                                  context: context,
-                                  label: 'GitHub',
-                                  icon: FontAwesomeIcons.github,
-                                  url: 'https://www.github.com/pyapril15',
-                                ),
-                                _buildSocialButton(
-                                  context: context,
-                                  label: 'LinkedIn',
-                                  icon: FontAwesomeIcons.linkedin,
-                                  url: 'https://www.linkedin.com/in/pyapril15',
-                                ),
-                                _buildSocialButton(
-                                  context: context,
-                                  label: 'Twitter',
-                                  icon: FontAwesomeIcons.twitter,
-                                  url: 'https://www.twitter.com/pyapril15',
-                                ),
-                                _buildSocialButton(
-                                  context: context,
-                                  label: 'Discord',
-                                  icon: FontAwesomeIcons.discord,
-                                  url: 'https://www.discord.com/pyapril15',
-                                ),
-                                _buildSocialButton(
-                                  context: context,
-                                  label: 'Instagram',
-                                  icon: FontAwesomeIcons.instagram,
-                                  url:
-                                      'https://www.instagram.com/__pyapril15.py__',
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          );
-        },
+    return Padding(
+      padding:
+          EdgeInsets.symmetric(horizontal: horizontalPadding, vertical: 40),
+      child: ConstrainedBox(
+        constraints: BoxConstraints(maxWidth: maxContentWidth),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildHeader(context),
+            const SizedBox(height: 20),
+            _ContactContent(),
+          ],
+        ),
       ),
     );
   }
 
-  CustomButton _buildSocialButton({
-    required BuildContext context,
-    required String label,
-    required IconData icon,
-    required String url,
-  }) {
-    return CustomButton(
-      onPressed: () { launchUrlString(url);},
-      label: label,
-      icon: icon,
-      hoverBackgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      hoverUnderlineColor: Theme.of(context).primaryColor,
-      hoverLabelColor: Theme.of(context).primaryColor,
-      hoverIconColor: Theme.of(context).primaryColor,
-      iconSize: AppSizes.iconSizeSmall,
-      hoverEffects: const [
-        HoverEffect.backgroundColor,
-        HoverEffect.underline,
-        HoverEffect.labelColor,
-        HoverEffect.iconColor,
-        HoverEffect.scale,
+  Widget _buildHeader(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          "Let's get to know each other",
+          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                color: Theme.of(context).primaryColor,
+              ),
+        ),
+        Text(
+          'Get in touch for collaborations or just a friendly hello!',
+          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                color: Theme.of(context).colorScheme.onPrimary,
+              ),
+        ),
       ],
+    );
+  }
+}
+
+class _ContactContent extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+
+    return screenWidth > 600
+        ? Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Flexible(flex: 1, child: _ContactImage()),
+              const SizedBox(width: 40),
+              Flexible(flex: 1, child: _ContactDetails()),
+            ],
+          )
+        : Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _ContactImage(),
+              const SizedBox(height: 20),
+              _ContactDetails(),
+            ],
+          );
+  }
+}
+
+class _ContactImage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return AspectRatio(
+      aspectRatio: 1,
+      child: SvgPicture.asset(
+        'assets/images/connect.svg',
+        fit: BoxFit.contain,
+      ),
+    );
+  }
+}
+
+class _ContactDetails extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          "Thank you for visiting! Feel free to reach out whether you have a project in mind or just want to say hi. Let's connect!",
+          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                height: 1.5,
+                color: Theme.of(context).colorScheme.onSecondary,
+              ),
+        ),
+        const SizedBox(height: 20),
+        Text(
+          "Contact me:",
+          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                color: Theme.of(context).colorScheme.onPrimary,
+                fontWeight: FontWeight.bold,
+              ),
+        ),
+        const SizedBox(height: 10),
+        _EmailButton(),
+        const SizedBox(height: 20),
+        _SocialLinks(),
+      ],
+    );
+  }
+}
+
+class _EmailButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return TextButton.icon(
+      onPressed: () => launchUrlString('mailto:praveen885127@gmail.com'),
+      icon: Icon(FontAwesomeIcons.envelope,
+          color: Theme.of(context).primaryColor),
+      label: Text(
+        'praveen885127@gmail.com',
+        style: TextStyle(
+          color: Theme.of(context).primaryColor,
+          decoration: TextDecoration.underline,
+        ),
+      ),
+    );
+  }
+}
+
+class _SocialLinks extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return const Wrap(
+      spacing: 16,
+      runSpacing: 10,
+      children: [
+        _SocialButton(
+          label: 'GitHub',
+          icon: FontAwesomeIcons.github,
+          url: 'https://www.github.com/pyapril15',
+        ),
+        _SocialButton(
+          label: 'LinkedIn',
+          icon: FontAwesomeIcons.linkedin,
+          url: 'https://www.linkedin.com/in/pyapril15',
+        ),
+        _SocialButton(
+          label: 'Twitter',
+          icon: FontAwesomeIcons.twitter,
+          url: 'https://www.twitter.com/pyapril15',
+        ),
+        _SocialButton(
+          label: 'Discord',
+          icon: FontAwesomeIcons.discord,
+          url: 'https://www.discord.com/pyapril15',
+        ),
+        _SocialButton(
+          label: 'Instagram',
+          icon: FontAwesomeIcons.instagram,
+          url: 'https://www.instagram.com/__pyapril15.py__',
+        ),
+      ],
+    );
+  }
+}
+
+class _SocialButton extends StatelessWidget {
+  final String label;
+  final IconData icon;
+  final String url;
+
+  const _SocialButton({
+    required this.label,
+    required this.icon,
+    required this.url,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton.icon(
+      onPressed: () => launchUrlString(url),
+      icon: Icon(icon, color: Theme.of(context).primaryColor),
+      label:
+          Text(label, style: TextStyle(color: Theme.of(context).primaryColor)),
+      style: TextButton.styleFrom(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      ),
     );
   }
 }

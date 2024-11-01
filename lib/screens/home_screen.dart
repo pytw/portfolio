@@ -91,56 +91,15 @@ class _HomeScreenState extends State<HomeScreen> {
           thumbVisibility: true,
           child: SingleChildScrollView(
             controller: _scrollController,
-            child: Container(
-              margin: responsiveMargin,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 20.h),
+              child: const Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    key: _homeKey,
-                    margin: EdgeInsets.symmetric(
-                        vertical:
-                            screenType == ScreenType.mobile ? 0 : 15.h),
-                    height: ((screenType == ScreenType.mobile ? 0.3 : 0.8) *
-                            screenHeight).h,
-                    width: double.infinity,
-                    child: HeroSection(onSectionSelected: (String section) {
-                      scrollToSection(_projectsKey, section);
-                    }),
-                  ),
-                  SizedBox(height: screenType==ScreenType.mobile?52.h:108.h),
-                  Container(
-                    key: _projectsKey,
-                    margin: EdgeInsets.symmetric(
-                        vertical: screenType == ScreenType.mobile ? 0 : 15.h),
-                    height: (screenType == ScreenType.mobile ? null : (1.3*screenHeight).h),
-                    child: const ProjectSection(),
-                  ),
-                  SizedBox(height: screenType==ScreenType.mobile?52.h:108.h),
-                  Container(
-                    key: _skillsKey,
-                    margin: EdgeInsets.symmetric(
-                        vertical: screenType == ScreenType.mobile ? 0 : 15.h),
-                    height: (screenType == ScreenType.mobile ? null : (1.1*screenHeight).h),
-                    child: const SkillsSection(),
-                  ),
-                  SizedBox(height: AppSizes.mediumSpaceBtwItems.h),
-                  Container(
-                    key: _aboutKey,
-                    margin: EdgeInsets.symmetric(
-                        vertical: mediaQuery.height * 0.025),
-                    height: mediaQuery.height * 0.7,
-                    child: const AboutSection(),
-                  ),
-                  SizedBox(height: AppSizes.mediumSpaceBtwItems.h),
-                  Container(
-                    key: _contactKey,
-                    margin: EdgeInsets.symmetric(
-                        vertical: mediaQuery.height * 0.025),
-                    height: mediaQuery.height * 0.7,
-                    child: const ContactSection(),
-                  ),
-                  const Footer(),
+                  HeroSection(),
+                  ProjectSection(),
+                  AboutSection(),
+                  ContactSection(),
                 ],
               ),
             ),
