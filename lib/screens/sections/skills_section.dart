@@ -79,12 +79,17 @@ class SkillsSection extends StatelessWidget {
             children: [
               CustomHeader(
                 titleText: 'What ',
-                titleColor: Theme.of(context).primaryColor,
+                titleStyle: TextStyle(
+                  color: Theme.of(context).primaryColor,
+                  fontSize: headingFontSize,
+                  letterSpacing: letterSpace,
+                ),
                 subtitleText: 'I Bring to the Table.',
-                subtitleColor: Theme.of(context).colorScheme.onPrimary,
-                headingFontSize: headingFontSize,
-                titleLetterSpacing: letterSpace,
-                subTitleLetterSpacing: letterSpace,
+                subtitleStyle: TextStyle(
+                  color: Theme.of(context).colorScheme.onPrimary,
+                  fontSize: headingFontSize,
+                  letterSpacing: letterSpace,
+                ),
               ),
               SizedBox(height: spaceHeight),
               screenType == ScreenType.mobile

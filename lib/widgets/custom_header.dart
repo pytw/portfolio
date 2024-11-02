@@ -2,29 +2,27 @@ import 'package:flutter/material.dart';
 
 /// A reusable widget that displays a header consisting of two customizable
 /// pieces of text, each with configurable styles such as color, font size,
-/// and alignment.
+/// letter spacing, and word spacing.
 ///
-/// [CustomHeader] allows for a title and subtitle with different colors
+/// [CustomHeader] allows for a title and subtitle with different styles
 /// and can be reused across different screens in your application. It
 /// provides flexibility to control the content and styling via parameters.
 ///
 /// Parameters:
 /// - [titleText]: The main text (title) to display in the header.
 /// - [subtitleText]: The secondary text (subtitle) to display next to the title.
-/// - [titleColor]: Color of the title text. Defaults to `Colors.white`.
-/// - [subtitleColor]: Color of the subtitle text. Defaults to `Colors.blue`.
-/// - [headingFontSize]: Font size to be used for both the title and subtitle text.
-/// - [alignment]: Alignment of the text. Defaults to `TextAlign.left`.
+/// - [titleStyle]: The [TextStyle] for the title text. Defaults to bold white text.
+/// - [subtitleStyle]: The [TextStyle] for the subtitle text. Defaults to bold blue text.
+/// - [alignment]: Alignment of the text. Defaults to `Alignment.topLeft`.
 ///
 /// Example usage:
 /// ```dart
 /// CustomHeader(
 ///   titleText: 'But wait.. ',
 ///   subtitleText: 'Who am I...',
-///   titleColor: Colors.white,
-///   subtitleColor: Colors.blue,
-///   headingFontSize: 24.sp, // Uses ScreenUtil for responsive sizing
-///   alignment: TextAlign.left,
+///   titleStyle: TextStyle(color: Colors.white, fontSize: 24, letterSpacing: 2, wordSpacing: 4),
+///   subtitleStyle: TextStyle(color: Colors.blue, fontSize: 24, letterSpacing: 2, wordSpacing: 4),
+///   alignment: Alignment.topLeft,
 /// )
 /// ```
 class CustomHeader extends StatelessWidget {
@@ -34,64 +32,55 @@ class CustomHeader extends StatelessWidget {
   /// The secondary text (subtitle) to be displayed after the title.
   final String subtitleText;
 
-  /// The color of the title text. Defaults to `Colors.white`.
-  final Color titleColor;
+  /// The style for the title text. Defaults to bold white text.
+  final TextStyle titleStyle;
 
-  /// The color of the subtitle text. Defaults to `Colors.blue`.
-  final Color subtitleColor;
+  /// The style for the subtitle text. Defaults to bold blue text.
+  final TextStyle subtitleStyle;
 
-  /// The font size for both the title and subtitle text. This must be provided by the user.
-  final double headingFontSize;
-
-  /// The alignment of the text in the header. Defaults to `TextAlign.left`.
-  final TextAlign textAlign;
-
+  /// The alignment of the text in the header. Defaults to `Alignment.topLeft`.
   final AlignmentGeometry alignment;
-  final double? titleLetterSpacing;
-  final double? subTitleLetterSpacing;
 
-  /// Constructor for [CustomHeader] widget. Requires [titleText], [subtitleText],
-  /// and [headingFontSize] to be provided.
-  ///
-  /// Optional parameters include [titleColor], [subtitleColor], and [alignment].
+  /// Constructor for [CustomHeader] widget. Requires [titleText] and [subtitleText]
+  /// to be provided. Optional parameters include [titleStyle] and [subtitleStyle].
   const CustomHeader({
     super.key,
     required this.titleText,
     required this.subtitleText,
-    this.titleColor = Colors.white,
-    this.subtitleColor = Colors.blue,
-    required this.headingFontSize,
+    TextStyle? titleStyle,
+    TextStyle? subtitleStyle,
     this.alignment = Alignment.topLeft,
-    this.textAlign = TextAlign.left,
-    this.titleLetterSpacing,
-    this.subTitleLetterSpacing,
-  });
+  })  : titleStyle = titleStyle ??
+            const TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+              letterSpacing: 0,
+              wordSpacing: 0,
+            ),
+        subtitleStyle = subtitleStyle ??
+            const TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Colors.blue,
+              letterSpacing: 0,
+              wordSpacing: 0,
+            );
 
   @override
   Widget build(BuildContext context) {
     return Align(
       alignment: alignment,
       child: RichText(
-        textAlign: textAlign,
         text: TextSpan(
           children: [
             TextSpan(
               text: titleText,
-              style: TextStyle(
-                fontSize: headingFontSize,
-                fontWeight: FontWeight.bold,
-                color: titleColor,
-                letterSpacing: titleLetterSpacing,
-              ),
+              style: titleStyle,
             ),
             TextSpan(
               text: subtitleText,
-              style: TextStyle(
-                fontSize: headingFontSize,
-                fontWeight: FontWeight.bold,
-                color: subtitleColor,
-                letterSpacing: subTitleLetterSpacing,
-              ),
+              style: subtitleStyle,
             ),
           ],
         ),

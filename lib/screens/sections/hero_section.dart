@@ -98,23 +98,33 @@ class _IntroSection extends StatelessWidget {
       children: [
         CustomHeader(
           titleText: "Hey ",
-          titleColor: Theme.of(context).primaryColor,
-          titleLetterSpacing: 2.w,
+          titleStyle: TextStyle(
+            color: Theme.of(context).primaryColor,
+            letterSpacing: 1.5.w,
+            fontSize: subHeadingFontSize
+          ),
           subtitleText: "${welcome[0]} ${welcome[1]} !",
-          subtitleColor: Theme.of(context).colorScheme.onPrimary,
-          subTitleLetterSpacing: 2.w,
-          headingFontSize: subHeadingFontSize,
+          subtitleStyle: TextStyle(
+            color: Theme.of(context).colorScheme.onPrimary,
+            letterSpacing: 1.5.w,
+            fontSize: subHeadingFontSize
+          ),
           alignment: Alignment.center,
         ),
         SizedBox(height: smallSpaceHeight),
         CustomHeader(
           titleText: "I'm ",
-          titleColor: Theme.of(context).colorScheme.onPrimary,
-          titleLetterSpacing: 2.w,
+          titleStyle: TextStyle(
+              color: Theme.of(context).colorScheme.onPrimary,
+              letterSpacing: 1.5.w,
+              fontSize: headingFontSize
+          ),
           subtitleText: "Praveen Yadav",
-          subtitleColor: Theme.of(context).primaryColor,
-          subTitleLetterSpacing: 2.w,
-          headingFontSize: headingFontSize,
+          subtitleStyle: TextStyle(
+              color: Theme.of(context).primaryColor,
+              letterSpacing: 1.5.w,
+              fontSize: headingFontSize
+          ),
           alignment: Alignment.center,
         ),
         SizedBox(height: smallSpaceHeight),

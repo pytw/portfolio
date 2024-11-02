@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:portfolio_website/widgets/custom_button.dart';
+import 'package:portfolio_website/widgets/custom_header.dart';
 
 class ProjectSection extends StatelessWidget {
   const ProjectSection({super.key});
 
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
-    double horizontalPadding = screenWidth > 800 ? 80.0 : 20.0;
+    double screenWidth = ScreenUtil().screenWidth;
+    double horizontalPadding = screenWidth > 800 ? 20.0 : 20.0;
 
     return Padding(
       padding:
@@ -33,22 +36,17 @@ class ProjectSection extends StatelessWidget {
   }
 
   Widget _buildHeader(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'A Glimpse of My Work',
-          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                color: Theme.of(context).colorScheme.onPrimary,
-              ),
-        ),
-        Text(
-          'Selected Projects',
-          style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                color: Theme.of(context).primaryColor,
-              ),
-        ),
-      ],
+    return CustomHeader(
+      titleText: 'A Glimpse of ',
+      titleStyle: Theme.of(context).textTheme.headlineMedium?.copyWith(
+            color: Theme.of(context).colorScheme.onPrimary,
+            fontWeight: FontWeight.bold,
+          ),
+      subtitleText: 'My Work',
+      subtitleStyle: Theme.of(context).textTheme.headlineMedium?.copyWith(
+            color: Theme.of(context).primaryColor,
+            fontWeight: FontWeight.bold,
+          ),
     );
   }
 }
@@ -59,7 +57,7 @@ class _ProjectResponsiveLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ProjectDetail project = _sampleProject();
+    final _ProjectDetail project = _sampleProject();
 
     return isStacked
         ? Column(
@@ -71,7 +69,7 @@ class _ProjectResponsiveLayout extends StatelessWidget {
             ],
           )
         : Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Flexible(
                   flex: 1, child: _ProjectImage(imagePath: project.imagePath)),
@@ -96,7 +94,7 @@ class _ProjectImage extends StatelessWidget {
 }
 
 class _ProjectDetails extends StatelessWidget {
-  final ProjectDetail project;
+  final _ProjectDetail project;
   const _ProjectDetails({required this.project});
 
   @override
@@ -104,20 +102,21 @@ class _ProjectDetails extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
             project.title,
-            style: Theme.of(context)
-                .textTheme
-                .headlineSmall
-                ?.copyWith(fontWeight: FontWeight.bold),
+            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
           ),
           const SizedBox(height: 16),
           Text(
             project.overview,
-            style:
-                Theme.of(context).textTheme.bodyMedium?.copyWith(height: 1.5),
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  height: 2,
+                  color: Theme.of(context).colorScheme.onSecondary,
+                ),
           ),
           const SizedBox(height: 20),
           Wrap(
@@ -134,7 +133,7 @@ class _ProjectDetails extends StatelessWidget {
 }
 
 class _SkillChip extends StatelessWidget {
-  final TechnicalSkill skill;
+  final _TechnicalSkill skill;
   const _SkillChip({required this.skill});
 
   @override
@@ -151,49 +150,51 @@ class _MoreProjectsButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextButton(
+    return CustomButton(
       onPressed: () {},
-      child: Text(
-        'More Projects...',
-        style: TextStyle(
-            color: Theme.of(context).primaryColor,
-            decoration: TextDecoration.underline),
+      label: 'More Projects...',
+      textStyle: TextStyle(
+        color: Theme.of(context).primaryColor,
       ),
+      hoverUnderlineColor: Theme.of(context).primaryColor,
+      hoverEffects: const [
+        HoverEffect.underline,
+      ],
     );
   }
 }
 
-ProjectDetail _sampleProject() {
-  return ProjectDetail(
-    "Admin Dashboard",
+_ProjectDetail _sampleProject() {
+  return _ProjectDetail(
+    "Dashboard",
     "assets/gif/tmc.gif",
-    "An admin dashboard providing real-time data analytics, streamlined user management, and comprehensive monitoring to support decision-making and operational efficiency.",
+    "An admin dashboard serves multiple crucial functions, enhancing operational efficiency, decision-making, and user management. It provides a centralized platform for overseeing components, making informed decisions, and managing user interactions. The dashboard presents real-time data and analytics, enabling prompt responses to emerging trends and issues. It empowers data-driven decision-making, efficient user management, and content oversight. The dashboard also monitors system health, ensures security and compliance, and facilitates communication among team members. Its scalability supports long-term growth, adapting to changing business environments. It's a vital tool for effective management, strategic decision-making, and operational excellence.",
     _technicalSkills(),
   );
 }
 
-List<TechnicalSkill> _technicalSkills() {
+List<_TechnicalSkill> _technicalSkills() {
   return [
-    TechnicalSkill('Flutter', 'assets/icons/Flutter.svg'),
-    TechnicalSkill('Tkinter', 'assets/icons/Python.svg'),
-    TechnicalSkill('Qt', 'assets/icons/Qt-Framework.svg'),
-    TechnicalSkill('HTML', 'assets/icons/HTML5.svg'),
-    TechnicalSkill('CSS', 'assets/icons/css3.svg'),
+    _TechnicalSkill('Flutter', 'assets/icons/Flutter.svg'),
+    _TechnicalSkill('Tkinter', 'assets/icons/Python.svg'),
+    _TechnicalSkill('Qt', 'assets/icons/Qt-Framework.svg'),
+    _TechnicalSkill('HTML', 'assets/icons/HTML5.svg'),
+    _TechnicalSkill('CSS', 'assets/icons/css3.svg'),
   ];
 }
 
-class ProjectDetail {
+class _ProjectDetail {
   final String title;
   final String imagePath;
   final String overview;
-  final List<TechnicalSkill> skills;
+  final List<_TechnicalSkill> skills;
 
-  ProjectDetail(this.title, this.imagePath, this.overview, this.skills);
+  _ProjectDetail(this.title, this.imagePath, this.overview, this.skills);
 }
 
-class TechnicalSkill {
+class _TechnicalSkill {
   final String name;
   final String iconPath;
 
-  TechnicalSkill(this.name, this.iconPath);
+  _TechnicalSkill(this.name, this.iconPath);
 }
