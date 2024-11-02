@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:portfolio_website/helpers/responsive_helper.dart';
@@ -9,6 +10,7 @@ import 'package:portfolio_website/screens/sections/project_section.dart';
 import 'package:portfolio_website/screens/sections/skills_section.dart';
 import 'package:portfolio_website/theme/theme.dart';
 import 'package:portfolio_website/widgets/navbar.dart';
+import 'dart:io';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -55,12 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context).size;
-    final screenHeight = ScreenUtil().screenHeight;
     final ScreenType screenType = getScreenType(context);
-
-    final EdgeInsetsGeometry responsiveMargin = screenType == ScreenType.desktop
-        ? EdgeInsets.symmetric(horizontal: mediaQuery.width * 0.05)
-        : const EdgeInsets.all(5);
 
     return SafeArea(
       child: Scaffold(
@@ -96,8 +93,11 @@ class _HomeScreenState extends State<HomeScreen> {
               child: const Column(
                 children: [
                   HeroSection(),
+                  SizedBox(height: kIsWeb == true ? 30 : 16),
                   ProjectSection(),
+                  SizedBox(height: kIsWeb == true ? 30 : 16),
                   AboutSection(),
+                  SizedBox(height: kIsWeb == true ? 30 : 16),
                   ContactSection(),
                 ],
               ),

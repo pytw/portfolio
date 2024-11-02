@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:portfolio_website/widgets/custom_button.dart';
@@ -43,7 +44,7 @@ class ContactSection extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const _BuildHeader(),
-          const SizedBox(height: spacing * 3),
+          SizedBox(height: (spacing * 3).h),
           _buildContactContent(screenWidth),
         ],
       ),
@@ -60,12 +61,12 @@ class ContactSection extends StatelessWidget {
               Flexible(flex: 1, child: _ContactDetails()),
             ],
           )
-        : const Column(
+        : Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _ContactImage(),
-              SizedBox(height: spacing), // Spacing between text and image
-              _ContactDetails(),
+              const _ContactImage(),
+              SizedBox(height: spacing.h), // Spacing between text and image
+              const _ContactDetails(),
             ],
           );
   }

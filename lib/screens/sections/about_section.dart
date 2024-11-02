@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:portfolio_website/widgets/custom_button.dart';
 import 'package:portfolio_website/widgets/custom_header.dart';
@@ -31,9 +32,9 @@ class AboutSection extends StatelessWidget {
       child: Column(
         children: [
           const _BuildHeader(),
-          const SizedBox(height: spacing * 3), // Adjusted spacing
+          SizedBox(height: (spacing * 3).h), // Adjusted spacing
           _buildAboutContent(screenWidth),
-          const SizedBox(height: spacing), // Spacing between content and button
+          SizedBox(height: spacing.h), // Spacing between content and button
           const _ConnectButton(),
         ],
       ),
@@ -50,12 +51,12 @@ class AboutSection extends StatelessWidget {
               Flexible(flex: 1, child: _AboutImage()),
             ],
           )
-        : const Column(
+        : Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _AboutImage(),
-              SizedBox(height: spacing), // Spacing between text and image
-              _AboutText(),
+              const _AboutImage(),
+              SizedBox(height: spacing.h), // Spacing between text and image
+              const _AboutText(),
             ],
           );
   }
