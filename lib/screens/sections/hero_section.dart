@@ -15,7 +15,7 @@ double mLargeSpaceHeight = 28.h;
 
 double mSmallParaFontSize = 40.sp;
 double mMediumParaFontSize = 64.sp;
-double mLargeParaFontSize = 112.sp;
+double mLargeParaFontSize = 102.sp;
 
 double mIconSize = 52.sp;
 
@@ -44,11 +44,12 @@ class HeroSection extends StatelessWidget {
 
   // Layout for desktop and tablet screens
   Widget _buildDesktopTabletLayout(BuildContext context) {
+    final ScreenType screenType = getScreenType(context);
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Expanded(
-          flex: 1,
+          flex: screenType==ScreenType.mobile?2:1,
           child: _IntroSection(),
         ),
         SizedBox(width: 30.w),
@@ -236,7 +237,7 @@ class _CircularImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       constraints:
-          BoxConstraints(maxHeight: (ScreenUtil().screenHeight * 0.8).h),
+          BoxConstraints(maxHeight: (ScreenUtil().screenHeight).h),
       decoration: const BoxDecoration(
         shape: BoxShape.circle,
         color: Colors.white,
