@@ -8,23 +8,17 @@ class ContactSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
-    double horizontalPadding = screenWidth > 800 ? 80.0 : 20.0;
-    double maxContentWidth = screenWidth > 600 ? 1200 : double.infinity;
 
     return Padding(
       padding:
-          EdgeInsets.symmetric(horizontal: horizontalPadding, vertical: 40),
-      child: ConstrainedBox(
-        constraints: BoxConstraints(maxWidth: maxContentWidth),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildHeader(context),
-            const SizedBox(height: 20),
-            _ContactContent(),
-          ],
-        ),
+          const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildHeader(context),
+          const SizedBox(height: 20),
+          _ContactContent(),
+        ],
       ),
     );
   }

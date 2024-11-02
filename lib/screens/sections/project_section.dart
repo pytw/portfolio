@@ -10,11 +10,10 @@ class ProjectSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double screenWidth = ScreenUtil().screenWidth;
-    double horizontalPadding = screenWidth > 800 ? 20.0 : 20.0;
 
     return Padding(
       padding:
-          EdgeInsets.symmetric(horizontal: horizontalPadding, vertical: 20),
+          const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

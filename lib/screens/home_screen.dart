@@ -94,7 +94,6 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 20.h),
               child: const Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   HeroSection(),
                   ProjectSection(),
