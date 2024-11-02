@@ -1,28 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:portfolio_website/widgets/custom_button.dart';
+import 'package:portfolio_website/widgets/custom_header.dart';
 
 class AboutSection extends StatelessWidget {
   const AboutSection({super.key});
 
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
+    double screenWidth = ScreenUtil().screenWidth;
 
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 1200),
-          child: Column(
-            children: [
-              const Header(),
-              const SizedBox(height: 20),
-              _buildAboutContent(screenWidth),
-              const SizedBox(height: 20),
-              const _ConnectButton(),
-            ],
-          ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 1200),
+        child: Column(
+          children: [
+            const Header(),
+            const SizedBox(height: 20),
+            _buildAboutContent(screenWidth),
+            const SizedBox(height: 20),
+            const _ConnectButton(),
+          ],
         ),
       ),
     );
@@ -52,10 +52,15 @@ class Header extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      "About Me",
-      style: Theme.of(context).textTheme.headlineMedium,
-      textAlign: TextAlign.center,
+    return CustomHeader(
+      titleText: 'But wait . ',
+      titleStyle: Theme.of(context).textTheme.headlineMedium?.copyWith(
+        color: Theme.of(context).colorScheme.onPrimary,
+      ),
+      subtitleText: 'Who am I . . .',
+      subtitleStyle: Theme.of(context).textTheme.headlineMedium?.copyWith(
+        color: Theme.of(context).primaryColor,
+      ),
     );
   }
 }
@@ -66,9 +71,8 @@ class AboutText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
-      "I am a dedicated undergraduate with an interest in full-stack development.",
-      style: Theme.of(context).textTheme.bodyLarge,
-      textAlign: TextAlign.center,
+      "Hello, I'm Praveen Yadav, a dedicated undergraduate student with a profound interest in web development. Currently pursuing my Bachelor of Computer Applications (BCA) degree, my goal is to master both front-end and back-end technologies, aiming to become a versatile and skilled developer. I thrive on the creativity and problem-solving that web development offers. Let's connect and exchange ideas in the dynamic world of web development. I'm always open to new connections and exciting opportunities. Feel free to reach out, and let's embark on this journey together.",
+      style: Theme.of(context).textTheme.bodyMedium,
     );
   }
 }

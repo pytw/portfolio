@@ -40,12 +40,10 @@ class ProjectSection extends StatelessWidget {
       titleText: 'A Glimpse of ',
       titleStyle: Theme.of(context).textTheme.headlineMedium?.copyWith(
             color: Theme.of(context).colorScheme.onPrimary,
-            fontWeight: FontWeight.bold,
           ),
       subtitleText: 'My Work',
       subtitleStyle: Theme.of(context).textTheme.headlineMedium?.copyWith(
             color: Theme.of(context).primaryColor,
-            fontWeight: FontWeight.bold,
           ),
     );
   }
