@@ -49,9 +49,9 @@ class AboutSection extends StatelessWidget {
       // Layout for medium and small screens (tablet and mobile)
       return const Column(
         children: [
-          _AboutText(),
-          SizedBox(height: spacing), // Spacing between text and image
           _AboutImage(),
+          SizedBox(height: spacing), // Spacing between text and image
+          _AboutText(),
         ],
       );
     }

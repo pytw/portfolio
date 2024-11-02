@@ -6,12 +6,18 @@ import 'package:url_launcher/url_launcher_string.dart';
 class ContactSection extends StatelessWidget {
   const ContactSection({super.key});
 
+  // Constants for padding, spacing, and breakpoints
+  static const double horizontalPadding = 16.0;
+  static const double verticalPadding = 16.0;
+  static const double spacing = 8.0;
+  static const double largeScreenBreakpoint = 1200.0;
+
   @override
   Widget build(BuildContext context) {
 
     return Padding(
       padding:
-          const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+          const EdgeInsets.symmetric(horizontal: horizontalPadding, vertical: verticalPadding),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
