@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:portfolio_website/widgets/custom_button.dart';
 import 'package:portfolio_website/widgets/custom_header.dart';
@@ -22,7 +21,7 @@ class AboutSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double screenWidth = ScreenUtil().screenWidth;
+    double screenWidth = MediaQuery.of(context).size.width;
 
     return Padding(
       padding: const EdgeInsets.symmetric(
@@ -44,7 +43,7 @@ class AboutSection extends StatelessWidget {
   Widget _buildAboutContent(double screenWidth) {
     return screenWidth >= largeScreenBreakpoint
         ? const Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Flexible(flex: 1, child: _AboutText()),
               SizedBox(width: spacing * 2), // Adjusted spacing between columns
@@ -52,6 +51,7 @@ class AboutSection extends StatelessWidget {
             ],
           )
         : const Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _AboutImage(),
               SizedBox(height: spacing), // Spacing between text and image
@@ -90,8 +90,8 @@ class _AboutText extends StatelessWidget {
         AboutSection.aboutMeText,
         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
               color: Theme.of(context).colorScheme.onSecondary,
-              letterSpacing: 1,
-              height: 2,
+              letterSpacing: 0.8,
+              height: 2.5,
             ),
       ),
     );

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:portfolio_website/widgets/custom_button.dart';
 import 'package:portfolio_website/widgets/custom_header.dart';
@@ -7,24 +6,26 @@ import 'package:portfolio_website/widgets/custom_header.dart';
 class ProjectSection extends StatelessWidget {
   const ProjectSection({super.key});
 
+  // Constants for padding, spacing, and breakpoints
+  static const double horizontalPadding = 16.0;
+  static const double verticalPadding = 16.0;
+  static const double spacing = 8.0;
+  static const double largeScreenBreakpoint = 1200.0;
+
   @override
   Widget build(BuildContext context) {
-    double screenWidth = ScreenUtil().screenWidth;
+    double screenWidth = MediaQuery.of(context).size.width;
 
     return Padding(
-      padding:
-          const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+      padding: const EdgeInsets.symmetric(
+          horizontal: horizontalPadding, vertical: verticalPadding),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildHeader(context),
-          const SizedBox(height: 20),
-          ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 1200),
-            child: screenWidth > 600
-                ? const _ProjectResponsiveLayout(isStacked: false)
-                : const _ProjectResponsiveLayout(isStacked: true),
-          ),
+          const _BuildHeader(),
+          const SizedBox(height: spacing * 3),
+          _buildProjectContent(screenWidth),
+          const SizedBox(height: spacing),
           const Align(
             alignment: Alignment.centerRight,
             child: _MoreProjectsButton(),
@@ -34,7 +35,35 @@ class ProjectSection extends StatelessWidget {
     );
   }
 
-  Widget _buildHeader(BuildContext context) {
+  Widget _buildProjectContent(double screenWidth) {
+    final _ProjectDetail project = _sampleProject();
+    return screenWidth >= largeScreenBreakpoint
+        ? Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Flexible(
+                  flex: 1, child: _ProjectImage(imagePath: project.imagePath)),
+              const SizedBox(
+                  width: spacing * 2), // Adjusted spacing between columns
+              Flexible(flex: 1, child: _ProjectDetails(project: project)),
+            ],
+          )
+        : Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _ProjectImage(imagePath: project.imagePath),
+              const SizedBox(height: spacing), // Spacing between text and image
+              _ProjectDetails(project: project),
+            ],
+          );
+  }
+}
+
+class _BuildHeader extends StatelessWidget {
+  const _BuildHeader();
+
+  @override
+  Widget build(BuildContext context) {
     return CustomHeader(
       titleText: 'A Glimpse of ',
       titleStyle: Theme.of(context).textTheme.headlineMedium?.copyWith(
@@ -48,45 +77,13 @@ class ProjectSection extends StatelessWidget {
   }
 }
 
-class _ProjectResponsiveLayout extends StatelessWidget {
-  final bool isStacked;
-  const _ProjectResponsiveLayout({required this.isStacked});
-
-  @override
-  Widget build(BuildContext context) {
-    final _ProjectDetail project = _sampleProject();
-
-    return isStacked
-        ? Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _ProjectImage(imagePath: project.imagePath),
-              const SizedBox(height: 20),
-              _ProjectDetails(project: project),
-            ],
-          )
-        : Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Flexible(
-                  flex: 1, child: _ProjectImage(imagePath: project.imagePath)),
-              const SizedBox(width: 40),
-              Flexible(flex: 1, child: _ProjectDetails(project: project)),
-            ],
-          );
-  }
-}
-
 class _ProjectImage extends StatelessWidget {
   final String imagePath;
   const _ProjectImage({required this.imagePath});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      constraints: const BoxConstraints(maxHeight: 400, maxWidth: 600),
-      child: Image.asset(imagePath, fit: BoxFit.cover),
-    );
+    return Image.asset(imagePath, fit: BoxFit.contain);
   }
 }
 
@@ -96,35 +93,34 @@ class _ProjectDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Text(
-            project.title,
-            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
-          ),
-          const SizedBox(height: 16),
-          Text(
-            project.overview,
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  height: 2,
-                  color: Theme.of(context).colorScheme.onSecondary,
-                ),
-          ),
-          const SizedBox(height: 20),
-          Wrap(
-            spacing: 8,
-            runSpacing: 10,
-            children: project.skills
-                .map((skill) => _SkillChip(skill: skill))
-                .toList(),
-          ),
-        ],
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Text(
+          project.title,
+          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+            color: Theme.of(context).colorScheme.onPrimary,
+            fontWeight: FontWeight.bold
+              ),
+        ),
+        const SizedBox(height: ProjectSection.spacing),
+        Text(
+          project.overview,
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: Theme.of(context).colorScheme.onSecondary,
+            letterSpacing: 0.8,
+            height: 2.5,
+              ),
+        ),
+        const SizedBox(height: ProjectSection.spacing),
+        Wrap(
+          spacing: ProjectSection.spacing*2,
+          runSpacing: ProjectSection.spacing,
+          children: project.skills.map(
+                  (skill) => _SkillChip(skill: skill)
+          ).toList(),
+        ),
+      ],
     );
   }
 }

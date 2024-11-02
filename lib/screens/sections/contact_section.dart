@@ -53,7 +53,7 @@ class ContactSection extends StatelessWidget {
   Widget _buildContactContent(double screenWidth) {
     return screenWidth >= largeScreenBreakpoint
         ? const Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Flexible(flex: 1, child: _ContactImage()),
               SizedBox(width: spacing * 2), // Adjusted spacing between columns
@@ -61,6 +61,7 @@ class ContactSection extends StatelessWidget {
             ],
           )
         : const Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _ContactImage(),
               SizedBox(height: spacing), // Spacing between text and image
@@ -123,7 +124,7 @@ class _ContactDetails extends StatelessWidget {
             ContactSection.introText,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: Theme.of(context).colorScheme.onSecondary,
-                  letterSpacing: 1,
+                  letterSpacing: 0.8,
                   height: 2.5,
                 ),
           ),
@@ -142,7 +143,7 @@ class _ContactDetails extends StatelessWidget {
             ContactSection.contactMeText,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: Theme.of(context).colorScheme.onSecondary,
-                  letterSpacing: 1,
+                  letterSpacing: 0.8,
                   height: 2.5,
                 ),
           ),
