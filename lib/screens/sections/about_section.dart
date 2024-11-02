@@ -13,6 +13,13 @@ class AboutSection extends StatelessWidget {
   static const double spacing = 8.0;
   static const double largeScreenBreakpoint = 1200.0;
 
+  static const String aboutImage = "assets/images/about-me.svg";
+  static const String aboutMeText = """
+        Hello! I’m Praveen Yadav, an enthusiastic undergraduate currently pursuing my Bachelor of Computer Applications (BCA). My passion lies in software development, where I strive to master both front-end and back-end technologies. I am driven by a love for coding and a desire to create innovative solutions that address real-world challenges.
+        \nI thrive in collaborative environments, where exchanging ideas and learning from others fuels my creativity and problem-solving skills. I’m always eager to explore new technologies and refine my abilities, as I believe in the power of continuous growth in this ever-evolving field.
+        \nIf you're interested in connecting or discussing exciting opportunities in software development, I would love to hear from you! Let’s inspire each other and make a meaningful impact in this dynamic industry together. Feel free to reach out!
+        """;
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = ScreenUtil().screenWidth;
@@ -24,7 +31,7 @@ class AboutSection extends StatelessWidget {
       ),
       child: Column(
         children: [
-          const _BuilderHeader(),
+          const _BuildHeader(),
           const SizedBox(height: spacing * 3), // Adjusted spacing
           _buildAboutContent(screenWidth),
           const SizedBox(height: spacing), // Spacing between content and button
@@ -35,31 +42,27 @@ class AboutSection extends StatelessWidget {
   }
 
   Widget _buildAboutContent(double screenWidth) {
-    if (screenWidth >= largeScreenBreakpoint) {
-      // Layout for large screens (desktop)
-      return const Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Flexible(flex: 1, child: _AboutText()),
-          SizedBox(width: spacing * 2), // Adjusted spacing between columns
-          Flexible(flex: 1, child: _AboutImage()),
-        ],
-      );
-    } else {
-      // Layout for medium and small screens (tablet and mobile)
-      return const Column(
-        children: [
-          _AboutImage(),
-          SizedBox(height: spacing), // Spacing between text and image
-          _AboutText(),
-        ],
-      );
-    }
+    return screenWidth >= largeScreenBreakpoint
+        ? const Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Flexible(flex: 1, child: _AboutText()),
+              SizedBox(width: spacing * 2), // Adjusted spacing between columns
+              Flexible(flex: 1, child: _AboutImage()),
+            ],
+          )
+        : const Column(
+            children: [
+              _AboutImage(),
+              SizedBox(height: spacing), // Spacing between text and image
+              _AboutText(),
+            ],
+          );
   }
 }
 
-class _BuilderHeader extends StatelessWidget {
-  const _BuilderHeader();
+class _BuildHeader extends StatelessWidget {
+  const _BuildHeader();
 
   @override
   Widget build(BuildContext context) {
@@ -81,17 +84,16 @@ class _AboutText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      """
-      Hello! I’m Praveen Yadav, an enthusiastic undergraduate currently pursuing my Bachelor of Computer Applications (BCA). My passion lies in software development, where I strive to master both front-end and back-end technologies. I am driven by a love for coding and a desire to create innovative solutions that address real-world challenges.
-      \nI thrive in collaborative environments, where exchanging ideas and learning from others fuels my creativity and problem-solving skills. I’m always eager to explore new technologies and refine my abilities, as I believe in the power of continuous growth in this ever-evolving field.
-      \nIf you're interested in connecting or discussing exciting opportunities in software development, I would love to hear from you! Let’s inspire each other and make a meaningful impact in this dynamic industry together. Feel free to reach out!
-      """,
-      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-            color: Theme.of(context).colorScheme.onSecondary,
-            letterSpacing: 1,
-            height: 2,
-          ),
+    return Semantics(
+      label: 'About me section containing personal details',
+      child: Text(
+        AboutSection.aboutMeText,
+        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: Theme.of(context).colorScheme.onSecondary,
+              letterSpacing: 1,
+              height: 2,
+            ),
+      ),
     );
   }
 }
@@ -101,7 +103,10 @@ class _AboutImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SvgPicture.asset('assets/images/about-me.svg');
+    return Semantics(
+      label: 'Illustration representing personal development',
+      child: SvgPicture.asset(AboutSection.aboutImage),
+    );
   }
 }
 
@@ -110,20 +115,23 @@ class _ConnectButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomButton(
-      label: "Connect with Me",
-      borderColor: Theme.of(context).colorScheme.onPrimary,
-      clickBorderColor: Theme.of(context).primaryColor,
-      hoverLabelColor: Theme.of(context).primaryColor,
-      hoverEffects: const [
-        HoverEffect.labelColor
-      ],
-      clickEffects: const [
-        ClickEffect.borderColor
-      ],
-      onPressed: () {
-        // Implement your connection logic here
-      },
+    return Semantics(
+      label: 'Button to connect with me',
+      child: CustomButton(
+        label: "Connect with Me",
+        borderColor: Theme.of(context).colorScheme.onPrimary,
+        clickBorderColor: Theme.of(context).primaryColor,
+        hoverLabelColor: Theme.of(context).primaryColor,
+        hoverEffects: const [
+          HoverEffect.labelColor,
+        ],
+        clickEffects: const [
+          ClickEffect.borderColor,
+        ],
+        onPressed: () {
+          // Implement your connection logic here
+        },
+      ),
     );
   }
 }

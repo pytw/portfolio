@@ -1,117 +1,155 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:portfolio_website/widgets/custom_button.dart';
+import 'package:portfolio_website/widgets/custom_header.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class ContactSection extends StatelessWidget {
   const ContactSection({super.key});
 
-  // Constants for padding, spacing, and breakpoints
+  // Constants
   static const double horizontalPadding = 16.0;
   static const double verticalPadding = 16.0;
   static const double spacing = 8.0;
+  static const double iconSize = 24.0;
   static const double largeScreenBreakpoint = 1200.0;
+
+  // Text Constants
+  static const String contactImage = 'assets/images/connect.svg';
+  static const String email = 'praveen885127@gmail.com';
+  static const String githubUrl = 'https://www.github.com/pyapril15';
+  static const String linkedinUrl = 'https://www.linkedin.com/in/pyapril15';
+  static const String twitterUrl = 'https://www.twitter.com/pyapril15';
+  static const String discordUrl = 'https://www.discord.com/pyapril15';
+  static const String instagramUrl =
+      'https://www.instagram.com/__pyapril15.py__';
+
+  static const String introText = """
+    I’m excited to connect with you! Whether you have a project in mind, questions about web development, or just want to chat, I’m here to help. Feel free to reach out via email or find me on social media platforms like Instagram, Twitter, and LinkedIn. Your ideas matter, and I can’t wait to hear them!
+  """;
+
+  static const String contactMeText = """
+    For collaboration, insights, or tech discussions, don’t hesitate to reach out through my GitHub or Discord. I value every conversation and look forward to building something amazing together. Let’s transform your vision into reality—one message at a time!
+  """;
 
   @override
   Widget build(BuildContext context) {
-
+    double screenWidth = MediaQuery.of(context).size.width;
     return Padding(
-      padding:
-          const EdgeInsets.symmetric(horizontal: horizontalPadding, vertical: verticalPadding),
+      padding: const EdgeInsets.symmetric(
+          horizontal: horizontalPadding, vertical: verticalPadding),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildHeader(context),
-          const SizedBox(height: 20),
-          _ContactContent(),
+          const _BuildHeader(),
+          const SizedBox(height: spacing * 3),
+          _buildContactContent(screenWidth),
         ],
       ),
     );
   }
 
-  Widget _buildHeader(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          "Let's get to know each other",
-          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                color: Theme.of(context).primaryColor,
-              ),
-        ),
-        Text(
-          'Get in touch for collaborations or just a friendly hello!',
-          style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                color: Theme.of(context).colorScheme.onPrimary,
-              ),
-        ),
-      ],
-    );
-  }
-}
-
-class _ContactContent extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
-
-    return screenWidth > 600
-        ? Row(
+  Widget _buildContactContent(double screenWidth) {
+    return screenWidth >= largeScreenBreakpoint
+        ? const Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Flexible(flex: 1, child: _ContactImage()),
-              const SizedBox(width: 40),
+              SizedBox(width: spacing * 2), // Adjusted spacing between columns
               Flexible(flex: 1, child: _ContactDetails()),
             ],
           )
-        : Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+        : const Column(
             children: [
               _ContactImage(),
-              const SizedBox(height: 20),
+              SizedBox(height: spacing), // Spacing between text and image
               _ContactDetails(),
             ],
           );
   }
 }
 
-class _ContactImage extends StatelessWidget {
+class _BuildHeader extends StatelessWidget {
+  const _BuildHeader();
+
   @override
   Widget build(BuildContext context) {
-    return AspectRatio(
-      aspectRatio: 1,
-      child: SvgPicture.asset(
-        'assets/images/connect.svg',
-        fit: BoxFit.contain,
-      ),
+    return CustomHeader(
+      titleText: "Let's ",
+      titleStyle: Theme.of(context).textTheme.headlineMedium?.copyWith(
+            color: Theme.of(context).primaryColor,
+          ),
+      subtitleText: "get to know each other",
+      subtitleStyle: Theme.of(context).textTheme.headlineMedium?.copyWith(
+            color: Theme.of(context).colorScheme.onPrimary,
+          ),
+    );
+  }
+}
+
+class _ContactImage extends StatelessWidget {
+  const _ContactImage();
+
+  @override
+  Widget build(BuildContext context) {
+    return Semantics(
+      label: 'Illustration of connecting with others',
+      child: SvgPicture.asset(ContactSection.contactImage),
     );
   }
 }
 
 class _ContactDetails extends StatelessWidget {
+  const _ContactDetails();
+
+  static const double spacing = ContactSection.spacing;
+
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "Thank you for visiting! Feel free to reach out whether you have a project in mind or just want to say hi. Let's connect!",
-          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                height: 1.5,
-                color: Theme.of(context).colorScheme.onSecondary,
-              ),
-        ),
-        const SizedBox(height: 20),
-        Text(
-          "Contact me:",
+          "Get in Touch!",
           style: Theme.of(context).textTheme.titleMedium?.copyWith(
                 color: Theme.of(context).colorScheme.onPrimary,
                 fontWeight: FontWeight.bold,
               ),
         ),
-        const SizedBox(height: 10),
+        Semantics(
+          label: ContactSection.introText,
+          child: Text(
+            ContactSection.introText,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: Theme.of(context).colorScheme.onSecondary,
+                  letterSpacing: 1,
+                  height: 2.5,
+                ),
+          ),
+        ),
+        const SizedBox(height: spacing * 2),
+        Text(
+          "Contact with Me:",
+          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                color: Theme.of(context).colorScheme.onPrimary,
+                fontWeight: FontWeight.bold,
+              ),
+        ),
+        Semantics(
+          label: ContactSection.contactMeText,
+          child: Text(
+            ContactSection.contactMeText,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: Theme.of(context).colorScheme.onSecondary,
+                  letterSpacing: 1,
+                  height: 2.5,
+                ),
+          ),
+        ),
+        const SizedBox(height: spacing),
         _EmailButton(),
-        const SizedBox(height: 20),
+        const SizedBox(height: spacing * 2),
         _SocialLinks(),
       ],
     );
@@ -121,16 +159,28 @@ class _ContactDetails extends StatelessWidget {
 class _EmailButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return TextButton.icon(
-      onPressed: () => launchUrlString('mailto:praveen885127@gmail.com'),
-      icon: Icon(FontAwesomeIcons.envelope,
-          color: Theme.of(context).primaryColor),
-      label: Text(
-        'praveen885127@gmail.com',
-        style: TextStyle(
-          color: Theme.of(context).primaryColor,
-          decoration: TextDecoration.underline,
-        ),
+    return Semantics(
+      label: 'Email me at ${ContactSection.email}',
+      child: CustomButton(
+        label: ContactSection.email,
+        icon: FontAwesomeIcons.mailchimp,
+        iconSize: ContactSection.iconSize,
+        iconColor: Theme.of(context).primaryColor,
+        hoverLabelColor: Theme.of(context).primaryColor,
+        hoverUnderlineColor: Theme.of(context).primaryColor,
+        hoverEffects: const [
+          HoverEffect.labelColor,
+          HoverEffect.underline,
+        ],
+        onPressed: () async {
+          const emailUrl = 'mailto:${ContactSection.email}';
+          if (await canLaunchUrlString(emailUrl)) {
+            await launchUrlString(emailUrl);
+          } else {
+            if (!context.mounted) return;
+            _showErrorDialog(context, 'Could not launch email client.');
+          }
+        },
       ),
     );
   }
@@ -140,33 +190,33 @@ class _SocialLinks extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Wrap(
-      spacing: 16,
-      runSpacing: 10,
+      spacing: ContactSection.spacing * 2,
+      runSpacing: ContactSection.spacing,
       children: [
         _SocialButton(
           label: 'GitHub',
           icon: FontAwesomeIcons.github,
-          url: 'https://www.github.com/pyapril15',
+          url: ContactSection.githubUrl,
         ),
         _SocialButton(
           label: 'LinkedIn',
           icon: FontAwesomeIcons.linkedin,
-          url: 'https://www.linkedin.com/in/pyapril15',
+          url: ContactSection.linkedinUrl,
         ),
         _SocialButton(
           label: 'Twitter',
           icon: FontAwesomeIcons.twitter,
-          url: 'https://www.twitter.com/pyapril15',
+          url: ContactSection.twitterUrl,
         ),
         _SocialButton(
           label: 'Discord',
           icon: FontAwesomeIcons.discord,
-          url: 'https://www.discord.com/pyapril15',
+          url: ContactSection.discordUrl,
         ),
         _SocialButton(
           label: 'Instagram',
           icon: FontAwesomeIcons.instagram,
-          url: 'https://www.instagram.com/__pyapril15.py__',
+          url: ContactSection.instagramUrl,
         ),
       ],
     );
@@ -186,17 +236,50 @@ class _SocialButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextButton.icon(
-      onPressed: () => launchUrlString(url),
-      icon: Icon(icon, color: Theme.of(context).primaryColor),
-      label:
-          Text(label, style: TextStyle(color: Theme.of(context).primaryColor)),
-      style: TextButton.styleFrom(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+    return Semantics(
+      label: 'Visit my $label profile',
+      child: CustomButton(
+        onPressed: () async {
+          if (await canLaunchUrlString(url)) {
+            await launchUrlString(url);
+          } else {
+            if (!context.mounted) return;
+            _showErrorDialog(context, 'Could not launch $label link.');
+          }
+        },
+        label: label,
+        icon: icon,
+        hoverBackgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        hoverUnderlineColor: Theme.of(context).primaryColor,
+        hoverLabelColor: Theme.of(context).primaryColor,
+        hoverIconColor: Theme.of(context).primaryColor,
+        iconSize: ContactSection.iconSize,
+        hoverEffects: const [
+          HoverEffect.backgroundColor,
+          HoverEffect.underline,
+          HoverEffect.labelColor,
+          HoverEffect.iconColor,
+          HoverEffect.scale,
+        ],
       ),
     );
   }
+}
+
+void _showErrorDialog(BuildContext context, String message) {
+  showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        title: const Text('Error'),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('OK'),
+          ),
+        ],
+      );
+    },
+  );
 }
