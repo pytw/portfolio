@@ -5,7 +5,7 @@ import 'package:portfolio_website/helpers/responsive_helper.dart';
 import 'package:portfolio_website/screens/sections/about_section.dart';
 import 'package:portfolio_website/screens/sections/contact_section.dart';
 import 'package:portfolio_website/screens/sections/footer_section.dart';
-import 'package:portfolio_website/screens/sections/hero_section.dart';
+import 'package:portfolio_website/screens/sections/heroic_section.dart';
 import 'package:portfolio_website/screens/sections/project_section.dart';
 import 'package:portfolio_website/screens/sections/skills_section.dart';
 import 'package:portfolio_website/theme/theme.dart';
@@ -91,8 +91,9 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 20.h),
               child: const Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  HeroSection(),
+                  HeroicSection(),
                   SizedBox(height: kIsWeb == true ? 30 : 16),
                   ProjectSection(),
                   SizedBox(height: kIsWeb == true ? 30 : 16),

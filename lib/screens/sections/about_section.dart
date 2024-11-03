@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:portfolio_website/widgets/custom_button.dart';
 import 'package:portfolio_website/widgets/custom_header.dart';
 
@@ -12,12 +10,12 @@ class AboutSection extends StatelessWidget {
   static const double verticalPadding = 16.0;
   static const double spacing = 8.0;
   static const double largeScreenBreakpoint = 1200.0;
+  static const double mediumScreenBreakpoint = 800.0;
 
-  static const String aboutImage = "assets/images/about-me.svg";
+  static const String aboutImage = "assets/images/about-me.png";
   static const String aboutMeText = """
         Hello! I’m Praveen Yadav, an enthusiastic undergraduate currently pursuing my Bachelor of Computer Applications (BCA). My passion lies in software development, where I strive to master both front-end and back-end technologies. I am driven by a love for coding and a desire to create innovative solutions that address real-world challenges.
         \nI thrive in collaborative environments, where exchanging ideas and learning from others fuels my creativity and problem-solving skills. I’m always eager to explore new technologies and refine my abilities, as I believe in the power of continuous growth in this ever-evolving field.
-        \nIf you're interested in connecting or discussing exciting opportunities in software development, I would love to hear from you! Let’s inspire each other and make a meaningful impact in this dynamic industry together. Feel free to reach out!
         """;
 
   @override
@@ -32,33 +30,49 @@ class AboutSection extends StatelessWidget {
       child: Column(
         children: [
           const _BuildHeader(),
-          SizedBox(height: (spacing * 3).h), // Adjusted spacing
-          _buildAboutContent(screenWidth),
-          SizedBox(height: spacing.h), // Spacing between content and button
+          const SizedBox(height: (spacing * 3)), // Adjusted spacing
+          _buildAboutContent(screenWidth, context),
+          const SizedBox(height: spacing), // Spacing between content and button
           const _ConnectButton(),
         ],
       ),
     );
   }
 
-  Widget _buildAboutContent(double screenWidth) {
-    return screenWidth >= largeScreenBreakpoint
-        ? const Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Flexible(flex: 1, child: _AboutText()),
-              SizedBox(width: spacing * 2), // Adjusted spacing between columns
-              Flexible(flex: 1, child: _AboutImage()),
-            ],
-          )
-        : Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const _AboutImage(),
-              SizedBox(height: spacing.h), // Spacing between text and image
-              const _AboutText(),
-            ],
-          );
+  Widget _buildAboutContent(double screenWidth, BuildContext context) {
+    if (screenWidth >= largeScreenBreakpoint) {
+      // Large screen layout with row alignment
+      return const Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Flexible(child: _AboutText()),
+          SizedBox(width: (spacing * 2)),
+          Flexible(
+            child: _AboutImage(),
+          ),
+        ],
+      );
+    } else if (screenWidth >= mediumScreenBreakpoint) {
+      // Medium screen layout with column alignment
+      return const Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Flexible(child: _AboutImage()),
+          SizedBox(height: spacing),
+          Flexible(child: _AboutText()),
+        ],
+      );
+    } else {
+      // Small screen layout with column alignment
+      return const Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          _AboutImage(),
+          SizedBox(height: spacing),
+          _AboutText(),
+        ],
+      );
+    }
   }
 }
 
@@ -105,9 +119,8 @@ class _AboutImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Semantics(
-      label: 'Illustration representing personal development',
-      child: SvgPicture.asset(AboutSection.aboutImage),
-    );
+        label: 'Illustration representing personal development',
+        child: Image.asset(AboutSection.aboutImage, fit: BoxFit.contain));
   }
 }
 

@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:portfolio_website/widgets/custom_button.dart';
 import 'package:portfolio_website/widgets/custom_header.dart';
@@ -15,9 +13,10 @@ class ContactSection extends StatelessWidget {
   static const double spacing = 8.0;
   static const double iconSize = 24.0;
   static const double largeScreenBreakpoint = 1200.0;
+  static const double mediumScreenBreakpoint = 800.0;
 
   // Text Constants
-  static const String contactImage = 'assets/images/connect.svg';
+  static const String contactImage = 'assets/images/connect.png';
   static const String email = 'praveen885127@gmail.com';
   static const String githubUrl = 'https://www.github.com/pyapril15';
   static const String linkedinUrl = 'https://www.linkedin.com/in/pyapril15';
@@ -44,7 +43,7 @@ class ContactSection extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const _BuildHeader(),
-          SizedBox(height: (spacing * 3).h),
+          const SizedBox(height: (spacing * 3)),
           _buildContactContent(screenWidth),
         ],
       ),
@@ -52,23 +51,37 @@ class ContactSection extends StatelessWidget {
   }
 
   Widget _buildContactContent(double screenWidth) {
-    return screenWidth >= largeScreenBreakpoint
-        ? const Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Flexible(flex: 1, child: _ContactImage()),
-              SizedBox(width: spacing * 2), // Adjusted spacing between columns
-              Flexible(flex: 1, child: _ContactDetails()),
-            ],
-          )
-        : Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const _ContactImage(),
-              SizedBox(height: spacing.h), // Spacing between text and image
-              const _ContactDetails(),
-            ],
-          );
+    if (screenWidth >= largeScreenBreakpoint) {
+      // Large screen layout with row alignment
+      return const Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Flexible(child: _ContactDetails()),
+          SizedBox(width: (spacing * 2)),
+          Flexible(child: _ContactImage()),
+        ],
+      );
+    } else if (screenWidth >= mediumScreenBreakpoint) {
+      // Medium screen layout with column alignment
+      return const Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Flexible(child: _ContactDetails()),
+          SizedBox(height: spacing),
+          Flexible(child: _ContactImage()),
+        ],
+      );
+    } else {
+      // Small screen layout with column alignment
+      return const Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          _ContactImage(),
+          SizedBox(height: spacing),
+          _ContactDetails(),
+        ],
+      );
+    }
   }
 }
 
@@ -97,7 +110,7 @@ class _ContactImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Semantics(
       label: 'Illustration of connecting with others',
-      child: SvgPicture.asset(ContactSection.contactImage),
+      child: Image.asset(ContactSection.contactImage, fit: BoxFit.contain),
     );
   }
 }

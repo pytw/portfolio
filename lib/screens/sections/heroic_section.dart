@@ -1,0 +1,394 @@
+import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:portfolio_website/widgets/custom_button.dart';
+import 'package:portfolio_website/widgets/custom_header.dart';
+import 'package:url_launcher/url_launcher_string.dart';
+
+class HeroicSection extends StatelessWidget {
+  const HeroicSection({super.key});
+
+  // Constants
+  static const double horizontalPadding = 16.0;
+  static const double verticalPadding = 16.0;
+  static const double spacing = 8.0;
+  static const double iconSize = 24.0;
+  static const double largeScreenBreakpoint = 1200.0;
+  static const double mediumScreenBreakpoint = 800.0;
+  static const double borderRadius = 8.0;
+
+  // Text Constants
+  static const String heroicImage = 'assets/images/pyapril15.png';
+  static const String placeholderImage = 'assets/images/placeholder.png';
+  static const String profession = 'Aspiring Software & UI/UX Developer';
+
+  static const List<Map<String, dynamic>> socialMedia = [
+    {
+      'name': 'Github',
+      'icon': FontAwesomeIcons.github,
+      'url': 'https://www.github.com/pyapril15',
+    },
+    {
+      'name': 'LinkedIn',
+      'icon': FontAwesomeIcons.linkedin,
+      'url': 'https://www.linkedin.com/in/pyapril1507',
+    },
+    {
+      'name': 'Instagram',
+      'icon': FontAwesomeIcons.instagram,
+      'url': 'https://www.instagram.com/__pyapril15.py__',
+    },
+  ];
+
+  static const Map<String, String> downloadLinks = {
+    'PDF': 'assets/documents/resume/resume.pdf',
+    'DOCX': 'assets/documents/resume/resume.docx',
+    'Image': 'assets/documents/resume/resume.png',
+  };
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: horizontalPadding),
+      child: _buildHeroicContent(context),
+    );
+  }
+
+  Widget _buildHeroicContent(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    if (screenWidth >= largeScreenBreakpoint) {
+      return Row(
+        children: [
+          Flexible(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _buildHeroicDetails(context),
+              ],
+            ),
+          ),
+          const SizedBox(width: (spacing * 2)),
+          Flexible(child: _buildHeroicImage(context, isLargeScreen: true)),
+        ],
+      );
+    } else if (screenWidth >= mediumScreenBreakpoint) {
+      return Row(
+        children: [
+          Flexible(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _buildHeroicDetails(context),
+              ],
+            ),
+          ),
+          const SizedBox(height: spacing),
+          Flexible(child: _buildHeroicImage(context, isMediumScreen: true)),
+        ],
+      );
+    } else {
+      return Column(
+        children: [
+          _buildHeroicImage(context, isSmallScreen: true),
+          const SizedBox(height: spacing),
+          Center(child: _buildHeroicDetails(context)),
+        ],
+      );
+    }
+  }
+}
+
+Widget _buildHeroicDetails(BuildContext context) {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      const _BuildWishing(),
+      const SizedBox(height: HeroicSection.spacing),
+      _buildWelcome(context),
+      const SizedBox(height: HeroicSection.spacing),
+      _buildProfession(context),
+      const SizedBox(height: HeroicSection.spacing * 5),
+      _buildActionButtons(context),
+      const SizedBox(height: HeroicSection.spacing),
+      _buildSocialIcons(),
+    ],
+  );
+}
+
+class _BuildWishing extends StatelessWidget {
+  const _BuildWishing();
+
+  String _getGreetingMessage() {
+    final hour = DateTime.now().hour;
+    if (hour < 12) return "Good Morning";
+    if (hour < 17) return "Good Afternoon";
+    return "Good Evening";
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    List<String> welcome = _getGreetingMessage().split(" ");
+
+    return CustomHeader(
+      titleText: 'Hey ',
+      titleStyle: Theme.of(context).textTheme.titleLarge?.copyWith(
+            color: Theme.of(context).primaryColor,
+          ),
+      subtitleText: '${welcome[0]} ${welcome[1]} !',
+      subtitleStyle: Theme.of(context).textTheme.titleLarge?.copyWith(
+            color: Theme.of(context).colorScheme.onPrimary,
+          ),
+    );
+  }
+}
+
+Widget _buildWelcome(BuildContext context) {
+  return CustomHeader(
+    titleText: "I'm ",
+    titleStyle: Theme.of(context).textTheme.headlineMedium?.copyWith(
+          color: Theme.of(context).colorScheme.onPrimary,
+        ),
+    subtitleText: 'Praveen Yadav',
+    subtitleStyle: Theme.of(context).textTheme.headlineMedium?.copyWith(
+          color: Theme.of(context).primaryColor,
+        ),
+  );
+}
+
+Widget _buildProfession(BuildContext context) {
+  return Text(
+    HeroicSection.profession,
+    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+          color: Theme.of(context).colorScheme.onSecondary,
+        ),
+  );
+}
+
+Widget _buildActionButtons(BuildContext context) {
+  return Wrap(
+    spacing: HeroicSection.spacing * 2,
+    runSpacing: HeroicSection.spacing,
+    alignment: WrapAlignment.center,
+    children: [
+      CustomButton(
+        onPressed: () => _showDownloadOptions(context),
+        label: "Download Resume",
+        textStyle: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
+        borderColor: Theme.of(context).colorScheme.onPrimary,
+        borderWidth: 2,
+      ),
+      CustomButton(
+        onPressed: () {
+          // Add navigation to Projects
+        },
+        label: "See Projects",
+        textStyle: TextStyle(
+          fontWeight: FontWeight.bold,
+          color: Theme.of(context).colorScheme.onPrimary,
+        ),
+        backgroundColor: Theme.of(context).primaryColor,
+      ),
+    ],
+  );
+}
+
+Widget _buildSocialIcons() {
+  return Wrap(
+      spacing: HeroicSection.spacing * 2,
+      runSpacing: HeroicSection.spacing,
+      alignment: WrapAlignment.center,
+      children: HeroicSection.socialMedia.map((social) {
+        return _buildSocialIconButton(
+            social['name'], social['icon'], social['url']);
+      }).toList());
+}
+
+Widget _buildSocialIconButton(String name, IconData icon, String url) {
+  return IconButton(
+    onPressed: () async {
+      if (await canLaunchUrlString(url)) {
+        await launchUrlString(url);
+      }
+    },
+    icon: Icon(icon),
+    iconSize: HeroicSection.iconSize,
+    tooltip: name,
+  );
+}
+
+Widget _buildHeroicImage(BuildContext context,
+    {bool isSmallScreen = false,
+    bool isMediumScreen = false,
+    bool isLargeScreen = false}) {
+  double height = MediaQuery.of(context).size.height;
+
+  return Container(
+    width: double.infinity,
+    constraints: BoxConstraints(
+      maxHeight: isSmallScreen
+          ? height * 0.5
+          : isMediumScreen
+              ? height * 0.5
+              : height * 0.6,
+    ),
+    decoration: BoxDecoration(
+      gradient: LinearGradient(
+        colors: [Colors.white, Colors.blue.shade800],
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter,
+      ),
+      borderRadius: BorderRadius.circular(
+          HeroicSection.borderRadius * 2), // Rounded corners
+      boxShadow: const [
+        BoxShadow(
+          color: Colors.black26,
+          blurRadius: HeroicSection.borderRadius,
+          spreadRadius: 2,
+          offset: Offset(0, 5),
+        ),
+      ],
+    ),
+    child: ClipRRect(
+      borderRadius: BorderRadius.circular(HeroicSection.borderRadius * 2),
+      child: Image.asset(
+        HeroicSection.heroicImage,
+        fit: BoxFit.contain,
+        errorBuilder: (_, __, ___) => Image.asset(
+          HeroicSection.placeholderImage,
+          fit: BoxFit.contain,
+        ),
+      ),
+    ),
+  );
+}
+
+void _showDownloadOptions(BuildContext context) {
+  showModalBottomSheet(
+    context: context,
+    builder: (BuildContext context) {
+      return ListView(
+          padding: const EdgeInsets.all(20),
+          shrinkWrap: true,
+          children: HeroicSection.downloadLinks.keys.map((format) {
+            return _buildDownloadOption(context, format);
+          }).toList());
+    },
+  );
+}
+
+Widget _buildDownloadOption(BuildContext context, String format) {
+  return ListTile(
+    title: Text("Download as $format"),
+    onTap: () {
+      Navigator.pop(context);
+      _downloadFile(context, format);
+    },
+  );
+}
+
+Future<void> _downloadFile(BuildContext context, String format) async {
+  final url = HeroicSection.downloadLinks[format];
+  print(url);
+  if (url == null) return;
+
+  final tempDir = await getTemporaryDirectory();
+  final filePath = '${tempDir.path}/resume.$format.toLowerCase()';
+  final dio = Dio();
+
+  showDialog(
+    context: context,
+    barrierDismissible: false,
+    builder: (_) => DownloadDialog(
+      url: url,
+      savePath: filePath,
+      dio: dio,
+      format: format,
+    ),
+  );
+}
+
+class DownloadDialog extends StatefulWidget {
+  final String url;
+  final String savePath;
+  final Dio dio;
+  final String format;
+
+  const DownloadDialog({
+    super.key,
+    required this.url,
+    required this.savePath,
+    required this.dio,
+    required this.format,
+  });
+
+  @override
+  State<DownloadDialog> createState() => _DownloadDialogState();
+}
+
+class _DownloadDialogState extends State<DownloadDialog> {
+  double _progress = 0.0;
+  String _status = 'Starting download...';
+
+  @override
+  void initState() {
+    super.initState();
+    _startDownload();
+  }
+
+  Future<void> _startDownload() async {
+    try {
+      await widget.dio.download(
+        widget.url,
+        widget.savePath,
+        onReceiveProgress: (received, total) {
+          setState(() {
+            _progress = received / total;
+            _status = 'Downloading... ${(_progress * 100).toStringAsFixed(0)}%';
+          });
+        },
+      );
+
+      setState(() {
+        _status = 'Download successful!';
+      });
+
+      Future.delayed(const Duration(seconds: 2), () {
+        Navigator.pop(context);
+        _showSuccessMessage();
+      });
+    } catch (e) {
+      setState(() {
+        _status = 'Download failed. Please try again.';
+      });
+
+      Future.delayed(const Duration(seconds: 2), () {
+        Navigator.pop(context);
+      });
+    }
+  }
+
+  void _showSuccessMessage() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('${widget.format} file downloaded successfully!'),
+        duration: const Duration(seconds: 2),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text(_status),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          LinearProgressIndicator(value: _progress),
+          const SizedBox(height: 10),
+          const Text('Please wait while we download your file.'),
+        ],
+      ),
+    );
+  }
+}

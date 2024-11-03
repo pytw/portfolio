@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:portfolio_website/widgets/custom_button.dart';
 import 'package:portfolio_website/widgets/custom_header.dart';
@@ -24,9 +23,9 @@ class ProjectSection extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const _BuildHeader(),
-          SizedBox(height: (spacing * 3).h),
+          const SizedBox(height: spacing * 3),
           _buildProjectContent(screenWidth),
-          SizedBox(height: spacing.h),
+          const SizedBox(height: spacing),
           const Align(
             alignment: Alignment.centerRight,
             child: _MoreProjectsButton(),
@@ -53,7 +52,7 @@ class ProjectSection extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _ProjectImage(imagePath: project.imagePath),
-              SizedBox(height: spacing.h), // Spacing between text and image
+              const SizedBox(height: spacing), // Spacing between text and image
               _ProjectDetails(project: project),
             ],
           );
