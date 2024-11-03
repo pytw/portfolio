@@ -1,7 +1,6 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:portfolio_website/download_manager.dart';
 import 'package:portfolio_website/widgets/custom_button.dart';
 import 'package:portfolio_website/widgets/custom_header.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -282,113 +281,7 @@ Widget _buildDownloadOption(BuildContext context, String format) {
     title: Text("Download as $format"),
     onTap: () {
       Navigator.pop(context);
-      _downloadFile(context, format);
+      downloadResume(context, HeroicSection.downloadLinks[format]!);
     },
   );
-}
-
-Future<void> _downloadFile(BuildContext context, String format) async {
-  final url = HeroicSection.downloadLinks[format];
-  print(url);
-  if (url == null) return;
-
-  final tempDir = await getTemporaryDirectory();
-  final filePath = '${tempDir.path}/resume.$format.toLowerCase()';
-  final dio = Dio();
-
-  showDialog(
-    context: context,
-    barrierDismissible: false,
-    builder: (_) => DownloadDialog(
-      url: url,
-      savePath: filePath,
-      dio: dio,
-      format: format,
-    ),
-  );
-}
-
-class DownloadDialog extends StatefulWidget {
-  final String url;
-  final String savePath;
-  final Dio dio;
-  final String format;
-
-  const DownloadDialog({
-    super.key,
-    required this.url,
-    required this.savePath,
-    required this.dio,
-    required this.format,
-  });
-
-  @override
-  State<DownloadDialog> createState() => _DownloadDialogState();
-}
-
-class _DownloadDialogState extends State<DownloadDialog> {
-  double _progress = 0.0;
-  String _status = 'Starting download...';
-
-  @override
-  void initState() {
-    super.initState();
-    _startDownload();
-  }
-
-  Future<void> _startDownload() async {
-    try {
-      await widget.dio.download(
-        widget.url,
-        widget.savePath,
-        onReceiveProgress: (received, total) {
-          setState(() {
-            _progress = received / total;
-            _status = 'Downloading... ${(_progress * 100).toStringAsFixed(0)}%';
-          });
-        },
-      );
-
-      setState(() {
-        _status = 'Download successful!';
-      });
-
-      Future.delayed(const Duration(seconds: 2), () {
-        Navigator.pop(context);
-        _showSuccessMessage();
-      });
-    } catch (e) {
-      setState(() {
-        _status = 'Download failed. Please try again.';
-      });
-
-      Future.delayed(const Duration(seconds: 2), () {
-        Navigator.pop(context);
-      });
-    }
-  }
-
-  void _showSuccessMessage() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('${widget.format} file downloaded successfully!'),
-        duration: const Duration(seconds: 2),
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      title: Text(_status),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          LinearProgressIndicator(value: _progress),
-          const SizedBox(height: 10),
-          const Text('Please wait while we download your file.'),
-        ],
-      ),
-    );
-  }
 }
