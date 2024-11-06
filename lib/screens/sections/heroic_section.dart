@@ -282,6 +282,7 @@ Widget _buildDownloadOption(BuildContext context, String format) {
       onTap: () {
         Navigator.pop(context);
         final url = HeroicSection.downloadLinks[format];
+        format = format.toLowerCase();
         if (url != null) {
           _startDownload(context, url, "praveen_yadav_resume.$format");
         }
