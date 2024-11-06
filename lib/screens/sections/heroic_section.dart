@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:portfolio_website/download_manager.dart';
 import 'package:portfolio_website/widgets/custom_button.dart';
 import 'package:portfolio_website/widgets/custom_header.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+import 'dart:html' as html;
 
 class HeroicSection extends StatelessWidget {
   const HeroicSection({super.key});
@@ -43,7 +43,7 @@ class HeroicSection extends StatelessWidget {
   static const Map<String, String> downloadLinks = {
     'PDF': 'assets/documents/resume/resume.pdf',
     'DOCX': 'assets/documents/resume/resume.docx',
-    'Image': 'assets/documents/resume/resume.png',
+    'PNG': 'assets/documents/resume/resume.png',
   };
 
   @override
@@ -278,10 +278,50 @@ void _showDownloadOptions(BuildContext context) {
 
 Widget _buildDownloadOption(BuildContext context, String format) {
   return ListTile(
-    title: Text("Download as $format"),
-    onTap: () {
-      Navigator.pop(context);
-      downloadResume(context, HeroicSection.downloadLinks[format]!);
-    },
+      title: Text("Download as $format"),
+      onTap: () {
+        Navigator.pop(context);
+        final url = HeroicSection.downloadLinks[format];
+        if (url != null) {
+          _startDownload(context, url, "praveen_yadav_resume.$format");
+        }
+      },
+    );
+}
+
+void _startDownload(BuildContext context, String url, String fileName) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    const SnackBar(content: Text('Start Downloading...')),
   );
+
+  Future.delayed(const Duration(seconds: 1), () {
+    if(!context.mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Downloading...')),
+    );
+  });
+
+  try {
+    downloadFileWeb(url, fileName);
+
+    Future.delayed(const Duration(seconds: 2), () {
+      if(!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Download Complete')),
+      );
+    });
+  } catch (e) {
+    Future.delayed(const Duration(seconds: 2), () {
+      if(!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Download Failed')),
+      );
+    });
+  }
+}
+
+void downloadFileWeb(String url, String fileName) {
+    html.AnchorElement anchorElement = html.AnchorElement(href: url);
+    anchorElement.download = fileName;
+    anchorElement.click();
 }
