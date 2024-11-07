@@ -1,25 +1,31 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:portfolio_website/theme/theme.dart';
 
-class Footer extends StatelessWidget {
-  const Footer({super.key});
+class FooterSection extends StatelessWidget {
+  const FooterSection({super.key});
+
+  // Constants
+  static const double horizontalPadding = 16.0;
+  static const double verticalPadding = 16.0;
+  static const double spacing = 8.0;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: AppSizes.paddingMedium.w, vertical: AppSizes.paddingMedium.h),
+      padding: const EdgeInsets.symmetric(
+          horizontal: horizontalPadding, vertical: verticalPadding),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
             '\u00A9 2024 Praveen Yadav. All rights reserved.',
-            style: Theme.of(context).textTheme.bodyLarge,
+            style: Theme.of(context).textTheme.bodyMedium,
           ),
-          SizedBox(height: AppSizes.mediumSpaceBtwItems.h),
+          const SizedBox(height: spacing),
           Text(
             'Made with Flutter',
-            style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: Colors.grey[500]),
+            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                  color: Theme.of(context).colorScheme.onSecondary,
+                ),
           ),
         ],
       ),

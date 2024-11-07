@@ -1,16 +1,10 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:portfolio_website/helpers/responsive_helper.dart';
 import 'package:portfolio_website/screens/sections/about_section.dart';
 import 'package:portfolio_website/screens/sections/contact_section.dart';
 import 'package:portfolio_website/screens/sections/footer_section.dart';
 import 'package:portfolio_website/screens/sections/heroic_section.dart';
 import 'package:portfolio_website/screens/sections/project_section.dart';
-import 'package:portfolio_website/screens/sections/skills_section.dart';
-import 'package:portfolio_website/theme/theme.dart';
 import 'package:portfolio_website/widgets/navbar.dart';
-import 'dart:io';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -29,6 +23,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   String activeSection = 'Home';
 
+  // Constants
+  static const double verticalPadding = 16.0;
+  static const double spacing = 8.0;
+
   @override
   void initState() {
     super.initState();
@@ -43,7 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void scrollToSection(GlobalKey key, String section) {
     setState(() {
-      activeSection = section; // Set active section when clicking a button
+      activeSection = section;
     });
 
     // Smooth scrolling to the target section
@@ -56,9 +54,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final mediaQuery = MediaQuery.of(context).size;
-    final ScreenType screenType = getScreenType(context);
-
     return SafeArea(
       child: Scaffold(
         appBar: Navbar(
@@ -88,18 +83,20 @@ class _HomeScreenState extends State<HomeScreen> {
           thumbVisibility: true,
           child: SingleChildScrollView(
             controller: _scrollController,
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 20.h),
-              child: const Column(
+            child: const Padding(
+              padding: EdgeInsets.symmetric(vertical: verticalPadding),
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   HeroicSection(),
-                  SizedBox(height: kIsWeb == true ? 30 : 16),
+                  SizedBox(height: spacing*4),
                   ProjectSection(),
-                  SizedBox(height: kIsWeb == true ? 30 : 16),
+                  SizedBox(height: spacing*4),
                   AboutSection(),
-                  SizedBox(height: kIsWeb == true ? 30 : 16),
+                  SizedBox(height: spacing*4),
                   ContactSection(),
+                  SizedBox(height: spacing*4),
+                  FooterSection(),
                 ],
               ),
             ),

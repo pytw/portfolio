@@ -56,9 +56,9 @@ class ContactSection extends StatelessWidget {
       return const Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Flexible(child: _ContactDetails()),
-          SizedBox(width: (spacing * 2)),
           Flexible(child: _ContactImage()),
+          SizedBox(width: (spacing * 2)),
+          Flexible(child: _ContactDetails()),
         ],
       );
     } else if (screenWidth >= mediumScreenBreakpoint) {
@@ -66,9 +66,9 @@ class ContactSection extends StatelessWidget {
       return const Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Flexible(child: _ContactDetails()),
-          SizedBox(height: spacing),
           Flexible(child: _ContactImage()),
+          SizedBox(height: spacing),
+          Flexible(child: _ContactDetails()),
         ],
       );
     } else {

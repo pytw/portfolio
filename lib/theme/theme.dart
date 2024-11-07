@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 // Define Color Palette
 class AppColors {
-  static const Color primaryColor = Colors.blue;
+  static const Color primaryColor = Color(0xff2196f3);
   static const Color secondaryColor = Color(0xFF03DAC6);
   static const Color backgroundColor = Color(0xFF121212);
   static const Color surfaceColor = Color(0xFF1E1E1E);
@@ -89,7 +89,7 @@ class AppStyles {
 }
 
 final scrollbarThemeData = ScrollbarThemeData(
-  thumbColor: WidgetStateProperty.all(Colors.blue),
+  thumbColor: WidgetStateProperty.all(AppColors.primaryColor),
   thickness: WidgetStateProperty.all(AppSizes.borderSmall),
   radius: const Radius.circular(AppSizes.borderRadiusMedium),
 );
