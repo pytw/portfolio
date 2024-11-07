@@ -3,7 +3,8 @@ import 'package:portfolio_website/widgets/custom_button.dart';
 import 'package:portfolio_website/widgets/custom_header.dart';
 
 class AboutSection extends StatelessWidget {
-  const AboutSection({super.key});
+  final GlobalKey aboutKey;
+  const AboutSection(this.aboutKey, {super.key});
 
   // Constants for padding, spacing, and breakpoints
   static const double horizontalPadding = 16.0;
@@ -28,6 +29,7 @@ class AboutSection extends StatelessWidget {
         vertical: verticalPadding,
       ),
       child: Column(
+        key: aboutKey,
         children: [
           const _BuildHeader(),
           const SizedBox(height: (spacing * 3)), // Adjusted spacing

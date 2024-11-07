@@ -14,91 +14,95 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  late ScrollController _scrollController;
-  final GlobalKey _homeKey = GlobalKey();
-  final GlobalKey _projectsKey = GlobalKey();
-  final GlobalKey _skillsKey = GlobalKey();
-  final GlobalKey _aboutKey = GlobalKey();
-  final GlobalKey _contactKey = GlobalKey();
+  final ScrollController _scrollController = ScrollController();
+  final Map<String, GlobalKey> _sectionKeys = {
+    'Home': GlobalKey(),
+    'Projects': GlobalKey(),
+    'Skills': GlobalKey(),
+    'About': GlobalKey(),
+    'Contact': GlobalKey(),
+  };
 
-  String activeSection = 'Home';
-
-  // Constants
-  static const double verticalPadding = 16.0;
-  static const double spacing = 8.0;
+  String _activeSection = 'Home';
+  bool _isAutoScrolling = false;
 
   @override
   void initState() {
     super.initState();
-    _scrollController = ScrollController();
+    _scrollController.addListener(_onScroll);
   }
 
   @override
   void dispose() {
+    _scrollController.removeListener(_onScroll);
     _scrollController.dispose();
     super.dispose();
   }
 
-  void scrollToSection(GlobalKey key, String section) {
+  void _scrollToSection(String section) {
     setState(() {
-      activeSection = section;
+      _activeSection = section;
     });
 
-    // Smooth scrolling to the target section
-    Scrollable.ensureVisible(
-      key.currentContext!,
-      duration: const Duration(milliseconds: 600),
-      curve: Curves.easeInOut,
-    );
+    final keyContext = _sectionKeys[section]?.currentContext;
+    if (keyContext != null) {
+      _isAutoScrolling = true;
+      Scrollable.ensureVisible(
+        keyContext,
+        duration: const Duration(milliseconds: 600),
+        curve: Curves.easeInOut,
+      ).then((_) {
+        _isAutoScrolling = false;
+      });
+    }
   }
+
+  void _onScroll() {
+    if (_isAutoScrolling) return;
+
+    for (var entry in _sectionKeys.entries) {
+      final context = entry.value.currentContext;
+      if (context != null) {
+        final box = context.findRenderObject() as RenderBox;
+        final position = box.localToGlobal(Offset.zero);
+        if (position.dy <= 100 && position.dy >= -100) {
+          if (_activeSection != entry.key) {
+            setState(() {
+              _activeSection = entry.key;
+            });
+          }
+          break;
+        }
+      }
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         appBar: Navbar(
-          activeSection: activeSection,
-          onSectionSelected: (String section) {
-            switch (section) {
-              case 'Home':
-                scrollToSection(_homeKey, section);
-                break;
-              case 'Projects':
-                scrollToSection(_projectsKey, section);
-                break;
-              case 'Skills':
-                scrollToSection(_skillsKey, section);
-                break;
-              case 'About':
-                scrollToSection(_aboutKey, section);
-                break;
-              case 'Contact':
-                scrollToSection(_contactKey, section);
-                break;
-            }
-          },
+          activeSection: _activeSection,
+          onSectionSelected: (section) => _scrollToSection(section),
         ),
         body: Scrollbar(
           controller: _scrollController,
           thumbVisibility: true,
           child: SingleChildScrollView(
             controller: _scrollController,
-            child: const Padding(
-              padding: EdgeInsets.symmetric(vertical: verticalPadding),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  HeroicSection(),
-                  SizedBox(height: spacing*4),
-                  ProjectSection(),
-                  SizedBox(height: spacing*4),
-                  AboutSection(),
-                  SizedBox(height: spacing*4),
-                  ContactSection(),
-                  SizedBox(height: spacing*4),
-                  FooterSection(),
-                ],
-              ),
+            child: Column(
+              children: [
+                HeroicSection(_sectionKeys['Home']!),
+                const SizedBox(height: 32),
+                ProjectSection(_sectionKeys['Projects']!),
+                const SizedBox(height: 32),
+                AboutSection(_sectionKeys['About']!),
+                const SizedBox(height: 32),
+                ContactSection(_sectionKeys['Contact']!),
+                const SizedBox(height: 32),
+                const FooterSection(),
+              ],
             ),
           ),
         ),

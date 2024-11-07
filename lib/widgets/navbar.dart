@@ -6,10 +6,10 @@ class Navbar extends StatefulWidget implements PreferredSizeWidget {
   final String activeSection;
 
   const Navbar({
-    Key? key,
+    super.key,
     required this.onSectionSelected,
     required this.activeSection,
-  }) : super(key: key);
+  });
 
   @override
   State<Navbar> createState() => _NavbarState();
@@ -39,7 +39,6 @@ class _NavbarState extends State<Navbar> {
 
   Timer? debounceTimer;
 
-  // Styles for easy adjustments
   static const Color activeColor = Colors.blue;
   static const Color inactiveColor = Colors.white;
   static const TextStyle desktopTextStyle = TextStyle(
@@ -56,7 +55,8 @@ class _NavbarState extends State<Navbar> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => _measureButton('Home'));
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => _measureButton(widget.activeSection));
   }
 
   @override

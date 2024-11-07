@@ -5,7 +5,8 @@ import 'package:portfolio_website/widgets/custom_header.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class ContactSection extends StatelessWidget {
-  const ContactSection({super.key});
+  final GlobalKey contactKey;
+  const ContactSection(this.contactKey, {super.key});
 
   // Constants
   static const double horizontalPadding = 16.0;
@@ -40,6 +41,7 @@ class ContactSection extends StatelessWidget {
       padding: const EdgeInsets.symmetric(
           horizontal: horizontalPadding, vertical: verticalPadding),
       child: Column(
+        key: contactKey,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const _BuildHeader(),

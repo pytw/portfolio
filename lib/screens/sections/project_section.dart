@@ -4,7 +4,8 @@ import 'package:portfolio_website/widgets/custom_button.dart';
 import 'package:portfolio_website/widgets/custom_header.dart';
 
 class ProjectSection extends StatelessWidget {
-  const ProjectSection({super.key});
+  final GlobalKey projectKey;
+  const ProjectSection(this.projectKey, {super.key});
 
   // Constants for padding, spacing, and breakpoints
   static const double horizontalPadding = 16.0;
@@ -20,6 +21,7 @@ class ProjectSection extends StatelessWidget {
       padding: const EdgeInsets.symmetric(
           horizontal: horizontalPadding, vertical: verticalPadding),
       child: Column(
+        key: projectKey,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const _BuildHeader(),

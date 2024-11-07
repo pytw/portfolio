@@ -6,7 +6,8 @@ import 'package:url_launcher/url_launcher_string.dart';
 import 'dart:html' as html;
 
 class HeroicSection extends StatelessWidget {
-  const HeroicSection({super.key});
+  final GlobalKey<State<StatefulWidget>> heroicKey;
+  const HeroicSection(this.heroicKey, {super.key});
 
   // Constants
   static const double horizontalPadding = 16.0;
@@ -58,6 +59,7 @@ class HeroicSection extends StatelessWidget {
     double screenWidth = MediaQuery.of(context).size.width;
     if (screenWidth >= largeScreenBreakpoint) {
       return Row(
+        key: heroicKey,
         children: [
           Flexible(
             child: Row(
@@ -73,6 +75,7 @@ class HeroicSection extends StatelessWidget {
       );
     } else if (screenWidth >= mediumScreenBreakpoint) {
       return Row(
+        key: heroicKey,
         children: [
           Flexible(
             child: Row(
@@ -88,6 +91,7 @@ class HeroicSection extends StatelessWidget {
       );
     } else {
       return Column(
+        key: heroicKey,
         children: [
           _buildHeroicImage(context, isSmallScreen: true),
           const SizedBox(height: spacing),
