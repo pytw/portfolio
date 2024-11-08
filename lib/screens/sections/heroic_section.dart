@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:portfolio_website/animations/slide_in_animation.dart';
 import 'package:portfolio_website/widgets/custom_button.dart';
 import 'package:portfolio_website/widgets/custom_header.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -42,9 +43,12 @@ class HeroicSection extends StatelessWidget {
   ];
 
   static const Map<String, String> downloadLinks = {
-    'PDF': 'https://firebasestorage.googleapis.com/v0/b/portfolio-1952e.appspot.com/o/resume.pdf?alt=media&token=1f10e879-5234-4ab4-ab7c-c272e81f38fb',
-    'DOCX': 'https://firebasestorage.googleapis.com/v0/b/portfolio-1952e.appspot.com/o/resume.docx?alt=media&token=6bc02eaa-f332-46b0-b34a-fb51aeb2aa42',
-    'PNG': 'https://firebasestorage.googleapis.com/v0/b/portfolio-1952e.appspot.com/o/resume.png?alt=media&token=09985770-9968-4df8-8508-2942cd18935b',
+    'PDF':
+        'https://firebasestorage.googleapis.com/v0/b/portfolio-1952e.appspot.com/o/resume.pdf?alt=media&token=1f10e879-5234-4ab4-ab7c-c272e81f38fb',
+    'DOCX':
+        'https://firebasestorage.googleapis.com/v0/b/portfolio-1952e.appspot.com/o/resume.docx?alt=media&token=6bc02eaa-f332-46b0-b34a-fb51aeb2aa42',
+    'PNG':
+        'https://firebasestorage.googleapis.com/v0/b/portfolio-1952e.appspot.com/o/resume.png?alt=media&token=09985770-9968-4df8-8508-2942cd18935b',
   };
 
   @override
@@ -220,52 +224,6 @@ Widget _buildSocialIconButton(String name, IconData icon, String url) {
   );
 }
 
-Widget _buildHeroicImage(BuildContext context,
-    {bool isSmallScreen = false,
-    bool isMediumScreen = false,
-    bool isLargeScreen = false}) {
-  double height = MediaQuery.of(context).size.height;
-
-  return Container(
-    width: double.infinity,
-    constraints: BoxConstraints(
-      maxHeight: isSmallScreen
-          ? height * 0.5
-          : isMediumScreen
-              ? height * 0.5
-              : height * 0.6,
-    ),
-    decoration: BoxDecoration(
-      gradient: LinearGradient(
-        colors: [Colors.white, Colors.blue.shade800],
-        begin: Alignment.topCenter,
-        end: Alignment.bottomCenter,
-      ),
-      borderRadius: BorderRadius.circular(
-          HeroicSection.borderRadius * 2), // Rounded corners
-      boxShadow: const [
-        BoxShadow(
-          color: Colors.black26,
-          blurRadius: HeroicSection.borderRadius,
-          spreadRadius: 2,
-          offset: Offset(0, 5),
-        ),
-      ],
-    ),
-    child: ClipRRect(
-      borderRadius: BorderRadius.circular(HeroicSection.borderRadius * 2),
-      child: Image.asset(
-        HeroicSection.heroicImage,
-        fit: BoxFit.contain,
-        errorBuilder: (_, __, ___) => Image.asset(
-          HeroicSection.placeholderImage,
-          fit: BoxFit.contain,
-        ),
-      ),
-    ),
-  );
-}
-
 void _showDownloadOptions(BuildContext context) {
   showModalBottomSheet(
     context: context,
@@ -282,16 +240,16 @@ void _showDownloadOptions(BuildContext context) {
 
 Widget _buildDownloadOption(BuildContext context, String format) {
   return ListTile(
-      title: Text("Download as $format"),
-      onTap: () {
-        Navigator.pop(context);
-        final url = HeroicSection.downloadLinks[format];
-        format = format.toLowerCase();
-        if (url != null) {
-          _startDownload(context, url, "praveen_yadav_resume.$format");
-        }
-      },
-    );
+    title: Text("Download as $format"),
+    onTap: () {
+      Navigator.pop(context);
+      final url = HeroicSection.downloadLinks[format];
+      format = format.toLowerCase();
+      if (url != null) {
+        _startDownload(context, url, "praveen_yadav_resume.$format");
+      }
+    },
+  );
 }
 
 void _startDownload(BuildContext context, String url, String fileName) {
@@ -300,7 +258,7 @@ void _startDownload(BuildContext context, String url, String fileName) {
   );
 
   Future.delayed(const Duration(seconds: 1), () {
-    if(!context.mounted) return;
+    if (!context.mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Downloading...')),
     );
@@ -310,14 +268,14 @@ void _startDownload(BuildContext context, String url, String fileName) {
     downloadFileWeb(url, fileName);
 
     Future.delayed(const Duration(seconds: 2), () {
-      if(!context.mounted) return;
+      if (!context.mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Download Complete')),
       );
     });
   } catch (e) {
     Future.delayed(const Duration(seconds: 2), () {
-      if(!context.mounted) return;
+      if (!context.mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Download Failed')),
       );
@@ -326,7 +284,61 @@ void _startDownload(BuildContext context, String url, String fileName) {
 }
 
 void downloadFileWeb(String url, String fileName) {
-    html.AnchorElement anchorElement = html.AnchorElement(href: url);
-    anchorElement.download = fileName;
-    anchorElement.click();
+  html.AnchorElement anchorElement = html.AnchorElement(href: url);
+  anchorElement.download = fileName;
+  anchorElement.click();
 }
+
+Widget _buildHeroicImage(
+    BuildContext context, {
+      bool isSmallScreen = false,
+      bool isMediumScreen = false,
+      bool isLargeScreen = false,
+    }) {
+  double height = MediaQuery.of(context).size.height;
+
+  return CustomAnimation(
+    animationType: AnimationType.fadeAndSlide,
+    begin: const Offset(0.5, -0.5), // Slide in from slightly above
+    duration: const Duration(milliseconds: 600),
+    curve: Curves.easeOut,
+    child: Container(
+      width: double.infinity,
+      constraints: BoxConstraints(
+        maxHeight: isSmallScreen
+            ? height * 0.5
+            : isMediumScreen
+            ? height * 0.5
+            : height * 0.6,
+      ),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [Colors.white, Colors.blue.shade800],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+        ),
+        borderRadius: BorderRadius.circular(HeroicSection.borderRadius * 2),
+        boxShadow: const [
+          BoxShadow(
+            color: Colors.black26,
+            blurRadius: HeroicSection.borderRadius,
+            spreadRadius: 2,
+            offset: Offset(0, 5),
+          ),
+        ],
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(HeroicSection.borderRadius * 2),
+        child: Image.asset(
+          HeroicSection.heroicImage,
+          fit: BoxFit.contain,
+          errorBuilder: (_, __, ___) => Image.asset(
+            HeroicSection.placeholderImage,
+            fit: BoxFit.contain,
+          ),
+        ),
+      ),
+    ),
+  );
+}
+
