@@ -30,11 +30,12 @@ class AboutSection extends StatelessWidget {
       ),
       child: Column(
         key: aboutKey,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           const _BuildHeader(),
-          const SizedBox(height: (spacing * 3)), // Adjusted spacing
+          const SizedBox(height: (spacing * 3)),
           _buildAboutContent(screenWidth, context),
-          const SizedBox(height: spacing), // Spacing between content and button
+          const SizedBox(height: spacing),
           const _ConnectButton(),
         ],
       ),

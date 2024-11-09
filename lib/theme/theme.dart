@@ -88,6 +88,10 @@ class AppStyles {
   );
 }
 
+const appBarTheme = AppBarTheme(
+  backgroundColor: AppColors.backgroundColor
+);
+
 final scrollbarThemeData = ScrollbarThemeData(
   thumbColor: WidgetStateProperty.all(AppColors.primaryColor),
   thickness: WidgetStateProperty.all(AppSizes.borderSmall),
@@ -99,6 +103,7 @@ ThemeData appTheme() {
     brightness: Brightness.dark,
     primaryColor: AppColors.primaryColor,
     scaffoldBackgroundColor: AppColors.backgroundColor,
+    appBarTheme: appBarTheme,
     fontFamily: GoogleFonts.poppins().fontFamily,
     scrollbarTheme: scrollbarThemeData,
     colorScheme: const ColorScheme(

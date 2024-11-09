@@ -19,6 +19,9 @@ class Navbar extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _NavbarState extends State<Navbar> {
+  static const double mediumScreenBreakPoint = 768.0;
+  static const double smallScreenBreakPoint = 600.0;
+
   String hoveredSection = '';
   final Map<String, GlobalKey> keys = {
     'Home': GlobalKey(),
@@ -61,19 +64,32 @@ class _NavbarState extends State<Navbar> {
 
   @override
   Widget build(BuildContext context) {
-    return AppBar(
-      backgroundColor: Colors.black87,
-      elevation: 0,
-      title: LayoutBuilder(
-        builder: (context, constraints) {
-          if (constraints.maxWidth < 600) {
-            return _buildMobileNav();
-          } else if (constraints.maxWidth < 768) {
-            return _buildTabletNav();
-          } else {
-            return _buildDesktopNav();
-          }
-        },
+    final size = MediaQuery.of(context).size;
+
+    double padding;
+    if (size.width < smallScreenBreakPoint) {
+      padding = size.width * 0.01;
+    } else if (size.width < mediumScreenBreakPoint) {
+      padding = size.width * 0.05;
+    } else {
+      padding = size.width * 0.1;
+    }
+
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: padding),
+      child: AppBar(
+        elevation: 0,
+        title: LayoutBuilder(
+          builder: (context, constraints) {
+            if (constraints.maxWidth < smallScreenBreakPoint) {
+              return _buildMobileNav();
+            } else if (constraints.maxWidth < mediumScreenBreakPoint) {
+              return _buildTabletNav();
+            } else {
+              return _buildDesktopNav();
+            }
+          },
+        ),
       ),
     );
   }

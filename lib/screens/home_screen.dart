@@ -26,6 +26,9 @@ class _HomeScreenState extends State<HomeScreen> {
   String _activeSection = 'Home';
   bool _isAutoScrolling = false;
 
+  static const double mediumScreenBreakPoint = 768.0;
+  static const double smallScreenBreakPoint = 600.0;
+
   @override
   void initState() {
     super.initState();
@@ -77,9 +80,19 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+
+    double padding;
+    if (size.width < smallScreenBreakPoint) {
+      padding = size.width * 0.01;
+    } else if (size.width < mediumScreenBreakPoint) {
+      padding = size.width * 0.05;
+    } else {
+      padding = size.width * 0.1;
+    }
+
     return SafeArea(
       child: Scaffold(
         appBar: Navbar(
@@ -91,18 +104,29 @@ class _HomeScreenState extends State<HomeScreen> {
           thumbVisibility: true,
           child: SingleChildScrollView(
             controller: _scrollController,
-            child: Column(
-              children: [
-                HeroicSection(_sectionKeys['Home']!),
-                const SizedBox(height: 32),
-                ProjectSection(_sectionKeys['Projects']!),
-                const SizedBox(height: 32),
-                AboutSection(_sectionKeys['About']!),
-                const SizedBox(height: 32),
-                ContactSection(_sectionKeys['Contact']!),
-                const SizedBox(height: 32),
-                const FooterSection(),
-              ],
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: padding),
+              child: Column(
+                children: [
+                  ConstrainedBox(
+                      constraints: BoxConstraints(minHeight: size.height * 0.7),
+                      child: HeroicSection(_sectionKeys['Home']!)),
+                  const SizedBox(height: 32),
+                  ConstrainedBox(
+                      constraints: BoxConstraints(minHeight: size.height * 0.8),
+                      child: ProjectSection(_sectionKeys['Projects']!)),
+                  const SizedBox(height: 32),
+                  ConstrainedBox(
+                      constraints: BoxConstraints(minHeight: size.height * 0.8),
+                      child: AboutSection(_sectionKeys['About']!)),
+                  const SizedBox(height: 32),
+                  ConstrainedBox(
+                      constraints: BoxConstraints(minHeight: size.height * 0.8),
+                      child: ContactSection(_sectionKeys['Contact']!)),
+                  const SizedBox(height: 32),
+                  const FooterSection(),
+                ],
+              ),
             ),
           ),
         ),
