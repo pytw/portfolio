@@ -68,11 +68,11 @@ class _NavbarState extends State<Navbar> {
 
     double padding;
     if (size.width < smallScreenBreakPoint) {
-      padding = size.width * 0.01;
+      padding = size.width * 0.005;
     } else if (size.width < mediumScreenBreakPoint) {
-      padding = size.width * 0.05;
+      padding = size.width * 0.01;
     } else {
-      padding = size.width * 0.1;
+      padding = size.width * 0.08;
     }
 
     return Padding(

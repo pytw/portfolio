@@ -1,48 +1,14 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 
-/// A reusable widget that displays a header consisting of two customizable
-/// pieces of text, each with configurable styles such as color, font size,
-/// letter spacing, and word spacing.
-///
-/// [CustomHeader] allows for a title and subtitle with different styles
-/// and can be reused across different screens in your application. It
-/// provides flexibility to control the content and styling via parameters.
-///
-/// Parameters:
-/// - [titleText]: The main text (title) to display in the header.
-/// - [subtitleText]: The secondary text (subtitle) to display next to the title.
-/// - [titleStyle]: The [TextStyle] for the title text. Defaults to bold white text.
-/// - [subtitleStyle]: The [TextStyle] for the subtitle text. Defaults to bold blue text.
-/// - [alignment]: Alignment of the text. Defaults to `Alignment.topLeft`.
-///
-/// Example usage:
-/// ```dart
-/// CustomHeader(
-///   titleText: 'But wait.. ',
-///   subtitleText: 'Who am I...',
-///   titleStyle: TextStyle(color: Colors.white, fontSize: 24, letterSpacing: 2, wordSpacing: 4),
-///   subtitleStyle: TextStyle(color: Colors.blue, fontSize: 24, letterSpacing: 2, wordSpacing: 4),
-///   alignment: Alignment.topLeft,
-/// )
-/// ```
-class CustomHeader extends StatelessWidget {
-  /// The main text (title) to be displayed in the header.
+class CustomHeader extends StatefulWidget {
   final String titleText;
-
-  /// The secondary text (subtitle) to be displayed after the title.
   final String subtitleText;
-
-  /// The style for the title text. Defaults to bold white text.
   final TextStyle titleStyle;
-
-  /// The style for the subtitle text. Defaults to bold blue text.
   final TextStyle subtitleStyle;
-
-  /// The alignment of the text in the header. Defaults to `Alignment.topLeft`.
   final AlignmentGeometry alignment;
+  final bool isTyping;
 
-  /// Constructor for [CustomHeader] widget. Requires [titleText] and [subtitleText]
-  /// to be provided. Optional parameters include [titleStyle] and [subtitleStyle].
   const CustomHeader({
     super.key,
     required this.titleText,
@@ -50,6 +16,7 @@ class CustomHeader extends StatelessWidget {
     TextStyle? titleStyle,
     TextStyle? subtitleStyle,
     this.alignment = Alignment.topLeft,
+    this.isTyping = false,
   })  : titleStyle = titleStyle ??
             const TextStyle(
               fontSize: 20,
@@ -68,19 +35,65 @@ class CustomHeader extends StatelessWidget {
             );
 
   @override
+  State<CustomHeader> createState() => _CustomHeaderState();
+}
+
+class _CustomHeaderState extends State<CustomHeader> {
+  String _displayedSubtitle = '';
+  Timer? _timer;
+  int _currentIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.isTyping) _startTypingAnimation();
+  }
+
+  void _startTypingAnimation() {
+    _timer = Timer.periodic(const Duration(milliseconds: 100), (timer) {
+      setState(() {
+        if (_currentIndex < widget.subtitleText.length) {
+          _displayedSubtitle += widget.subtitleText[_currentIndex++];
+        } else {
+          _resetTyping();
+        }
+      });
+    });
+  }
+
+  void _resetTyping() {
+    _timer?.cancel();
+    Future.delayed(const Duration(milliseconds: 800), () {
+      setState(() {
+        _displayedSubtitle = '';
+        _currentIndex = 0;
+        _startTypingAnimation();
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Align(
-      alignment: alignment,
+      alignment: widget.alignment,
       child: RichText(
         text: TextSpan(
           children: [
             TextSpan(
-              text: titleText,
-              style: titleStyle,
+              text: widget.titleText,
+              style: widget.titleStyle,
             ),
             TextSpan(
-              text: subtitleText,
-              style: subtitleStyle,
+              text: widget.isTyping
+                  ? _displayedSubtitle
+                  : widget.subtitleText, // Display the animated subtitle
+              style: widget.subtitleStyle,
             ),
           ],
         ),

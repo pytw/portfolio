@@ -7,7 +7,6 @@ enum HoverEffect {
   borderColor,
   labelColor,
   iconColor,
-  elevation,
   shadow,
   underline,
 }

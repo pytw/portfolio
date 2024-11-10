@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:portfolio_website/widgets/custom_button.dart';
 import 'package:portfolio_website/widgets/custom_header.dart';
+import 'package:portfolio_website/widgets/effect.dart';
 
 class ProjectSection extends StatelessWidget {
   final GlobalKey projectKey;
@@ -51,7 +52,7 @@ class ProjectSection extends StatelessWidget {
             ],
           )
         : Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               _ProjectImage(imagePath: project.imagePath),
               const SizedBox(height: spacing), // Spacing between text and image
@@ -68,11 +69,11 @@ class _BuildHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomHeader(
       titleText: 'A Glimpse of ',
-      titleStyle: Theme.of(context).textTheme.headlineMedium?.copyWith(
+      titleStyle: Theme.of(context).textTheme.headlineMedium!.copyWith(
             color: Theme.of(context).colorScheme.onPrimary,
           ),
       subtitleText: 'My Work',
-      subtitleStyle: Theme.of(context).textTheme.headlineMedium?.copyWith(
+      subtitleStyle: Theme.of(context).textTheme.headlineMedium!.copyWith(
             color: Theme.of(context).primaryColor,
           ),
     );
@@ -85,7 +86,14 @@ class _ProjectImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Image.asset(imagePath, fit: BoxFit.contain);
+    return Effect(
+      hoverOpacity: 0.7,
+      slideOffset: const Offset(0, -10),
+      fadeOnHover: true,
+      builder: (isHovered, isClicked, scale, opacity) {
+        return Image.asset(imagePath, fit: BoxFit.contain);
+      },
+    );
   }
 }
 
@@ -101,26 +109,24 @@ class _ProjectDetails extends StatelessWidget {
         Text(
           project.title,
           style: Theme.of(context).textTheme.titleLarge?.copyWith(
-            color: Theme.of(context).colorScheme.onPrimary,
-            fontWeight: FontWeight.bold
-              ),
+              color: Theme.of(context).colorScheme.onPrimary,
+              fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: ProjectSection.spacing),
         Text(
           project.overview,
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 color: Theme.of(context).colorScheme.onSecondary,
-            letterSpacing: 0.8,
-            height: 2.5,
+                letterSpacing: 0.8,
+                height: 2.5,
               ),
         ),
         const SizedBox(height: ProjectSection.spacing),
         Wrap(
-          spacing: ProjectSection.spacing*2,
+          spacing: ProjectSection.spacing * 2,
           runSpacing: ProjectSection.spacing,
-          children: project.skills.map(
-                  (skill) => _SkillChip(skill: skill)
-          ).toList(),
+          children:
+              project.skills.map((skill) => _SkillChip(skill: skill)).toList(),
         ),
       ],
     );

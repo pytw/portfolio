@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:portfolio_website/animations/slide_in_animation.dart';
-import 'package:portfolio_website/widgets/custom_button.dart';
 import 'package:portfolio_website/widgets/custom_header.dart';
+import 'package:portfolio_website/widgets/effect.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'dart:html' as html;
 
@@ -67,7 +67,6 @@ class HeroicSection extends StatelessWidget {
         children: [
           Flexible(
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 _buildHeroicDetails(context),
               ],
@@ -83,7 +82,6 @@ class HeroicSection extends StatelessWidget {
         children: [
           Flexible(
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 _buildHeroicDetails(context),
               ],
@@ -115,9 +113,9 @@ Widget _buildHeroicDetails(BuildContext context) {
       _buildWelcome(context),
       const SizedBox(height: HeroicSection.spacing),
       _buildProfession(context),
-      const SizedBox(height: HeroicSection.spacing * 5),
+      const SizedBox(height: HeroicSection.spacing * 6),
       _buildActionButtons(context),
-      const SizedBox(height: HeroicSection.spacing),
+      const SizedBox(height: HeroicSection.spacing*2),
       _buildSocialIcons(),
     ],
   );
@@ -160,6 +158,7 @@ Widget _buildWelcome(BuildContext context) {
     subtitleStyle: Theme.of(context).textTheme.headlineMedium?.copyWith(
           color: Theme.of(context).primaryColor,
         ),
+    isTyping: true,
   );
 }
 
@@ -178,23 +177,47 @@ Widget _buildActionButtons(BuildContext context) {
     runSpacing: HeroicSection.spacing,
     alignment: WrapAlignment.center,
     children: [
-      CustomButton(
-        onPressed: () => _showDownloadOptions(context),
-        label: "Download Resume",
-        textStyle: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
-        borderColor: Theme.of(context).colorScheme.onPrimary,
-        borderWidth: 2,
-      ),
-      CustomButton(
-        onPressed: () {
-          // Add navigation to Projects
-        },
-        label: "See Projects",
-        textStyle: TextStyle(
-          fontWeight: FontWeight.bold,
-          color: Theme.of(context).colorScheme.onPrimary,
+      Effect(
+        scale: 1.05,
+        hoverOpacity: 0.9,
+        builder: (isHovered, isClick, scale, opacity) => Tooltip(
+          message: "Download Resume",
+          child: TextButton(
+            style: TextButton.styleFrom(
+              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(HeroicSection.borderRadius),
+                side: BorderSide(
+                  color:
+                      isHovered ? Theme.of(context).primaryColor : Colors.white,
+                  width: 2,
+                ),
+              ),
+            ),
+            onPressed: () => _showDownloadOptions(context),
+            child: const Text(
+              "Download Resume",
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
         ),
-        backgroundColor: Theme.of(context).primaryColor,
+      ),
+      Effect(
+        scale: 1.1,
+        builder: (isHovered, isClicked, scale, opacity) => Tooltip(
+          message: "See Projects",
+          child: TextButton(
+            style: TextButton.styleFrom(
+              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+              backgroundColor: Theme.of(context).primaryColor,
+            ),
+            onPressed: () => _showDownloadOptions(context),
+            child: const Text(
+              "See Projects",
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        ),
       ),
     ],
   );
@@ -212,15 +235,19 @@ Widget _buildSocialIcons() {
 }
 
 Widget _buildSocialIconButton(String name, IconData icon, String url) {
-  return IconButton(
-    onPressed: () async {
-      if (await canLaunchUrlString(url)) {
-        await launchUrlString(url);
-      }
-    },
-    icon: Icon(icon),
-    iconSize: HeroicSection.iconSize,
-    tooltip: name,
+  return Effect(
+    scale: 1.2,
+    rotationAngle: 0.2,
+    builder: (isHovered, isClicked, scale, opacity) => IconButton(
+      onPressed: () async {
+        if (await canLaunchUrlString(url)) {
+          await launchUrlString(url);
+        }
+      },
+      icon: Icon(icon),
+      iconSize: HeroicSection.iconSize,
+      tooltip: name,
+    ),
   );
 }
 
@@ -290,16 +317,16 @@ void downloadFileWeb(String url, String fileName) {
 }
 
 Widget _buildHeroicImage(
-    BuildContext context, {
-      bool isSmallScreen = false,
-      bool isMediumScreen = false,
-      bool isLargeScreen = false,
-    }) {
+  BuildContext context, {
+  bool isSmallScreen = false,
+  bool isMediumScreen = false,
+  bool isLargeScreen = false,
+}) {
   double height = MediaQuery.of(context).size.height;
 
   return CustomAnimation(
     animationType: AnimationType.fadeAndSlide,
-    begin: const Offset(0.5, -0.5), // Slide in from slightly above
+    begin: const Offset(0.5, -0.5),
     duration: const Duration(milliseconds: 600),
     curve: Curves.easeOut,
     child: Container(
@@ -308,8 +335,8 @@ Widget _buildHeroicImage(
         maxHeight: isSmallScreen
             ? height * 0.5
             : isMediumScreen
-            ? height * 0.5
-            : height * 0.6,
+                ? height * 0.5
+                : height * 0.6,
       ),
       decoration: BoxDecoration(
         gradient: LinearGradient(
@@ -327,18 +354,22 @@ Widget _buildHeroicImage(
           ),
         ],
       ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(HeroicSection.borderRadius * 2),
-        child: Image.asset(
-          HeroicSection.heroicImage,
-          fit: BoxFit.contain,
-          errorBuilder: (_, __, ___) => Image.asset(
-            HeroicSection.placeholderImage,
+      child: Effect(
+        scale: 1.03,
+        slideOffset: const Offset(-5, -15),
+        fadeOnHover: true,
+        builder: (_,__,___,____) => ClipRRect(
+          borderRadius: BorderRadius.circular(HeroicSection.borderRadius * 2),
+          child: Image.asset(
+            HeroicSection.heroicImage,
             fit: BoxFit.contain,
+            errorBuilder: (_, __, ___) => Image.asset(
+              HeroicSection.placeholderImage,
+              fit: BoxFit.contain,
+            ),
           ),
         ),
       ),
     ),
   );
 }
-
