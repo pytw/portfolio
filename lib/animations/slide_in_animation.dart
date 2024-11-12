@@ -52,33 +52,18 @@ class _CustomAnimationState extends State<CustomAnimation>
       vsync: this,
     );
 
-    // Initialize animations with the specified curve
     _fadeAnimation =
         Tween<double>(begin: widget.initiallyVisible ? 1.0 : 0.0, end: 1.0)
-            .animate(CurvedAnimation(
-      parent: _controller,
-      curve: widget.curve,
-    ));
+            .animate(CurvedAnimation(parent: _controller, curve: widget.curve));
 
-    _slideAnimation = Tween<Offset>(
-      begin: widget.begin,
-      end: Offset.zero,
-    ).animate(CurvedAnimation(
-      parent: _controller,
-      curve: widget.curve,
-    ));
+    _slideAnimation = Tween<Offset>(begin: widget.begin, end: Offset.zero)
+        .animate(CurvedAnimation(parent: _controller, curve: widget.curve));
 
-    _scaleAnimation =
-        Tween<double>(begin: 0.8, end: 1.0).animate(CurvedAnimation(
-      parent: _controller,
-      curve: widget.curve,
-    ));
+    _scaleAnimation = Tween<double>(begin: 0.8, end: 1.0)
+        .animate(CurvedAnimation(parent: _controller, curve: widget.curve));
 
-    _rotateAnimation =
-        Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-      parent: _controller,
-      curve: widget.curve,
-    ));
+    _rotateAnimation = Tween<double>(begin: 0.0, end: 1.0)
+        .animate(CurvedAnimation(parent: _controller, curve: widget.curve));
   }
 
   @override
@@ -88,19 +73,25 @@ class _CustomAnimationState extends State<CustomAnimation>
   }
 
   void _startAnimation() {
-    if (!_hasAnimated) {
+    if (!_hasAnimated && mounted) {
       Future.delayed(widget.delay, () {
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          _controller.forward(from: 0.0);
-        });
+        if (mounted) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (mounted) {
+              _controller.forward(from: 0.0);
+            }
+          });
+        }
       });
       _hasAnimated = true;
     }
   }
 
   void _resetAnimation() {
-    _hasAnimated = false;
-    _controller.reset();
+    if (mounted) {
+      _hasAnimated = false;
+      _controller.reset();
+    }
   }
 
   @override
@@ -108,7 +99,7 @@ class _CustomAnimationState extends State<CustomAnimation>
     return VisibilityDetector(
       key: Key('custom-animation-${widget.hashCode}'),
       onVisibilityChanged: (visibilityInfo) {
-        if (visibilityInfo.visibleFraction > 0) {
+        if (visibilityInfo.visibleFraction > 0 && mounted) {
           _startAnimation();
         } else {
           _resetAnimation();
@@ -143,8 +134,7 @@ class _CustomAnimationState extends State<CustomAnimation>
               );
             case AnimationType.bounce:
               return Transform.scale(
-                scale: 1 +
-                    (_scaleAnimation.value - 1) * 0.15, // reduced bounce scale
+                scale: 1 + (_scaleAnimation.value - 1) * 0.15,
                 child: widget.child,
               );
             case AnimationType.fadeAndSlide:

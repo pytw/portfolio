@@ -51,6 +51,8 @@ class _CustomHeaderState extends State<CustomHeader> {
 
   void _startTypingAnimation() {
     _timer = Timer.periodic(const Duration(milliseconds: 100), (timer) {
+      if (!mounted) return;
+
       setState(() {
         if (_currentIndex < widget.subtitleText.length) {
           _displayedSubtitle += widget.subtitleText[_currentIndex++];
@@ -62,8 +64,12 @@ class _CustomHeaderState extends State<CustomHeader> {
   }
 
   void _resetTyping() {
+    if (!mounted) return;
+
     _timer?.cancel();
     Future.delayed(const Duration(milliseconds: 800), () {
+      if (!mounted) return;
+
       setState(() {
         _displayedSubtitle = '';
         _currentIndex = 0;
@@ -90,9 +96,7 @@ class _CustomHeaderState extends State<CustomHeader> {
               style: widget.titleStyle,
             ),
             TextSpan(
-              text: widget.isTyping
-                  ? _displayedSubtitle
-                  : widget.subtitleText, // Display the animated subtitle
+              text: widget.isTyping ? _displayedSubtitle : widget.subtitleText,
               style: widget.subtitleStyle,
             ),
           ],

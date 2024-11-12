@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:portfolio_website/widgets/custom_button.dart';
 import 'package:portfolio_website/widgets/custom_header.dart';
+import 'package:portfolio_website/widgets/df.dart';
+import 'package:portfolio_website/widgets/effect.dart';
 
 class AboutSection extends StatelessWidget {
   final GlobalKey aboutKey;
+
   const AboutSection(this.aboutKey, {super.key});
 
-  // Constants for padding, spacing, and breakpoints
   static const double horizontalPadding = 16.0;
   static const double verticalPadding = 16.0;
   static const double spacing = 8.0;
-  static const double largeScreenBreakpoint = 1200.0;
-  static const double mediumScreenBreakpoint = 800.0;
+  static const double screenBreakPoint = 800.0;
 
   static const String aboutImage = "assets/images/about-me.png";
   static const String aboutMeText = """
@@ -21,8 +21,6 @@ class AboutSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
-
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: horizontalPadding,
@@ -32,123 +30,92 @@ class AboutSection extends StatelessWidget {
         key: aboutKey,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          const _BuildHeader(),
+          _buildAboutHeader(context),
           const SizedBox(height: (spacing * 3)),
-          _buildAboutContent(screenWidth, context),
+          _buildAboutContent(context),
           const SizedBox(height: spacing),
-          const _ConnectButton(),
+          _buildAboutMeBtn(context),
         ],
       ),
     );
   }
 
-  Widget _buildAboutContent(double screenWidth, BuildContext context) {
-    if (screenWidth >= largeScreenBreakpoint) {
-      // Large screen layout with row alignment
-      return const Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
+  Widget _buildAboutContent(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    if (screenWidth >= screenBreakPoint) {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Flexible(child: _AboutText()),
-          SizedBox(width: (spacing * 2)),
-          Flexible(
-            child: _AboutImage(),
-          ),
-        ],
-      );
-    } else if (screenWidth >= mediumScreenBreakpoint) {
-      // Medium screen layout with column alignment
-      return const Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Flexible(child: _AboutImage()),
-          SizedBox(height: spacing),
-          Flexible(child: _AboutText()),
+          Flexible(child: _buildAboutMeText(context)),
+          const SizedBox(width: (spacing * 2)),
+          Flexible(child: _buildAboutMeImage()),
         ],
       );
     } else {
-      // Small screen layout with column alignment
-      return const Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          _AboutImage(),
-          SizedBox(height: spacing),
-          _AboutText(),
+          _buildAboutMeImage(),
+          const SizedBox(height: spacing),
+          _buildAboutMeText(context),
         ],
       );
     }
   }
 }
 
-class _BuildHeader extends StatelessWidget {
-  const _BuildHeader();
+Widget _buildAboutHeader(BuildContext context) {
+  return CustomHeader(
+    titleText: 'But wait . ',
+    titleStyle: Theme.of(context).textTheme.headlineMedium?.copyWith(
+          color: Theme.of(context).colorScheme.onPrimary,
+        ),
+    subtitleText: 'Who am I . . .',
+    subtitleStyle: Theme.of(context).textTheme.headlineMedium?.copyWith(
+          color: Theme.of(context).primaryColor,
+        ),
+  );
+}
 
-  @override
-  Widget build(BuildContext context) {
-    return CustomHeader(
-      titleText: 'But wait . ',
-      titleStyle: Theme.of(context).textTheme.headlineMedium?.copyWith(
-            color: Theme.of(context).colorScheme.onPrimary,
+Widget _buildAboutMeImage() {
+  return Semantics(
+      label: 'Illustration representing personal development',
+      child: Image.asset(AboutSection.aboutImage, fit: BoxFit.contain));
+}
+
+Widget _buildAboutMeText(BuildContext context) {
+  return Semantics(
+    label: 'About me section containing personal details',
+    child: Text(
+      AboutSection.aboutMeText,
+      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+            color: Theme.of(context).colorScheme.onSecondary,
+            letterSpacing: 0.8,
+            height: 2.5,
           ),
-      subtitleText: 'Who am I . . .',
-      subtitleStyle: Theme.of(context).textTheme.headlineMedium?.copyWith(
-            color: Theme.of(context).primaryColor,
-          ),
-    );
-  }
+    ),
+  );
 }
 
-class _AboutText extends StatelessWidget {
-  const _AboutText();
-
-  @override
-  Widget build(BuildContext context) {
-    return Semantics(
-      label: 'About me section containing personal details',
-      child: Text(
-        AboutSection.aboutMeText,
-        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: Theme.of(context).colorScheme.onSecondary,
-              letterSpacing: 0.8,
-              height: 2.5,
-            ),
-      ),
-    );
-  }
-}
-
-class _AboutImage extends StatelessWidget {
-  const _AboutImage();
-
-  @override
-  Widget build(BuildContext context) {
-    return Semantics(
-        label: 'Illustration representing personal development',
-        child: Image.asset(AboutSection.aboutImage, fit: BoxFit.contain));
-  }
-}
-
-class _ConnectButton extends StatelessWidget {
-  const _ConnectButton();
-
-  @override
-  Widget build(BuildContext context) {
-    return Semantics(
-      label: 'Button to connect with me',
-      child: CustomButton(
+Widget _buildAboutMeBtn(BuildContext context) {
+  return Semantics(
+    label: 'Button to connect with me',
+    child: Effect(
+      scale: 1.1,
+      builder: (isHovered, isClicked, __, ___) => CustomButton(
         label: "Connect with Me",
-        borderColor: Theme.of(context).colorScheme.onPrimary,
-        clickBorderColor: Theme.of(context).primaryColor,
-        hoverLabelColor: Theme.of(context).primaryColor,
-        hoverEffects: const [
-          HoverEffect.labelColor,
-        ],
-        clickEffects: const [
-          ClickEffect.borderColor,
-        ],
-        onPressed: () {
-          // Implement your connection logic here
-        },
+        textStyle: TextStyle(
+          color: isClicked
+              ? Theme.of(context).primaryColor
+              : Theme.of(context).colorScheme.onPrimary,
+        ),
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        borderWidth: 1.5,
+        borderColor: isHovered
+            ? Theme.of(context).primaryColor
+            : Theme.of(context).colorScheme.onPrimary,
+        onPressed: () {},
       ),
-    );
-  }
+    ),
+  );
 }

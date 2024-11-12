@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:portfolio_website/animations/slide_in_animation.dart';
 import 'package:portfolio_website/widgets/custom_header.dart';
+import 'package:portfolio_website/widgets/df.dart';
 import 'package:portfolio_website/widgets/effect.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'dart:html' as html;
 
 class HeroicSection extends StatelessWidget {
   final GlobalKey<State<StatefulWidget>> heroicKey;
+
   const HeroicSection(this.heroicKey, {super.key});
 
   // Constants
@@ -115,7 +117,7 @@ Widget _buildHeroicDetails(BuildContext context) {
       _buildProfession(context),
       const SizedBox(height: HeroicSection.spacing * 6),
       _buildActionButtons(context),
-      const SizedBox(height: HeroicSection.spacing*2),
+      const SizedBox(height: HeroicSection.spacing * 2),
       _buildSocialIcons(),
     ],
   );
@@ -182,23 +184,12 @@ Widget _buildActionButtons(BuildContext context) {
         hoverOpacity: 0.9,
         builder: (isHovered, isClick, scale, opacity) => Tooltip(
           message: "Download Resume",
-          child: TextButton(
-            style: TextButton.styleFrom(
-              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(HeroicSection.borderRadius),
-                side: BorderSide(
-                  color:
-                      isHovered ? Theme.of(context).primaryColor : Colors.white,
-                  width: 2,
-                ),
-              ),
-            ),
+          child: CustomButton(
             onPressed: () => _showDownloadOptions(context),
-            child: const Text(
-              "Download Resume",
-              style: TextStyle(color: Colors.white),
-            ),
+            label: "Download Resume",
+            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+            borderColor: Colors.white,
+            borderWidth: 2,
           ),
         ),
       ),
@@ -206,16 +197,9 @@ Widget _buildActionButtons(BuildContext context) {
         scale: 1.1,
         builder: (isHovered, isClicked, scale, opacity) => Tooltip(
           message: "See Projects",
-          child: TextButton(
-            style: TextButton.styleFrom(
-              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-              backgroundColor: Theme.of(context).primaryColor,
-            ),
+          child: CustomButton(
             onPressed: () => _showDownloadOptions(context),
-            child: const Text(
-              "See Projects",
-              style: TextStyle(color: Colors.white),
-            ),
+            label: "See Projects",
           ),
         ),
       ),
@@ -237,14 +221,23 @@ Widget _buildSocialIcons() {
 Widget _buildSocialIconButton(String name, IconData icon, String url) {
   return Effect(
     scale: 1.2,
-    rotationAngle: 0.2,
+    rotationAngle: 0.3,
     builder: (isHovered, isClicked, scale, opacity) => IconButton(
       onPressed: () async {
         if (await canLaunchUrlString(url)) {
           await launchUrlString(url);
         }
       },
-      icon: Icon(icon),
+      icon: Icon(
+        icon,
+        color: isHovered
+            ? name == 'Instagram'
+                ? Colors.red
+                : name == 'Github'
+                    ? Colors.blue
+                    : Colors.white
+            : Colors.white,
+      ),
       iconSize: HeroicSection.iconSize,
       tooltip: name,
     ),
@@ -326,8 +319,9 @@ Widget _buildHeroicImage(
 
   return CustomAnimation(
     animationType: AnimationType.fadeAndSlide,
-    begin: const Offset(0.5, -0.5),
-    duration: const Duration(milliseconds: 600),
+    begin: const Offset(0.0, -0.5),
+    duration: const Duration(seconds: 1),
+    delay: const Duration(milliseconds: 100),
     curve: Curves.easeOut,
     child: Container(
       width: double.infinity,
@@ -355,10 +349,10 @@ Widget _buildHeroicImage(
         ],
       ),
       child: Effect(
-        scale: 1.03,
-        slideOffset: const Offset(-5, -15),
+        scale: 1.05,
+        hoverOpacity: 0.95,
         fadeOnHover: true,
-        builder: (_,__,___,____) => ClipRRect(
+        builder: (_, __, ___, ____) => ClipRRect(
           borderRadius: BorderRadius.circular(HeroicSection.borderRadius * 2),
           child: Image.asset(
             HeroicSection.heroicImage,

@@ -90,7 +90,7 @@ class _HomeScreenState extends State<HomeScreen> {
     } else if (size.width < mediumScreenBreakPoint) {
       padding = size.width * 0.01;
     } else {
-      padding = size.width * 0.08;
+      padding = size.width * 0.1;
     }
 
     return SafeArea(
@@ -122,7 +122,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   const SizedBox(height: 32),
                   ConstrainedBox(
                       constraints: BoxConstraints(minHeight: size.height * 0.8),
-                      child: ContactSection(_sectionKeys['Contact']!)),
+                      child: ContactSection(_sectionKeys['Contact']!),
+                  ),
                   const SizedBox(height: 32),
                   const FooterSection(),
                 ],
