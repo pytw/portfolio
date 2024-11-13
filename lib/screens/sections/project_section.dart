@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:portfolio_website/widgets/custom_header.dart';
-import 'package:portfolio_website/widgets/df.dart';
+import 'package:portfolio_website/widgets/simple_custom_button.dart';
 import 'package:portfolio_website/widgets/effect.dart';
 
 class ProjectSection extends StatelessWidget {
@@ -138,7 +138,7 @@ Widget _buildMoreProjectBtn(BuildContext context) {
   return Effect(
     scale: 1.15,
     clickScale: 1,
-    builder: (isHovered, _, __, ___) => CustomButton(
+    builder: (isHovered, _, __, ___) => SimpleCustomButton(
       onPressed: () {},
       label: 'More Projects . . .',
       textStyle: const TextStyle(

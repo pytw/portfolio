@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:portfolio_website/widgets/df.dart';
+import 'package:portfolio_website/widgets/simple_custom_button.dart';
 import 'package:portfolio_website/widgets/custom_header.dart';
 import 'package:portfolio_website/widgets/effect.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -171,7 +171,7 @@ Widget _buildContactDetail(BuildContext context) {
 Widget _buildEmailBtn(BuildContext context) {
   return Effect(
     clickScale: 1.05,
-    builder: (isHovered, isClicked, __, ___) => CustomButton(
+    builder: (isHovered, isClicked, __, ___) => SimpleCustomButton(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       label: ContactSection.email,
       textStyle: TextStyle(
@@ -229,7 +229,7 @@ class _BuildSocialButton extends StatelessWidget {
       rotationAngle: 0.3,
       builder: (isHovered, isClicked, scale, opacity) => Tooltip(
         message: name,
-        child: CustomButton(
+        child: SimpleCustomButton(
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           label: name,
           icon: Icon(icon),

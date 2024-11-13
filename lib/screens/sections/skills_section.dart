@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:portfolio_website/animations/slide_in_animation.dart';
+import 'package:portfolio_website/animations/custom_animation.dart';
 import 'package:portfolio_website/helpers/responsive_helper.dart';
 import 'package:portfolio_website/theme/theme.dart';
 import 'package:portfolio_website/widgets/custom_header.dart';

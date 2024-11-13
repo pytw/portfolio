@@ -5,7 +5,7 @@ enum IconPosition {
   right,
 }
 
-class CustomButton extends StatelessWidget {
+class SimpleCustomButton extends StatelessWidget {
   final String? label;
   final Icon? icon;
   final VoidCallback onPressed;
@@ -20,7 +20,7 @@ class CustomButton extends StatelessWidget {
   final Color underlineColor;
   final double underlineThickness;
 
-  const CustomButton({
+  const SimpleCustomButton({
     super.key,
     required this.onPressed,
     this.label,

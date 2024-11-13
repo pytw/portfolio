@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:portfolio_website/animations/slide_in_animation.dart';
+import 'package:portfolio_website/animations/custom_animation.dart';
 import 'package:portfolio_website/widgets/custom_header.dart';
-import 'package:portfolio_website/widgets/df.dart';
+import 'package:portfolio_website/widgets/simple_custom_button.dart';
 import 'package:portfolio_website/widgets/effect.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'dart:html' as html;
@@ -184,7 +184,7 @@ Widget _buildActionButtons(BuildContext context) {
         hoverOpacity: 0.9,
         builder: (isHovered, isClick, scale, opacity) => Tooltip(
           message: "Download Resume",
-          child: CustomButton(
+          child: SimpleCustomButton(
             onPressed: () => _showDownloadOptions(context),
             label: "Download Resume",
             backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -197,7 +197,7 @@ Widget _buildActionButtons(BuildContext context) {
         scale: 1.1,
         builder: (isHovered, isClicked, scale, opacity) => Tooltip(
           message: "See Projects",
-          child: CustomButton(
+          child: SimpleCustomButton(
             onPressed: () => _showDownloadOptions(context),
             label: "See Projects",
           ),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:portfolio_website/widgets/custom_header.dart';
-import 'package:portfolio_website/widgets/df.dart';
+import 'package:portfolio_website/widgets/simple_custom_button.dart';
 import 'package:portfolio_website/widgets/effect.dart';
 
 class AboutSection extends StatelessWidget {
@@ -102,7 +102,7 @@ Widget _buildAboutMeBtn(BuildContext context) {
     label: 'Button to connect with me',
     child: Effect(
       scale: 1.1,
-      builder: (isHovered, isClicked, __, ___) => CustomButton(
+      builder: (isHovered, isClicked, __, ___) => SimpleCustomButton(
         label: "Connect with Me",
         textStyle: TextStyle(
           color: isClicked
