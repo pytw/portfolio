@@ -4,6 +4,7 @@ import 'package:portfolio_website/screens/sections/contact_section.dart';
 import 'package:portfolio_website/screens/sections/footer_section.dart';
 import 'package:portfolio_website/screens/sections/heroic_section.dart';
 import 'package:portfolio_website/screens/sections/project_section.dart';
+import 'package:portfolio_website/screens/sections/skills_section.dart';
 import 'package:portfolio_website/widgets/navbar.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -115,6 +116,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   ConstrainedBox(
                       constraints: BoxConstraints(minHeight: size.height * 0.8),
                       child: ProjectSection(_sectionKeys['Projects']!)),
+                  const SizedBox(height: 32),
+                  SkillsSection(_sectionKeys['Skills']!),
                   const SizedBox(height: 32),
                   ConstrainedBox(
                       constraints: BoxConstraints(minHeight: size.height * 0.8),

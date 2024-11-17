@@ -1,6 +1,7 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:portfolio_website/animations/custom_animation.dart';
 import 'package:portfolio_website/widgets/custom_header.dart';
 import 'package:portfolio_website/widgets/simple_custom_button.dart';
 import 'package:portfolio_website/widgets/effect.dart';
@@ -17,8 +18,7 @@ class HeroicSection extends StatelessWidget {
   static const double verticalPadding = 16.0;
   static const double spacing = 8.0;
   static const double iconSize = 24.0;
-  static const double largeScreenBreakpoint = 1200.0;
-  static const double mediumScreenBreakpoint = 800.0;
+  static const double largeScreenBreakpoint = 800.0;
   static const double borderRadius = 8.0;
 
   // Text Constants
@@ -75,29 +75,14 @@ class HeroicSection extends StatelessWidget {
             ),
           ),
           const SizedBox(width: (spacing * 2)),
-          Flexible(child: _buildHeroicImage(context, isLargeScreen: true)),
-        ],
-      );
-    } else if (screenWidth >= mediumScreenBreakpoint) {
-      return Row(
-        key: heroicKey,
-        children: [
-          Flexible(
-            child: Row(
-              children: [
-                _buildHeroicDetails(context),
-              ],
-            ),
-          ),
-          const SizedBox(height: spacing),
-          Flexible(child: _buildHeroicImage(context, isMediumScreen: true)),
+          Flexible(child: _buildHeroicImageContainer(context)),
         ],
       );
     } else {
       return Column(
         key: heroicKey,
         children: [
-          _buildHeroicImage(context, isSmallScreen: true),
+          _buildHeroicImageContainer(context),
           const SizedBox(height: spacing),
           Center(child: _buildHeroicDetails(context)),
         ],
@@ -161,6 +146,7 @@ Widget _buildWelcome(BuildContext context) {
           color: Theme.of(context).primaryColor,
         ),
     isTyping: true,
+    showIcon: true,
   );
 }
 
@@ -309,61 +295,69 @@ void downloadFileWeb(String url, String fileName) {
   anchorElement.click();
 }
 
-Widget _buildHeroicImage(
-  BuildContext context, {
-  bool isSmallScreen = false,
-  bool isMediumScreen = false,
-  bool isLargeScreen = false,
-}) {
-  double height = MediaQuery.of(context).size.height;
+Widget _buildHeroicImageContainer(BuildContext context) {
+  double screenWidth = MediaQuery.of(context).size.width;
+  bool isLargeScreen = screenWidth >= HeroicSection.largeScreenBreakpoint;
 
-  return CustomAnimation(
-    animationType: AnimationType.fadeAndSlide,
-    begin: const Offset(0.0, -0.5),
-    duration: const Duration(seconds: 1),
-    delay: const Duration(milliseconds: 100),
-    curve: Curves.easeOut,
-    child: Container(
-      width: double.infinity,
-      constraints: BoxConstraints(
-        maxHeight: isSmallScreen
-            ? height * 0.5
-            : isMediumScreen
-                ? height * 0.5
-                : height * 0.6,
-      ),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [Colors.white, Colors.blue.shade800],
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-        ),
-        borderRadius: BorderRadius.circular(HeroicSection.borderRadius * 2),
-        boxShadow: const [
-          BoxShadow(
-            color: Colors.black26,
-            blurRadius: HeroicSection.borderRadius,
-            spreadRadius: 2,
-            offset: Offset(0, 5),
+  return StreamBuilder<DateTime>(
+    stream: Stream.periodic(const Duration(seconds: 1), (_) => DateTime.now()),
+    builder: (context, snapshot) {
+      final currentTime = snapshot.data ?? DateTime.now();
+      final gradientCenter = _calculateGradientCenter(currentTime);
+
+      return Container(
+        width: isLargeScreen ? screenWidth * 0.3 : double.infinity,
+        height: isLargeScreen ? screenWidth * 0.3 : screenWidth * 0.6,
+        decoration: BoxDecoration(
+          gradient: RadialGradient(
+            colors: [
+              Colors.yellow.shade400,
+              Colors.black,
+            ],
+            stops: const [0.0, 1.0],
+            center: gradientCenter,
+            radius: 1.0,
           ),
-        ],
-      ),
-      child: Effect(
-        scale: 1.05,
-        hoverOpacity: 0.95,
-        fadeOnHover: true,
-        builder: (_, __, ___, ____) => ClipRRect(
-          borderRadius: BorderRadius.circular(HeroicSection.borderRadius * 2),
-          child: Image.asset(
-            HeroicSection.heroicImage,
-            fit: BoxFit.contain,
-            errorBuilder: (_, __, ___) => Image.asset(
-              HeroicSection.placeholderImage,
-              fit: BoxFit.contain,
-            ),
-          ),
+          shape: isLargeScreen ? BoxShape.circle : BoxShape.rectangle,
+          borderRadius: isLargeScreen
+              ? null
+              : BorderRadius.circular(HeroicSection.borderRadius * 2),
         ),
-      ),
+        child: isLargeScreen
+            ? ClipOval(child: _buildImage())
+            : ClipRRect(
+                borderRadius:
+                    BorderRadius.circular(HeroicSection.borderRadius * 2),
+                child: _buildImage(),
+              ),
+      );
+    },
+  );
+}
+
+Alignment _calculateGradientCenter(DateTime time) {
+  final hour = time.hour % 12;
+  final minute = time.minute;
+  final hourAngle = (hour / 12) * 360 - 90;
+  final minuteAngle = (minute / 60) * 30;
+
+  final totalAngle = hourAngle + minuteAngle;
+
+  final radians = totalAngle * pi / 180;
+
+  final x = cos(radians);
+  final y = sin(radians);
+
+  return Alignment(x, y);
+}
+
+Widget _buildImage() {
+  return Image.asset(
+    HeroicSection.heroicImage,
+    fit: BoxFit.contain,
+    errorBuilder: (_, __, ___) => Image.asset(
+      HeroicSection.placeholderImage,
+      fit: BoxFit.contain,
     ),
   );
 }

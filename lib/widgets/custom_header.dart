@@ -8,6 +8,7 @@ class CustomHeader extends StatefulWidget {
   final TextStyle subtitleStyle;
   final AlignmentGeometry alignment;
   final bool isTyping;
+  final bool showIcon;
 
   const CustomHeader({
     super.key,
@@ -17,6 +18,7 @@ class CustomHeader extends StatefulWidget {
     TextStyle? subtitleStyle,
     this.alignment = Alignment.topLeft,
     this.isTyping = false,
+    this.showIcon = false,
   })  : titleStyle = titleStyle ??
             const TextStyle(
               fontSize: 20,
@@ -46,11 +48,13 @@ class _CustomHeaderState extends State<CustomHeader> {
   @override
   void initState() {
     super.initState();
-    if (widget.isTyping) _startTypingAnimation();
+    if (widget.isTyping) {
+      _startTypingAndCursorAnimation();
+    }
   }
 
-  void _startTypingAnimation() {
-    _timer = Timer.periodic(const Duration(milliseconds: 100), (timer) {
+  void _startTypingAndCursorAnimation() {
+    _timer = Timer.periodic(const Duration(milliseconds: 80), (timer) {
       if (!mounted) return;
 
       setState(() {
@@ -67,13 +71,13 @@ class _CustomHeaderState extends State<CustomHeader> {
     if (!mounted) return;
 
     _timer?.cancel();
-    Future.delayed(const Duration(milliseconds: 800), () {
+    Future.delayed(const Duration(milliseconds: 1500), () {
       if (!mounted) return;
 
       setState(() {
         _displayedSubtitle = '';
         _currentIndex = 0;
-        _startTypingAnimation();
+        _startTypingAndCursorAnimation();
       });
     });
   }
@@ -88,19 +92,40 @@ class _CustomHeaderState extends State<CustomHeader> {
   Widget build(BuildContext context) {
     return Align(
       alignment: widget.alignment,
-      child: RichText(
-        text: TextSpan(
-          children: [
-            TextSpan(
-              text: widget.titleText,
-              style: widget.titleStyle,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          RichText(
+            text: TextSpan(
+              children: [
+                TextSpan(text: widget.titleText, style: widget.titleStyle),
+                TextSpan(
+                  text: widget.isTyping
+                      ? _displayedSubtitle
+                      : widget.subtitleText,
+                  style: widget.subtitleStyle,
+                ),
+              ],
             ),
-            TextSpan(
-              text: widget.isTyping ? _displayedSubtitle : widget.subtitleText,
-              style: widget.subtitleStyle,
-            ),
-          ],
-        ),
+          ),
+          const SizedBox(width: 10),
+          widget.showIcon
+              ? Image.asset(
+                  "assets/gif/hand.gif",
+                  width: 32,
+                  height: 32,
+                  errorBuilder: (_, __, ___) {
+                    return Transform.flip(
+                      flipX: true,
+                      child: const Icon(
+                        Icons.waving_hand,
+                        color: Colors.yellow,
+                      ),
+                    );
+                  },
+                )
+              : const SizedBox()
+        ],
       ),
     );
   }
