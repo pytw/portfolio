@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:portfolio_website/constants/app_size.dart';
 import 'package:portfolio_website/widgets/custom_header.dart';
 
 class SkillsSection extends StatelessWidget {
@@ -7,25 +8,23 @@ class SkillsSection extends StatelessWidget {
 
   const SkillsSection(this.skillSectionKey, {super.key});
 
-  static const double horizontalPadding = 16.0;
-  static const double verticalPadding = 16.0;
-  static const double spacing = 8.0;
-  static const double screenBreakPoint = 800.0;
-
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(
-          horizontal: horizontalPadding, vertical: verticalPadding),
+        horizontal: AppSize.horizontalPadding,
+        vertical: AppSize.verticalPadding,
+      ),
       child: Column(
         key: skillSectionKey,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           _buildSkillHeader(context),
-          const SizedBox(height: spacing * 3),
+          const SizedBox(height: AppSize.spacing * 3),
           LayoutBuilder(
             builder: (context, constraints) {
-              final isWideScreen = constraints.maxWidth > screenBreakPoint;
+              final isWideScreen =
+                  constraints.maxWidth > AppSize.screenBreakPoint;
               return isWideScreen
                   ? _buildHorizontalSkillCategories(context, skillCategories)
                   : _buildVerticalSkillCategories(context, skillCategories);
@@ -60,8 +59,7 @@ Widget _buildHorizontalSkillCategories(
       children: categories.map((category) {
         return Expanded(
           child: Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: SkillsSection.spacing),
+            padding: const EdgeInsets.symmetric(horizontal: AppSize.spacing),
             child: _buildSkillCategoryCard(context, category),
           ),
         );
@@ -75,8 +73,8 @@ Widget _buildVerticalSkillCategories(
   List<SkillCategory> categories,
 ) {
   return Wrap(
-    spacing: SkillsSection.spacing * 3,
-    runSpacing: SkillsSection.spacing * 3,
+    spacing: AppSize.spacing * 3,
+    runSpacing: AppSize.spacing * 3,
     alignment: WrapAlignment.center,
     children: categories.map((category) {
       return ConstrainedBox(
@@ -89,9 +87,9 @@ Widget _buildVerticalSkillCategories(
 
 Widget _buildSkillCategoryCard(BuildContext context, SkillCategory category) {
   return Container(
-    padding: const EdgeInsets.all(SkillsSection.spacing * 2),
+    padding: const EdgeInsets.all(AppSize.spacing * 2),
     decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(12),
+      borderRadius: BorderRadius.circular(AppSize.borderRadius * 2),
       color: Colors.black.withOpacity(0.7),
       border: Border.all(color: Theme.of(context).primaryColor),
       boxShadow: [
@@ -106,7 +104,7 @@ Widget _buildSkillCategoryCard(BuildContext context, SkillCategory category) {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _buildSkillCategoryHeader(context, category),
-        const SizedBox(height: SkillsSection.spacing * 2),
+        const SizedBox(height: AppSize.spacing * 2),
         _buildSkillList(context, category.skills),
       ],
     ),
@@ -118,7 +116,7 @@ Widget _buildSkillCategoryHeader(BuildContext context, SkillCategory category) {
     mainAxisAlignment: MainAxisAlignment.center,
     children: [
       Icon(category.icon, color: Theme.of(context).primaryColor),
-      const SizedBox(width: SkillsSection.spacing),
+      const SizedBox(width: AppSize.spacing),
       Text(
         category.title,
         style: Theme.of(context).textTheme.titleMedium!.copyWith(
@@ -135,11 +133,11 @@ Widget _buildSkillList(BuildContext context, List<Skill> skills) {
     crossAxisAlignment: CrossAxisAlignment.start,
     children: skills.map((skill) {
       return Padding(
-        padding: const EdgeInsets.symmetric(vertical: SkillsSection.spacing),
+        padding: const EdgeInsets.symmetric(vertical: AppSize.spacing),
         child: Row(
           children: [
             SvgPicture.asset(skill.iconPath, width: 28, height: 28),
-            const SizedBox(width: SkillsSection.spacing * 2),
+            const SizedBox(width: AppSize.spacing * 2),
             Text(
               skill.name,
               style: Theme.of(context).textTheme.bodyMedium!.copyWith(
@@ -169,37 +167,55 @@ class Skill {
   Skill(this.name, this.iconPath);
 }
 
+List<Skill> _frontendSkill() {
+  return [
+    Skill('Flutter', 'assets/icons/Flutter.svg'),
+    Skill('Tkinter', 'assets/icons/Python.svg'),
+    Skill('Qt', 'assets/icons/Qt-Framework.svg'),
+    Skill('HTML', 'assets/icons/HTML5.svg'),
+    Skill('CSS', 'assets/icons/css3.svg'),
+  ];
+}
+
+List<Skill> _backendSkill() {
+  return [
+    Skill('Firebase', 'assets/icons/Firebase.svg'),
+    Skill('Dart', 'assets/icons/Dart.svg'),
+    Skill('Python', 'assets/icons/Python.svg'),
+    Skill('Java', 'assets/icons/Java.svg'),
+    Skill('Django', 'assets/icons/Django.svg'),
+    Skill('Django Rest', 'assets/icons/django-rest.svg'),
+    Skill('MySQL', 'assets/icons/MySQl.svg'),
+    Skill('SQLite', 'assets/icons/SQLite.svg'),
+    Skill('Postman', 'assets/icons/Postman.svg'),
+  ];
+}
+
+List<Skill> _otherToolsSkill() {
+  return [
+    Skill('Matplotlib', 'assets/icons/Matplotlib.svg'),
+    Skill('Pandas', 'assets/icons/pandas.svg'),
+    Skill('NumPy', 'assets/icons/NumPy.svg'),
+    Skill('Git', 'assets/icons/Git.svg'),
+    Skill('Github', 'assets/icons/GitHub.svg'),
+    Skill('Github Action', 'assets/icons/github-actions.svg'),
+  ];
+}
+
 final List<SkillCategory> skillCategories = [
   SkillCategory(
     title: 'Frontend',
     icon: Icons.web,
-    skills: [
-      Skill('Flutter', 'assets/icons/Flutter.svg'),
-      Skill('Tkinter', 'assets/icons/Python.svg'),
-      Skill('Qt', 'assets/icons/Qt-Framework.svg'),
-      Skill('HTML', 'assets/icons/HTML5.svg'),
-      Skill('CSS', 'assets/icons/css3.svg'),
-    ],
+    skills: _frontendSkill(),
   ),
   SkillCategory(
     title: 'Backend',
     icon: Icons.storage,
-    skills: [
-      Skill('Firebase', 'assets/icons/Firebase.svg'),
-      Skill('Dart', 'assets/icons/Dart.svg'),
-      Skill('Python', 'assets/icons/Python.svg'),
-      Skill('Java', 'assets/icons/Java.svg'),
-      Skill('Django', 'assets/icons/Django.svg'),
-    ],
+    skills: _backendSkill(),
   ),
   SkillCategory(
     title: 'Other Tools',
     icon: Icons.build,
-    skills: [
-      Skill('Matplotlib', 'assets/icons/Matplotlib.svg'),
-      Skill('Pandas', 'assets/icons/pandas.svg'),
-      Skill('NumPy', 'assets/icons/NumPy.svg'),
-      Skill('Git', 'assets/icons/Git.svg'),
-    ],
+    skills: _otherToolsSkill(),
   ),
 ];

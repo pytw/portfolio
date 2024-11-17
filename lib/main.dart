@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:portfolio_website/screens/home_screen.dart';
-import 'package:portfolio_website/theme/theme.dart';
+import 'constants/theme.dart';
 import 'firebase/firebase_options.dart';
 
 void main() async {
@@ -19,7 +19,6 @@ class PortfolioApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Portfolio - Praveen Yadav',

@@ -1,7 +1,9 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:portfolio_website/constants/app_image.dart';
+import 'package:portfolio_website/constants/app_size.dart';
+import 'package:portfolio_website/constants/app_text.dart';
 import 'package:portfolio_website/widgets/custom_header.dart';
 import 'package:portfolio_website/widgets/simple_custom_button.dart';
 import 'package:portfolio_website/widgets/effect.dart';
@@ -12,19 +14,6 @@ class HeroicSection extends StatelessWidget {
   final GlobalKey<State<StatefulWidget>> heroicKey;
 
   const HeroicSection(this.heroicKey, {super.key});
-
-  // Constants
-  static const double horizontalPadding = 16.0;
-  static const double verticalPadding = 16.0;
-  static const double spacing = 8.0;
-  static const double iconSize = 24.0;
-  static const double largeScreenBreakpoint = 800.0;
-  static const double borderRadius = 8.0;
-
-  // Text Constants
-  static const String heroicImage = 'assets/images/pyapril15.png';
-  static const String placeholderImage = 'assets/images/placeholder.png';
-  static const String profession = 'Aspiring Software & UI/UX Developer';
 
   static const List<Map<String, dynamic>> socialMedia = [
     {
@@ -56,14 +45,16 @@ class HeroicSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: horizontalPadding),
+      padding: const EdgeInsets.symmetric(
+          horizontal: AppSize.horizontalPadding,
+          vertical: AppSize.verticalPadding),
       child: _buildHeroicContent(context),
     );
   }
 
   Widget _buildHeroicContent(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
-    if (screenWidth >= largeScreenBreakpoint) {
+    if (screenWidth >= AppSize.screenBreakPoint) {
       return Row(
         key: heroicKey,
         children: [
@@ -74,7 +65,7 @@ class HeroicSection extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(width: (spacing * 2)),
+          const SizedBox(width: (AppSize.spacing * 2)),
           Flexible(child: _buildHeroicImageContainer(context)),
         ],
       );
@@ -83,7 +74,7 @@ class HeroicSection extends StatelessWidget {
         key: heroicKey,
         children: [
           _buildHeroicImageContainer(context),
-          const SizedBox(height: spacing),
+          const SizedBox(height: AppSize.spacing),
           Center(child: _buildHeroicDetails(context)),
         ],
       );
@@ -96,13 +87,13 @@ Widget _buildHeroicDetails(BuildContext context) {
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       const _BuildWishing(),
-      const SizedBox(height: HeroicSection.spacing),
+      const SizedBox(height: AppSize.spacing),
       _buildWelcome(context),
-      const SizedBox(height: HeroicSection.spacing),
+      const SizedBox(height: AppSize.spacing),
       _buildProfession(context),
-      const SizedBox(height: HeroicSection.spacing * 6),
+      const SizedBox(height: AppSize.spacing * 6),
       _buildActionButtons(context),
-      const SizedBox(height: HeroicSection.spacing * 2),
+      const SizedBox(height: AppSize.spacing * 2),
       _buildSocialIcons(),
     ],
   );
@@ -152,7 +143,7 @@ Widget _buildWelcome(BuildContext context) {
 
 Widget _buildProfession(BuildContext context) {
   return Text(
-    HeroicSection.profession,
+    AppText.profession,
     style: Theme.of(context).textTheme.bodySmall?.copyWith(
           color: Theme.of(context).colorScheme.onSecondary,
         ),
@@ -161,12 +152,12 @@ Widget _buildProfession(BuildContext context) {
 
 Widget _buildActionButtons(BuildContext context) {
   return Wrap(
-    spacing: HeroicSection.spacing * 2,
-    runSpacing: HeroicSection.spacing,
+    spacing: AppSize.spacing * 2,
+    runSpacing: AppSize.spacing,
     alignment: WrapAlignment.center,
     children: [
       Effect(
-        scale: 1.05,
+        scale: 1.1,
         hoverOpacity: 0.9,
         builder: (isHovered, isClick, scale, opacity) => Tooltip(
           message: "Download Resume",
@@ -195,8 +186,8 @@ Widget _buildActionButtons(BuildContext context) {
 
 Widget _buildSocialIcons() {
   return Wrap(
-      spacing: HeroicSection.spacing * 2,
-      runSpacing: HeroicSection.spacing,
+      spacing: AppSize.spacing * 2,
+      runSpacing: AppSize.spacing,
       alignment: WrapAlignment.center,
       children: HeroicSection.socialMedia.map((social) {
         return _buildSocialIconButton(
@@ -206,7 +197,7 @@ Widget _buildSocialIcons() {
 
 Widget _buildSocialIconButton(String name, IconData icon, String url) {
   return Effect(
-    scale: 1.2,
+    scale: 1.1,
     rotationAngle: 0.3,
     builder: (isHovered, isClicked, scale, opacity) => IconButton(
       onPressed: () async {
@@ -224,7 +215,7 @@ Widget _buildSocialIconButton(String name, IconData icon, String url) {
                     : Colors.white
             : Colors.white,
       ),
-      iconSize: HeroicSection.iconSize,
+      iconSize: AppSize.iconSize,
       tooltip: name,
     ),
   );
@@ -235,7 +226,7 @@ void _showDownloadOptions(BuildContext context) {
     context: context,
     builder: (BuildContext context) {
       return ListView(
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.all(AppSize.horizontalPadding),
           shrinkWrap: true,
           children: HeroicSection.downloadLinks.keys.map((format) {
             return _buildDownloadOption(context, format);
@@ -297,7 +288,7 @@ void downloadFileWeb(String url, String fileName) {
 
 Widget _buildHeroicImageContainer(BuildContext context) {
   double screenWidth = MediaQuery.of(context).size.width;
-  bool isLargeScreen = screenWidth >= HeroicSection.largeScreenBreakpoint;
+  bool isLargeScreen = screenWidth >= AppSize.screenBreakPoint;
 
   return StreamBuilder<DateTime>(
     stream: Stream.periodic(const Duration(seconds: 1), (_) => DateTime.now()),
@@ -321,13 +312,12 @@ Widget _buildHeroicImageContainer(BuildContext context) {
           shape: isLargeScreen ? BoxShape.circle : BoxShape.rectangle,
           borderRadius: isLargeScreen
               ? null
-              : BorderRadius.circular(HeroicSection.borderRadius * 2),
+              : BorderRadius.circular(AppSize.borderRadius * 2),
         ),
         child: isLargeScreen
             ? ClipOval(child: _buildImage())
             : ClipRRect(
-                borderRadius:
-                    BorderRadius.circular(HeroicSection.borderRadius * 2),
+                borderRadius: BorderRadius.circular(AppSize.borderRadius * 2),
                 child: _buildImage(),
               ),
       );
@@ -353,10 +343,10 @@ Alignment _calculateGradientCenter(DateTime time) {
 
 Widget _buildImage() {
   return Image.asset(
-    HeroicSection.heroicImage,
+    AppImage.heroicImage,
     fit: BoxFit.contain,
     errorBuilder: (_, __, ___) => Image.asset(
-      HeroicSection.placeholderImage,
+      AppImage.placeholderImage,
       fit: BoxFit.contain,
     ),
   );

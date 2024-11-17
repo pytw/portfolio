@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:portfolio_website/constants/app_image.dart';
+import 'package:portfolio_website/constants/app_size.dart';
+import 'package:portfolio_website/constants/app_text.dart';
 import 'package:portfolio_website/widgets/simple_custom_button.dart';
 import 'package:portfolio_website/widgets/custom_header.dart';
 import 'package:portfolio_website/widgets/effect.dart';
@@ -9,25 +12,6 @@ class ContactSection extends StatelessWidget {
   final GlobalKey contactKey;
 
   const ContactSection(this.contactKey, {super.key});
-
-  // Constants
-  static const double horizontalPadding = 16.0;
-  static const double verticalPadding = 16.0;
-  static const double spacing = 8.0;
-  static const double iconSize = 24.0;
-  static const double screenBreakPoint = 800.0;
-
-  // Text Constants
-  static const String contactImage = 'assets/images/connect.png';
-  static const String email = 'praveen885127@gmail.com';
-
-  static const String introText = """
-I’m excited to connect with you! Whether you have a project in mind, questions about web development, or just want to chat, I’m here to help. Feel free to reach out via email or find me on social media platforms like Instagram, Twitter, and LinkedIn.
-  """;
-
-  static const String contactMeText = """
-For collaboration, insights, or tech discussions, don’t hesitate to reach out through my GitHub or Discord. I value every conversation and look forward to building something amazing together.
-  """;
 
   static const List<Map<String, dynamic>> socialMedia = [
     {
@@ -61,15 +45,14 @@ For collaboration, insights, or tech discussions, don’t hesitate to reach out 
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(
-        horizontal: horizontalPadding,
-        vertical: verticalPadding,
+        horizontal: AppSize.horizontalPadding,
+        vertical: AppSize.verticalPadding,
       ),
       child: Column(
         key: contactKey,
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           _buildContactHeader(context),
-          const SizedBox(height: (spacing * 3)),
+          const SizedBox(height: (AppSize.spacing * 3)),
           _buildContactContent(context),
         ],
       ),
@@ -78,21 +61,19 @@ For collaboration, insights, or tech discussions, don’t hesitate to reach out 
 
   Widget _buildContactContent(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
-    if (screenWidth >= screenBreakPoint) {
+    if (screenWidth >= AppSize.screenBreakPoint) {
       return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           Flexible(child: _buildContactImage()),
-          const SizedBox(width: (spacing * 2)),
+          const SizedBox(width: (AppSize.spacing * 2)),
           Flexible(child: _buildContactDetail(context)),
         ],
       );
     } else {
       return Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           _buildContactImage(),
-          const SizedBox(height: spacing),
+          const SizedBox(height: AppSize.spacing),
           _buildContactDetail(context),
         ],
       );
@@ -116,13 +97,12 @@ Widget _buildContactHeader(BuildContext context) {
 Widget _buildContactImage() {
   return Semantics(
     label: 'Illustration of connecting with others',
-    child: Image.asset(ContactSection.contactImage, fit: BoxFit.contain),
+    child: Image.asset(AppImage.contactImage, fit: BoxFit.contain),
   );
 }
 
 Widget _buildContactDetail(BuildContext context) {
   return Column(
-    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       Text(
@@ -133,9 +113,9 @@ Widget _buildContactDetail(BuildContext context) {
             ),
       ),
       Semantics(
-        label: ContactSection.introText,
+        label: AppText.introText,
         child: Text(
-          ContactSection.introText,
+          AppText.introText,
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 color: Theme.of(context).colorScheme.onSecondary,
                 letterSpacing: 0.8,
@@ -151,9 +131,9 @@ Widget _buildContactDetail(BuildContext context) {
             ),
       ),
       Semantics(
-        label: ContactSection.contactMeText,
+        label: AppText.contactMeText,
         child: Text(
-          ContactSection.contactMeText,
+          AppText.contactMeText,
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 color: Theme.of(context).colorScheme.onSecondary,
                 letterSpacing: 0.8,
@@ -162,7 +142,7 @@ Widget _buildContactDetail(BuildContext context) {
         ),
       ),
       _buildEmailBtn(context),
-      const SizedBox(height: ContactSection.spacing),
+      const SizedBox(height: AppSize.spacing),
       const Align(child: _BuildSocialButton()),
     ],
   );
@@ -173,7 +153,7 @@ Widget _buildEmailBtn(BuildContext context) {
     clickScale: 1.05,
     builder: (isHovered, isClicked, __, ___) => SimpleCustomButton(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      label: ContactSection.email,
+      label: AppText.email,
       textStyle: TextStyle(
           color: isHovered
               ? Theme.of(context).primaryColor
@@ -185,7 +165,7 @@ Widget _buildEmailBtn(BuildContext context) {
       showUnderline: isHovered ? true : false,
       underlineColor: Theme.of(context).primaryColor,
       onPressed: () async {
-        const emailUrl = 'mailto:${ContactSection.email}';
+        const emailUrl = 'mailto:${AppText.email}';
         if (await canLaunchUrlString(emailUrl)) {
           await launchUrlString(emailUrl);
         } else {
@@ -203,8 +183,8 @@ class _BuildSocialButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Wrap(
-      spacing: ContactSection.spacing * 2,
-      runSpacing: ContactSection.spacing,
+      spacing: AppSize.spacing * 2,
+      runSpacing: AppSize.spacing,
       alignment: WrapAlignment.center,
       runAlignment: WrapAlignment.spaceEvenly,
       children: ContactSection.socialMedia.map((social) {
@@ -226,7 +206,6 @@ class _BuildSocialButton extends StatelessWidget {
   ) {
     return Effect(
       scale: 1.1,
-      rotationAngle: 0.3,
       builder: (isHovered, isClicked, scale, opacity) => Tooltip(
         message: name,
         child: SimpleCustomButton(

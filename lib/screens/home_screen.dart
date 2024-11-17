@@ -4,7 +4,7 @@ import 'package:portfolio_website/screens/sections/contact_section.dart';
 import 'package:portfolio_website/screens/sections/footer_section.dart';
 import 'package:portfolio_website/screens/sections/heroic_section.dart';
 import 'package:portfolio_website/screens/sections/project_section.dart';
-import 'package:portfolio_website/screens/sections/skills_section.dart';
+import 'package:portfolio_website/screens/sections/skill_section.dart';
 import 'package:portfolio_website/widgets/navbar.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -18,8 +18,8 @@ class _HomeScreenState extends State<HomeScreen> {
   final ScrollController _scrollController = ScrollController();
   final Map<String, GlobalKey> _sectionKeys = {
     'Home': GlobalKey(),
-    'Projects': GlobalKey(),
-    'Skills': GlobalKey(),
+    'Project': GlobalKey(),
+    'Skill': GlobalKey(),
     'About': GlobalKey(),
     'Contact': GlobalKey(),
   };
@@ -109,25 +109,16 @@ class _HomeScreenState extends State<HomeScreen> {
               padding: EdgeInsets.symmetric(horizontal: padding),
               child: Column(
                 children: [
-                  ConstrainedBox(
-                      constraints: BoxConstraints(minHeight: size.height * 0.7),
-                      child: HeroicSection(_sectionKeys['Home']!)),
-                  const SizedBox(height: 32),
-                  ConstrainedBox(
-                      constraints: BoxConstraints(minHeight: size.height * 0.8),
-                      child: ProjectSection(_sectionKeys['Projects']!)),
-                  const SizedBox(height: 32),
-                  SkillsSection(_sectionKeys['Skills']!),
-                  const SizedBox(height: 32),
-                  ConstrainedBox(
-                      constraints: BoxConstraints(minHeight: size.height * 0.8),
-                      child: AboutSection(_sectionKeys['About']!)),
-                  const SizedBox(height: 32),
-                  ConstrainedBox(
-                      constraints: BoxConstraints(minHeight: size.height * 0.8),
-                      child: ContactSection(_sectionKeys['Contact']!),
-                  ),
-                  const SizedBox(height: 32),
+                  HeroicSection(_sectionKeys['Home']!),
+                  const SizedBox(height: 36),
+                  ProjectSection(_sectionKeys['Project']!),
+                  const SizedBox(height: 36),
+                  SkillsSection(_sectionKeys['Skill']!),
+                  const SizedBox(height: 36),
+                  AboutSection(_sectionKeys['About']!),
+                  const SizedBox(height: 36),
+                  ContactSection(_sectionKeys['Contact']!),
+                  const SizedBox(height: 36),
                   const FooterSection(),
                 ],
               ),

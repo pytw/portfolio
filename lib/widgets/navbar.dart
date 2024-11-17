@@ -25,8 +25,8 @@ class _NavbarState extends State<Navbar> {
   String hoveredSection = '';
   final Map<String, GlobalKey> keys = {
     'Home': GlobalKey(),
-    'Projects': GlobalKey(),
-    'Skills': GlobalKey(),
+    'Project': GlobalKey(),
+    'Skill': GlobalKey(),
     'About': GlobalKey(),
     'Contact': GlobalKey(),
   };
@@ -34,8 +34,8 @@ class _NavbarState extends State<Navbar> {
 
   final List<Map<String, dynamic>> sections = [
     {'label': 'Home', 'icon': Icons.home},
-    {'label': 'Projects', 'icon': Icons.work},
-    {'label': 'Skills', 'icon': Icons.code},
+    {'label': 'Project', 'icon': Icons.work},
+    {'label': 'Skill', 'icon': Icons.code},
     {'label': 'About', 'icon': Icons.person},
     {'label': 'Contact', 'icon': Icons.contact_mail},
   ];
