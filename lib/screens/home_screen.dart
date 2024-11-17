@@ -113,7 +113,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   const SizedBox(height: 36),
                   ProjectSection(_sectionKeys['Project']!),
                   const SizedBox(height: 36),
-                  SkillsSection(_sectionKeys['Skill']!),
+                  SkillSection(_sectionKeys['Skill']!),
                   const SizedBox(height: 36),
                   AboutSection(_sectionKeys['About']!),
                   const SizedBox(height: 36),

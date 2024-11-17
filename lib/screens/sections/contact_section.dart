@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:portfolio_website/animations/custom_animation.dart';
 import 'package:portfolio_website/constants/app_image.dart';
 import 'package:portfolio_website/constants/app_size.dart';
 import 'package:portfolio_website/constants/app_text.dart';
@@ -97,54 +98,60 @@ Widget _buildContactHeader(BuildContext context) {
 Widget _buildContactImage() {
   return Semantics(
     label: 'Illustration of connecting with others',
-    child: Image.asset(AppImage.contactImage, fit: BoxFit.contain),
+    child: CustomAnimation(
+      begin: const Offset(-0.1, 0),
+      child: Image.asset(AppImage.contactImage, fit: BoxFit.contain),
+    ),
   );
 }
 
 Widget _buildContactDetail(BuildContext context) {
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Text(
-        "Get in Touch!",
-        style: Theme.of(context).textTheme.titleMedium?.copyWith(
-              color: Theme.of(context).colorScheme.onPrimary,
-              fontWeight: FontWeight.bold,
-            ),
-      ),
-      Semantics(
-        label: AppText.introText,
-        child: Text(
-          AppText.introText,
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: Theme.of(context).colorScheme.onSecondary,
-                letterSpacing: 0.8,
-                height: 2.5,
+  return CustomAnimation(
+    begin: const Offset(0.1, 0),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          "Get in Touch!",
+          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                color: Theme.of(context).colorScheme.onPrimary,
+                fontWeight: FontWeight.bold,
               ),
         ),
-      ),
-      Text(
-        "Contact with Me:",
-        style: Theme.of(context).textTheme.titleMedium?.copyWith(
-              color: Theme.of(context).colorScheme.onPrimary,
-              fontWeight: FontWeight.bold,
-            ),
-      ),
-      Semantics(
-        label: AppText.contactMeText,
-        child: Text(
-          AppText.contactMeText,
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: Theme.of(context).colorScheme.onSecondary,
-                letterSpacing: 0.8,
-                height: 2.5,
+        Semantics(
+          label: AppText.introText,
+          child: Text(
+            AppText.introText,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: Theme.of(context).colorScheme.onSecondary,
+                  letterSpacing: 0.8,
+                  height: 2.5,
+                ),
+          ),
+        ),
+        Text(
+          "Contact with Me:",
+          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                color: Theme.of(context).colorScheme.onPrimary,
+                fontWeight: FontWeight.bold,
               ),
         ),
-      ),
-      _buildEmailBtn(context),
-      const SizedBox(height: AppSize.spacing),
-      const Align(child: _BuildSocialButton()),
-    ],
+        Semantics(
+          label: AppText.contactMeText,
+          child: Text(
+            AppText.contactMeText,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: Theme.of(context).colorScheme.onSecondary,
+                  letterSpacing: 0.8,
+                  height: 2.5,
+                ),
+          ),
+        ),
+        _buildEmailBtn(context),
+        const SizedBox(height: AppSize.spacing),
+        const Align(child: _BuildSocialButton()),
+      ],
+    ),
   );
 }
 

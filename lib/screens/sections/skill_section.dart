@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:portfolio_website/animations/custom_animation.dart';
 import 'package:portfolio_website/constants/app_size.dart';
 import 'package:portfolio_website/widgets/custom_header.dart';
+import 'package:portfolio_website/widgets/effect.dart';
 
-class SkillsSection extends StatelessWidget {
+class SkillSection extends StatelessWidget {
   final GlobalKey skillSectionKey;
 
-  const SkillsSection(this.skillSectionKey, {super.key});
+  const SkillSection(this.skillSectionKey, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +62,14 @@ Widget _buildHorizontalSkillCategories(
         return Expanded(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: AppSize.spacing),
-            child: _buildSkillCategoryCard(context, category),
+            child: CustomAnimation(
+              begin: category.title == 'Frontend'
+                  ? const Offset(-0.1, 0)
+                  : category.title == 'Backend'
+                      ? const Offset(0, -0.1)
+                      : const Offset(0.1, 0),
+              child: _buildSkillCategoryCard(context, category),
+            ),
           ),
         );
       }).toList(),
@@ -79,34 +88,42 @@ Widget _buildVerticalSkillCategories(
     children: categories.map((category) {
       return ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 350),
-        child: _buildSkillCategoryCard(context, category),
+        child: CustomAnimation(
+          begin: category.title == 'Backend'
+              ? const Offset(0.1, 0)
+              : const Offset(-0.1, 0),
+          child: _buildSkillCategoryCard(context, category),
+        ),
       );
     }).toList(),
   );
 }
 
 Widget _buildSkillCategoryCard(BuildContext context, SkillCategory category) {
-  return Container(
-    padding: const EdgeInsets.all(AppSize.spacing * 2),
-    decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(AppSize.borderRadius * 2),
-      color: Colors.black.withOpacity(0.7),
-      border: Border.all(color: Theme.of(context).primaryColor),
-      boxShadow: [
-        BoxShadow(
-          color: Colors.blue.withOpacity(0.5),
-          blurRadius: 10,
-          offset: const Offset(0, 5),
-        ),
-      ],
-    ),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _buildSkillCategoryHeader(context, category),
-        const SizedBox(height: AppSize.spacing * 2),
-        _buildSkillList(context, category.skills),
-      ],
+  return Effect(
+    scale: 1.05,
+    builder: (_, __, ___, ____) => Container(
+      padding: const EdgeInsets.all(AppSize.spacing * 2),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(AppSize.borderRadius * 2),
+        color: Colors.black.withOpacity(0.7),
+        border: Border.all(color: Theme.of(context).primaryColor),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.blue.withOpacity(0.5),
+            blurRadius: 10,
+            offset: const Offset(0, 5),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildSkillCategoryHeader(context, category),
+          const SizedBox(height: AppSize.spacing * 2),
+          _buildSkillList(context, category.skills),
+        ],
+      ),
     ),
   );
 }

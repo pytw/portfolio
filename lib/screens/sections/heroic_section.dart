@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:portfolio_website/animations/custom_animation.dart';
 import 'package:portfolio_website/constants/app_image.dart';
 import 'package:portfolio_website/constants/app_size.dart';
 import 'package:portfolio_website/constants/app_text.dart';
@@ -83,19 +84,22 @@ class HeroicSection extends StatelessWidget {
 }
 
 Widget _buildHeroicDetails(BuildContext context) {
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      const _BuildWishing(),
-      const SizedBox(height: AppSize.spacing),
-      _buildWelcome(context),
-      const SizedBox(height: AppSize.spacing),
-      _buildProfession(context),
-      const SizedBox(height: AppSize.spacing * 6),
-      _buildActionButtons(context),
-      const SizedBox(height: AppSize.spacing * 2),
-      _buildSocialIcons(),
-    ],
+  return CustomAnimation(
+    begin: const Offset(-0.1, 0),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const _BuildWishing(),
+        const SizedBox(height: AppSize.spacing),
+        _buildWelcome(context),
+        const SizedBox(height: AppSize.spacing),
+        _buildProfession(context),
+        const SizedBox(height: AppSize.spacing * 6),
+        _buildActionButtons(context),
+        const SizedBox(height: AppSize.spacing * 2),
+        _buildSocialIcons(),
+      ],
+    ),
   );
 }
 
@@ -296,30 +300,33 @@ Widget _buildHeroicImageContainer(BuildContext context) {
       final currentTime = snapshot.data ?? DateTime.now();
       final gradientCenter = _calculateGradientCenter(currentTime);
 
-      return Container(
-        width: isLargeScreen ? screenWidth * 0.3 : double.infinity,
-        height: isLargeScreen ? screenWidth * 0.3 : screenWidth * 0.6,
-        decoration: BoxDecoration(
-          gradient: RadialGradient(
-            colors: [
-              Colors.yellow.shade400,
-              Colors.black,
-            ],
-            stops: const [0.0, 1.0],
-            center: gradientCenter,
-            radius: 1.0,
+      return CustomAnimation(
+        begin: const Offset(0.1, 0),
+        child: Container(
+          width: isLargeScreen ? screenWidth * 0.3 : double.infinity,
+          height: isLargeScreen ? screenWidth * 0.3 : screenWidth * 0.6,
+          decoration: BoxDecoration(
+            gradient: RadialGradient(
+              colors: [
+                Colors.yellow.shade400,
+                Colors.black,
+              ],
+              stops: const [0.0, 1.0],
+              center: gradientCenter,
+              radius: 1.0,
+            ),
+            shape: isLargeScreen ? BoxShape.circle : BoxShape.rectangle,
+            borderRadius: isLargeScreen
+                ? null
+                : BorderRadius.circular(AppSize.borderRadius * 2),
           ),
-          shape: isLargeScreen ? BoxShape.circle : BoxShape.rectangle,
-          borderRadius: isLargeScreen
-              ? null
-              : BorderRadius.circular(AppSize.borderRadius * 2),
+          child: isLargeScreen
+              ? ClipOval(child: _buildImage())
+              : ClipRRect(
+                  borderRadius: BorderRadius.circular(AppSize.borderRadius * 2),
+                  child: _buildImage(),
+                ),
         ),
-        child: isLargeScreen
-            ? ClipOval(child: _buildImage())
-            : ClipRRect(
-                borderRadius: BorderRadius.circular(AppSize.borderRadius * 2),
-                child: _buildImage(),
-              ),
       );
     },
   );
@@ -342,12 +349,15 @@ Alignment _calculateGradientCenter(DateTime time) {
 }
 
 Widget _buildImage() {
-  return Image.asset(
-    AppImage.heroicImage,
-    fit: BoxFit.contain,
-    errorBuilder: (_, __, ___) => Image.asset(
-      AppImage.placeholderImage,
+  return Effect(
+    scale: 1.05,
+    builder: (_, __, ___, ____) => Image.asset(
+      AppImage.heroicImage,
       fit: BoxFit.contain,
+      errorBuilder: (_, __, ___) => Image.asset(
+        AppImage.placeholderImage,
+        fit: BoxFit.contain,
+      ),
     ),
   );
 }

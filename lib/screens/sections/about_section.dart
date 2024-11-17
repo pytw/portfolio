@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:portfolio_website/animations/custom_animation.dart';
 import 'package:portfolio_website/constants/app_image.dart';
 import 'package:portfolio_website/constants/app_size.dart';
 import 'package:portfolio_website/constants/app_text.dart';
@@ -68,20 +69,26 @@ Widget _buildAboutHeader(BuildContext context) {
 
 Widget _buildAboutMeImage() {
   return Semantics(
-      label: 'Illustration representing personal development',
-      child: Image.asset(AppImage.aboutImage, fit: BoxFit.contain));
+    label: 'Illustration representing personal development',
+    child: CustomAnimation(
+        begin: const Offset(0.1, 0),
+        child: Image.asset(AppImage.aboutImage, fit: BoxFit.contain)),
+  );
 }
 
 Widget _buildAboutMeText(BuildContext context) {
   return Semantics(
     label: 'About me section containing personal details',
-    child: Text(
-      AppText.aboutMeText,
-      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-            color: Theme.of(context).colorScheme.onSecondary,
-            letterSpacing: 0.8,
-            height: 2.5,
-          ),
+    child: CustomAnimation(
+      begin: const Offset(-0.1, 0),
+      child: Text(
+        AppText.aboutMeText,
+        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: Theme.of(context).colorScheme.onSecondary,
+              letterSpacing: 0.8,
+              height: 2.5,
+            ),
+      ),
     ),
   );
 }
