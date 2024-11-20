@@ -28,6 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   String _activeSection = 'Home';
   bool _isAutoScrolling = false;
+  final ValueNotifier<bool> _isScrolling = ValueNotifier<bool>(false);
 
   static const double mediumScreenBreakPoint = 768.0;
   static const double smallScreenBreakPoint = 600.0;
@@ -49,6 +50,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
     setState(() => _activeSection = section);
 
+    if (!_isScrolling.value) _isScrolling.value = true;
+
     final keyContext = _sectionKeys[section]?.currentContext;
     if (keyContext != null) {
       _isAutoScrolling = true;
@@ -58,10 +61,16 @@ class _HomeScreenState extends State<HomeScreen> {
         curve: Curves.easeInOut,
       ).then((_) => _isAutoScrolling = false);
     }
+
+    Future.delayed(const Duration(milliseconds: 800), () {
+      _isScrolling.value = false;
+    });
   }
 
   void _onScroll() {
     if (_isAutoScrolling) return;
+
+    if (!_isScrolling.value) _isScrolling.value = true;
 
     for (var entry in _sectionKeys.entries) {
       final context = entry.value.currentContext;
@@ -76,6 +85,10 @@ class _HomeScreenState extends State<HomeScreen> {
         }
       }
     }
+
+    Future.delayed(const Duration(milliseconds: 200), () {
+      _isScrolling.value = false;
+    });
   }
 
   double _calculatePadding(double width) {
@@ -96,14 +109,23 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         body: Stack(
           children: [
-            const Positioned.fill(
-              child: VideoBackground(videoPath: "assets/videos/background.mp4"),
+            Positioned.fill(
+              child: ValueListenableBuilder<bool>(
+                valueListenable: _isScrolling,
+                builder: (context, isScrolling, child) {
+                  return VideoBackground(
+                    videoPath: "assets/videos/background.mp4",
+                    play: isScrolling,
+                  );
+                },
+              ),
             ),
             Scrollbar(
               controller: _scrollController,
               thumbVisibility: true,
               child: SingleChildScrollView(
                 controller: _scrollController,
+                physics: const BouncingScrollPhysics(),
                 padding: EdgeInsets.symmetric(horizontal: padding),
                 child: Column(
                   children: [
@@ -136,10 +158,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
 class VideoBackground extends StatefulWidget {
   final String videoPath;
+  final bool play;
 
   const VideoBackground({
     super.key,
     required this.videoPath,
+    required this.play,
   });
 
   @override
@@ -156,9 +180,19 @@ class _VideoBackgroundState extends State<VideoBackground> {
       ..setLooping(true)
       ..setVolume(0)
       ..initialize().then((_) {
+        if (widget.play) _videoController.play();
         setState(() {});
-        _videoController.play();
       });
+  }
+
+  @override
+  void didUpdateWidget(covariant VideoBackground oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.play) {
+      _videoController.play();
+    } else {
+      _videoController.pause();
+    }
   }
 
   @override
