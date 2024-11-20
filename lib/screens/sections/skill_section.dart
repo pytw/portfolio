@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:portfolio_website/animations/custom_animation.dart';
 import 'package:portfolio_website/constants/app_size.dart';
 import 'package:portfolio_website/widgets/custom_header.dart';
 import 'package:portfolio_website/widgets/effect.dart';
 
 class SkillSection extends StatelessWidget {
-  final GlobalKey skillSectionKey;
-
-  const SkillSection(this.skillSectionKey, {super.key});
+  const SkillSection({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +15,6 @@ class SkillSection extends StatelessWidget {
         vertical: AppSize.verticalPadding,
       ),
       child: Column(
-        key: skillSectionKey,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           _buildSkillHeader(context),
@@ -62,14 +58,7 @@ Widget _buildHorizontalSkillCategories(
         return Expanded(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: AppSize.spacing),
-            child: CustomAnimation(
-              begin: category.title == 'Frontend'
-                  ? const Offset(-0.1, 0)
-                  : category.title == 'Backend'
-                      ? const Offset(0, -0.1)
-                      : const Offset(0.1, 0),
-              child: _buildSkillCategoryCard(context, category),
-            ),
+            child: _buildSkillCategoryCard(context, category),
           ),
         );
       }).toList(),
@@ -88,12 +77,7 @@ Widget _buildVerticalSkillCategories(
     children: categories.map((category) {
       return ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 350),
-        child: CustomAnimation(
-          begin: category.title == 'Backend'
-              ? const Offset(0.1, 0)
-              : const Offset(-0.1, 0),
-          child: _buildSkillCategoryCard(context, category),
-        ),
+        child: _buildSkillCategoryCard(context, category),
       );
     }).toList(),
   );

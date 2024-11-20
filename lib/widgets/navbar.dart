@@ -1,38 +1,19 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 
-class Navbar extends StatefulWidget implements PreferredSizeWidget {
+class Navbar extends StatelessWidget implements PreferredSizeWidget {
   final Function(String section) onSectionSelected;
   final String activeSection;
 
-  const Navbar({
+  Navbar({
     super.key,
     required this.onSectionSelected,
     required this.activeSection,
   });
 
-  @override
-  State<Navbar> createState() => _NavbarState();
-
-  @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
-}
-
-class _NavbarState extends State<Navbar> {
   static const double mediumScreenBreakPoint = 768.0;
   static const double smallScreenBreakPoint = 600.0;
 
-  String hoveredSection = '';
-  final Map<String, GlobalKey> keys = {
-    'Home': GlobalKey(),
-    'Project': GlobalKey(),
-    'Skill': GlobalKey(),
-    'About': GlobalKey(),
-    'Contact': GlobalKey(),
-  };
-  final Map<String, double> widths = {};
-
-  final List<Map<String, dynamic>> sections = [
+  final List<Map<String, dynamic>> _sections = [
     {'label': 'Home', 'icon': Icons.home},
     {'label': 'Project', 'icon': Icons.work},
     {'label': 'Skill', 'icon': Icons.code},
@@ -40,184 +21,49 @@ class _NavbarState extends State<Navbar> {
     {'label': 'Contact', 'icon': Icons.contact_mail},
   ];
 
-  Timer? debounceTimer;
-
-  static const Color activeColor = Colors.blue;
-  static const Color inactiveColor = Colors.white;
-  static const TextStyle desktopTextStyle = TextStyle(
-    color: inactiveColor,
-    fontSize: 18,
-    fontWeight: FontWeight.normal,
-  );
-  static const TextStyle tabletTextStyle = TextStyle(
-    color: inactiveColor,
-    fontSize: 16,
-    fontWeight: FontWeight.normal,
-  );
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance
-        .addPostFrameCallback((_) => _measureButton(widget.activeSection));
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-
-    double padding;
-    if (size.width < smallScreenBreakPoint) {
-      padding = size.width * 0.005;
-    } else if (size.width < mediumScreenBreakPoint) {
-      padding = size.width * 0.01;
-    } else {
-      padding = size.width * 0.08;
-    }
-
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: padding),
-      child: AppBar(
-        elevation: 0,
-        title: LayoutBuilder(
-          builder: (context, constraints) {
-            if (constraints.maxWidth < smallScreenBreakPoint) {
-              return _buildMobileNav();
-            } else if (constraints.maxWidth < mediumScreenBreakPoint) {
-              return _buildTabletNav();
-            } else {
-              return _buildDesktopNav();
-            }
-          },
+  Widget _buildLogo() => const Padding(
+        padding: EdgeInsets.symmetric(horizontal: 12.0),
+        child: Text(
+          'PY',
+          style: TextStyle(
+            color: Colors.blue,
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+          ),
         ),
-      ),
-    );
-  }
+      );
 
-  Widget _buildMobileNav() {
-    return Row(
-      children: [
-        _buildLogo(),
-        const Spacer(),
-        PopupMenuButton<String>(
-          icon: const Icon(Icons.menu, color: inactiveColor),
-          onSelected: (value) => widget.onSectionSelected(value),
-          itemBuilder: (context) => _buildMenuItems(),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildTabletNav() {
-    return Row(
-      children: [
-        _buildLogo(),
-        const Spacer(),
-        ...sections.map((section) => _buildNavItem(
-              section['icon'] as IconData,
-              section['label'] as String,
-              isTablet: true,
-            )),
-      ],
-    );
-  }
-
-  Widget _buildDesktopNav() {
-    return Row(
-      children: [
-        _buildLogo(),
-        const Spacer(),
-        ...sections.map((section) => _buildNavItem(
-              section['icon'] as IconData,
-              section['label'] as String,
-            )),
-      ],
-    );
-  }
-
-  Widget _buildLogo() {
-    return const Padding(
-      padding: EdgeInsets.symmetric(horizontal: 12.0),
-      child: Text(
-        'PY',
-        style: TextStyle(
-          color: activeColor,
-          fontSize: 24,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-    );
-  }
-
-  List<PopupMenuEntry<String>> _buildMenuItems() {
-    return sections
-        .map((section) => PopupMenuItem<String>(
-              value: section['label'] as String,
-              child: Text(section['label'] as String),
-            ))
-        .toList();
-  }
-
-  Widget _buildNavItem(IconData icon, String label, {bool isTablet = false}) {
-    bool isActive = widget.activeSection == label;
-    bool isHovered = hoveredSection == label;
-
-    return Tooltip(
-      message: label,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12.0),
-        child: InkWell(
-          key: keys[label],
-          splashColor: Colors.transparent,
-          highlightColor: Colors.transparent,
-          onTap: () {
-            widget.onSectionSelected(label);
-            _measureButton(label);
-          },
-          onHover: (hovering) {
-            setState(() {
-              hoveredSection = hovering ? label : '';
-              if (hovering) _measureButton(label);
-            });
-          },
-          child: Column(
+  Widget _buildNavItem({
+    required String label,
+    required IconData icon,
+    required bool isActive,
+    required bool isHovered,
+    required bool isTablet,
+  }) {
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        onTap: () => onSectionSelected(label),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12.0),
+          child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    icon,
-                    color: isActive || isHovered ? activeColor : inactiveColor,
-                    size: isTablet ? 18 : 24,
+              Icon(
+                icon,
+                color: Colors.blue,
+                size: isTablet ? 20 : 24,
+              ),
+              if (!isTablet) const SizedBox(width: 6),
+              if (!isTablet)
+                Text(
+                  label,
+                  style: TextStyle(
+                    color: isHovered || isActive ? Colors.blue : Colors.white,
+                    fontSize: isTablet ? 16 : 18,
+                    fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
                   ),
-                  if (!isTablet) const SizedBox(width: 4),
-                  if (!isTablet)
-                    Text(
-                      label,
-                      style: isTablet
-                          ? tabletTextStyle.copyWith(
-                              color: isActive ? activeColor : inactiveColor,
-                              fontWeight: isActive
-                                  ? FontWeight.bold
-                                  : FontWeight.normal,
-                            )
-                          : desktopTextStyle.copyWith(
-                              color: isActive ? activeColor : inactiveColor,
-                              fontWeight: isActive
-                                  ? FontWeight.bold
-                                  : FontWeight.normal,
-                            ),
-                    ),
-                ],
-              ),
-              const SizedBox(height: 4),
-              AnimatedContainer(
-                duration: const Duration(milliseconds: 300),
-                height: 2,
-                width: (isActive || isHovered) ? widths[label] ?? 0.0 : 0,
-                color: activeColor,
-              ),
+                ),
             ],
           ),
         ),
@@ -225,16 +71,63 @@ class _NavbarState extends State<Navbar> {
     );
   }
 
-  void _measureButton(String label) {
-    debounceTimer?.cancel();
-    debounceTimer = Timer(const Duration(milliseconds: 50), () {
-      final keyContext = keys[label]?.currentContext;
-      if (keyContext != null) {
-        final box = keyContext.findRenderObject() as RenderBox;
-        setState(() {
-          widths[label] = box.size.width;
-        });
-      }
-    });
+  @override
+  Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    final bool isTablet = width < mediumScreenBreakPoint;
+    final bool isSmallScreen = width < smallScreenBreakPoint;
+
+    return AppBar(
+      elevation: 0,
+      backgroundColor: Colors.black,
+      title: Row(
+        children: [
+          _buildLogo(),
+          const Spacer(),
+          if (isSmallScreen)
+            PopupMenuButton<String>(
+              icon: const Icon(Icons.menu, color: Colors.blue),
+              onSelected: onSectionSelected,
+              itemBuilder: (_) => _sections
+                  .map(
+                    (section) => PopupMenuItem<String>(
+                      value: section['label'] as String,
+                      child: Text(
+                        section['label'] as String,
+                        style: const TextStyle(color: Colors.black),
+                      ),
+                    ),
+                  )
+                  .toList(),
+            )
+          else
+            Row(
+              children: _sections.map((section) {
+                final String label = section['label'] as String;
+                return StatefulBuilder(
+                  builder: (context, setState) {
+                    bool isHovered = false;
+                    return MouseRegion(
+                      cursor: SystemMouseCursors.click,
+                      onEnter: (_) => setState(() => isHovered = true),
+                      onExit: (_) => setState(() => isHovered = false),
+                      child: _buildNavItem(
+                        label: label,
+                        icon: section['icon'] as IconData,
+                        isActive: activeSection == label,
+                        isHovered: isHovered,
+                        isTablet: isTablet,
+                      ),
+                    );
+                  },
+                );
+              }).toList(),
+            ),
+        ],
+      ),
+    );
   }
+
+  @override
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }

@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:portfolio_website/animations/custom_animation.dart';
 import 'package:portfolio_website/constants/app_size.dart';
 import 'package:portfolio_website/widgets/custom_header.dart';
 import 'package:portfolio_website/widgets/simple_custom_button.dart';
 import 'package:portfolio_website/widgets/effect.dart';
 
 class ProjectSection extends StatelessWidget {
-  final GlobalKey projectKey;
-
-  const ProjectSection(this.projectKey, {super.key});
+  const ProjectSection({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +16,6 @@ class ProjectSection extends StatelessWidget {
         vertical: AppSize.verticalPadding,
       ),
       child: Column(
-        key: projectKey,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           _buildProjectHeader(context),
@@ -75,51 +71,45 @@ Widget _buildProjectHeader(BuildContext context) {
 }
 
 Widget _buildProjectImage(String imagePath) {
-  return CustomAnimation(
-    begin: const Offset(-0.1, 0),
-    child: Effect(
-      scale: 1.03,
-      hoverOpacity: 0.8,
-      fadeOnHover: true,
-      builder: (isHovered, isClicked, scale, opacity) {
-        return Image.asset(imagePath, fit: BoxFit.contain);
-      },
-    ),
+  return Effect(
+    scale: 1.03,
+    hoverOpacity: 0.8,
+    fadeOnHover: true,
+    builder: (isHovered, isClicked, scale, opacity) {
+      return Image.asset(imagePath, fit: BoxFit.contain);
+    },
   );
 }
 
 Widget _buildProjectDetail(BuildContext context, _ProjectDetail project) {
-  return CustomAnimation(
-    begin: const Offset(0.1, 0),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Text(
-          project.title,
-          style: Theme.of(context).textTheme.titleLarge?.copyWith(
-              color: Theme.of(context).colorScheme.onPrimary,
-              fontWeight: FontWeight.bold),
-        ),
-        const SizedBox(height: AppSize.spacing),
-        Text(
-          project.overview,
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: Theme.of(context).colorScheme.onSecondary,
-                letterSpacing: 0.8,
-                height: 2.5,
-              ),
-        ),
-        const SizedBox(height: AppSize.spacing),
-        Wrap(
-          spacing: AppSize.spacing * 2,
-          alignment: WrapAlignment.spaceEvenly,
-          runSpacing: AppSize.spacing,
-          runAlignment: WrapAlignment.spaceEvenly,
-          children:
-              project.skills.map((skill) => _buildSkillChip(skill)).toList(),
-        ),
-      ],
-    ),
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.center,
+    children: [
+      Text(
+        project.title,
+        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+            color: Theme.of(context).colorScheme.onPrimary,
+            fontWeight: FontWeight.bold),
+      ),
+      const SizedBox(height: AppSize.spacing),
+      Text(
+        project.overview,
+        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: Theme.of(context).colorScheme.onSecondary,
+              letterSpacing: 0.8,
+              height: 2.5,
+            ),
+      ),
+      const SizedBox(height: AppSize.spacing),
+      Wrap(
+        spacing: AppSize.spacing * 2,
+        alignment: WrapAlignment.spaceEvenly,
+        runSpacing: AppSize.spacing,
+        runAlignment: WrapAlignment.spaceEvenly,
+        children:
+            project.skills.map((skill) => _buildSkillChip(skill)).toList(),
+      ),
+    ],
   );
 }
 

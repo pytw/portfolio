@@ -1,7 +1,7 @@
+import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:portfolio_website/animations/custom_animation.dart';
 import 'package:portfolio_website/constants/app_image.dart';
 import 'package:portfolio_website/constants/app_size.dart';
 import 'package:portfolio_website/constants/app_text.dart';
@@ -12,9 +12,7 @@ import 'package:url_launcher/url_launcher_string.dart';
 import 'dart:html' as html;
 
 class HeroicSection extends StatelessWidget {
-  final GlobalKey<State<StatefulWidget>> heroicKey;
-
-  const HeroicSection(this.heroicKey, {super.key});
+  const HeroicSection({super.key});
 
   static const List<Map<String, dynamic>> socialMedia = [
     {
@@ -57,7 +55,6 @@ class HeroicSection extends StatelessWidget {
     double screenWidth = MediaQuery.of(context).size.width;
     if (screenWidth >= AppSize.screenBreakPoint) {
       return Row(
-        key: heroicKey,
         children: [
           Flexible(
             child: Row(
@@ -67,14 +64,13 @@ class HeroicSection extends StatelessWidget {
             ),
           ),
           const SizedBox(width: (AppSize.spacing * 2)),
-          Flexible(child: _buildHeroicImageContainer(context)),
+          const Flexible(child: HeroicImageContainer()),
         ],
       );
     } else {
       return Column(
-        key: heroicKey,
         children: [
-          _buildHeroicImageContainer(context),
+          const HeroicImageContainer(),
           const SizedBox(height: AppSize.spacing),
           Center(child: _buildHeroicDetails(context)),
         ],
@@ -84,22 +80,19 @@ class HeroicSection extends StatelessWidget {
 }
 
 Widget _buildHeroicDetails(BuildContext context) {
-  return CustomAnimation(
-    begin: const Offset(-0.1, 0),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const _BuildWishing(),
-        const SizedBox(height: AppSize.spacing),
-        _buildWelcome(context),
-        const SizedBox(height: AppSize.spacing),
-        _buildProfession(context),
-        const SizedBox(height: AppSize.spacing * 6),
-        _buildActionButtons(context),
-        const SizedBox(height: AppSize.spacing * 2),
-        _buildSocialIcons(),
-      ],
-    ),
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      const _BuildWishing(),
+      const SizedBox(height: AppSize.spacing),
+      _buildWelcome(context),
+      const SizedBox(height: AppSize.spacing),
+      _buildProfession(context),
+      const SizedBox(height: AppSize.spacing * 6),
+      _buildActionButtons(context),
+      const SizedBox(height: AppSize.spacing * 2),
+      _buildSocialIcons(),
+    ],
   );
 }
 
@@ -290,74 +283,103 @@ void downloadFileWeb(String url, String fileName) {
   anchorElement.click();
 }
 
-Widget _buildHeroicImageContainer(BuildContext context) {
-  double screenWidth = MediaQuery.of(context).size.width;
-  bool isLargeScreen = screenWidth >= AppSize.screenBreakPoint;
+class HeroicImageContainer extends StatefulWidget {
+  const HeroicImageContainer({super.key});
 
-  return StreamBuilder<DateTime>(
-    stream: Stream.periodic(const Duration(seconds: 1), (_) => DateTime.now()),
-    builder: (context, snapshot) {
-      final currentTime = snapshot.data ?? DateTime.now();
-      final gradientCenter = _calculateGradientCenter(currentTime);
+  @override
+  State<HeroicImageContainer> createState() => _HeroicImageContainerState();
+}
 
-      return CustomAnimation(
-        begin: const Offset(0.1, 0),
-        child: Container(
-          width: isLargeScreen ? screenWidth * 0.3 : double.infinity,
-          height: isLargeScreen ? screenWidth * 0.3 : screenWidth * 0.6,
-          decoration: BoxDecoration(
-            gradient: RadialGradient(
-              colors: [
-                Colors.yellow.shade400,
-                Colors.black,
-              ],
-              stops: const [0.0, 1.0],
-              center: gradientCenter,
-              radius: 1.0,
-            ),
-            shape: isLargeScreen ? BoxShape.circle : BoxShape.rectangle,
-            borderRadius: isLargeScreen
-                ? null
-                : BorderRadius.circular(AppSize.borderRadius * 2),
-          ),
-          child: isLargeScreen
-              ? ClipOval(child: _buildImage())
-              : ClipRRect(
-                  borderRadius: BorderRadius.circular(AppSize.borderRadius * 2),
-                  child: _buildImage(),
-                ),
+class _HeroicImageContainerState extends State<HeroicImageContainer> {
+  late DateTime currentTime;
+  late Timer _timer;
+
+  @override
+  void initState() {
+    super.initState();
+    currentTime = DateTime.now();
+    _timer = Timer.periodic(const Duration(seconds: 1), _onTimerTick);
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
+
+  void _onTimerTick(Timer timer) {
+    setState(() {
+      currentTime = DateTime.now();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    bool isLargeScreen = screenWidth >= AppSize.screenBreakPoint;
+    final gradientCenter = _calculateGradientCenter(currentTime);
+
+    return Container(
+      width: isLargeScreen ? screenWidth * 0.3 : double.infinity,
+      height: isLargeScreen ? screenWidth * 0.3 : screenWidth * 0.6,
+      decoration: BoxDecoration(
+        gradient: RadialGradient(
+          colors: [
+            Colors.yellow.shade800,
+            Colors.yellow.shade600,
+            Colors.yellow.shade400,
+            Colors.yellow.shade200,
+            Colors.yellow.shade100,
+            Colors.yellow.shade50,
+          ],
+          stops: const [0.1, 0.2, 0.4, 0.6, 0.8, 1],
+          center: gradientCenter,
+          radius: 1,
         ),
-      );
-    },
-  );
-}
-
-Alignment _calculateGradientCenter(DateTime time) {
-  final hour = time.hour % 12;
-  final minute = time.minute;
-  final hourAngle = (hour / 12) * 360 - 90;
-  final minuteAngle = (minute / 60) * 30;
-
-  final totalAngle = hourAngle + minuteAngle;
-
-  final radians = totalAngle * pi / 180;
-
-  final x = cos(radians);
-  final y = sin(radians);
-
-  return Alignment(x, y);
-}
-
-Widget _buildImage() {
-  return Effect(
-    scale: 1.05,
-    builder: (_, __, ___, ____) => Image.asset(
-      AppImage.heroicImage,
-      fit: BoxFit.contain,
-      errorBuilder: (_, __, ___) => Image.asset(
-        AppImage.placeholderImage,
-        fit: BoxFit.contain,
+        shape: isLargeScreen ? BoxShape.circle : BoxShape.rectangle,
+        borderRadius: isLargeScreen
+            ? null
+            : BorderRadius.circular(AppSize.borderRadius * 2),
       ),
-    ),
-  );
+      child: isLargeScreen
+          ? ClipOval(child: _buildImage())
+          : ClipRRect(
+              borderRadius: BorderRadius.circular(AppSize.borderRadius * 2),
+              child: _buildImage(),
+            ),
+    );
+  }
+
+  Alignment _calculateGradientCenter(DateTime time) {
+    final hour = time.hour % 12;
+    final minute = time.minute;
+    final second = time.second;
+
+    final hourAngle = (hour * 30) - 90;
+    final minuteAngle = minute * 0.5;
+    final secondAngle = second * (0.5 / 60);
+
+    final totalAngle = hourAngle + minuteAngle + secondAngle;
+
+    final radians = totalAngle * pi / 180;
+
+    final x = cos(radians);
+    final y = sin(radians);
+
+    return Alignment(x, y);
+  }
+
+  Widget _buildImage() {
+    return Effect(
+      scale: 1.05,
+      builder: (_, __, ___, ____) => Image.asset(
+        AppImage.heroicImage,
+        fit: BoxFit.contain,
+        errorBuilder: (_, __, ___) => Image.asset(
+          AppImage.placeholderImage,
+          fit: BoxFit.contain,
+        ),
+      ),
+    );
+  }
 }

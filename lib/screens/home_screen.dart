@@ -1,3 +1,5 @@
+// 'lib/screens/home_screen.dart'
+
 import 'package:flutter/material.dart';
 import 'package:portfolio_website/screens/sections/about_section.dart';
 import 'package:portfolio_website/screens/sections/contact_section.dart';
@@ -16,6 +18,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final ScrollController _scrollController = ScrollController();
+
   final Map<String, GlobalKey> _sectionKeys = {
     'Home': GlobalKey(),
     'Project': GlobalKey(),
@@ -38,15 +41,14 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void dispose() {
-    _scrollController.removeListener(_onScroll);
     _scrollController.dispose();
     super.dispose();
   }
 
   void _scrollToSection(String section) {
-    setState(() {
-      _activeSection = section;
-    });
+    if (_activeSection == section) return;
+
+    setState(() => _activeSection = section);
 
     final keyContext = _sectionKeys[section]?.currentContext;
     if (keyContext != null) {
@@ -55,9 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
         keyContext,
         duration: const Duration(milliseconds: 600),
         curve: Curves.easeInOut,
-      ).then((_) {
-        _isAutoScrolling = false;
-      });
+      ).then((_) => _isAutoScrolling = false);
     }
   }
 
@@ -71,9 +71,7 @@ class _HomeScreenState extends State<HomeScreen> {
         final position = box.localToGlobal(Offset.zero);
         if (position.dy <= 100 && position.dy >= -100) {
           if (_activeSection != entry.key) {
-            setState(() {
-              _activeSection = entry.key;
-            });
+            setState(() => _activeSection = entry.key);
           }
           break;
         }
@@ -81,51 +79,51 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  double _calculatePadding(double width) {
+    if (width < smallScreenBreakPoint) return width * 0.005;
+    if (width < mediumScreenBreakPoint) return width * 0.01;
+    return width * 0.1;
+  }
+
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-
-    double padding;
-    if (size.width < smallScreenBreakPoint) {
-      padding = size.width * 0.005;
-    } else if (size.width < mediumScreenBreakPoint) {
-      padding = size.width * 0.01;
-    } else {
-      padding = size.width * 0.1;
-    }
+    final padding = _calculatePadding(MediaQuery.of(context).size.width);
 
     return SafeArea(
       child: Scaffold(
         appBar: Navbar(
           activeSection: _activeSection,
-          onSectionSelected: (section) => _scrollToSection(section),
+          onSectionSelected: _scrollToSection,
         ),
         body: Scrollbar(
           controller: _scrollController,
           thumbVisibility: true,
           child: SingleChildScrollView(
             controller: _scrollController,
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: padding),
-              child: Column(
-                children: [
-                  HeroicSection(_sectionKeys['Home']!),
-                  const SizedBox(height: 36),
-                  ProjectSection(_sectionKeys['Project']!),
-                  const SizedBox(height: 36),
-                  SkillSection(_sectionKeys['Skill']!),
-                  const SizedBox(height: 36),
-                  AboutSection(_sectionKeys['About']!),
-                  const SizedBox(height: 36),
-                  ContactSection(_sectionKeys['Contact']!),
-                  const SizedBox(height: 36),
-                  const FooterSection(),
-                ],
-              ),
+            padding: EdgeInsets.symmetric(horizontal: padding),
+            child: Column(
+              children: [
+                _buildSection('Home', const HeroicSection()),
+                _buildSection('Project', const ProjectSection()),
+                _buildSection('Skill', const SkillSection()),
+                _buildSection('About', const AboutSection()),
+                _buildSection('Contact', const ContactSection()),
+                const FooterSection(),
+              ],
             ),
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildSection(String key, Widget sectionWidget) {
+    return Column(
+      key: _sectionKeys[key],
+      children: [
+        sectionWidget,
+        const SizedBox(height: 36),
+      ],
     );
   }
 }
