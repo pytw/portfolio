@@ -1,5 +1,3 @@
-// 'lib/screens/home_screen.dart'
-
 import 'package:flutter/material.dart';
 import 'package:portfolio_website/screens/sections/about_section.dart';
 import 'package:portfolio_website/screens/sections/contact_section.dart';
@@ -8,6 +6,7 @@ import 'package:portfolio_website/screens/sections/heroic_section.dart';
 import 'package:portfolio_website/screens/sections/project_section.dart';
 import 'package:portfolio_website/screens/sections/skill_section.dart';
 import 'package:portfolio_website/widgets/navbar.dart';
+import 'package:video_player/video_player.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -95,23 +94,30 @@ class _HomeScreenState extends State<HomeScreen> {
           activeSection: _activeSection,
           onSectionSelected: _scrollToSection,
         ),
-        body: Scrollbar(
-          controller: _scrollController,
-          thumbVisibility: true,
-          child: SingleChildScrollView(
-            controller: _scrollController,
-            padding: EdgeInsets.symmetric(horizontal: padding),
-            child: Column(
-              children: [
-                _buildSection('Home', const HeroicSection()),
-                _buildSection('Project', const ProjectSection()),
-                _buildSection('Skill', const SkillSection()),
-                _buildSection('About', const AboutSection()),
-                _buildSection('Contact', const ContactSection()),
-                const FooterSection(),
-              ],
+        body: Stack(
+          children: [
+            const Positioned.fill(
+              child: VideoBackground(videoPath: "assets/videos/background.mp4"),
             ),
-          ),
+            Scrollbar(
+              controller: _scrollController,
+              thumbVisibility: true,
+              child: SingleChildScrollView(
+                controller: _scrollController,
+                padding: EdgeInsets.symmetric(horizontal: padding),
+                child: Column(
+                  children: [
+                    _buildSection('Home', const HeroicSection()),
+                    _buildSection('Project', const ProjectSection()),
+                    _buildSection('Skill', const SkillSection()),
+                    _buildSection('About', const AboutSection()),
+                    _buildSection('Contact', const ContactSection()),
+                    const FooterSection(),
+                  ],
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -125,5 +131,53 @@ class _HomeScreenState extends State<HomeScreen> {
         const SizedBox(height: 36),
       ],
     );
+  }
+}
+
+class VideoBackground extends StatefulWidget {
+  final String videoPath;
+
+  const VideoBackground({
+    super.key,
+    required this.videoPath,
+  });
+
+  @override
+  State<VideoBackground> createState() => _VideoBackgroundState();
+}
+
+class _VideoBackgroundState extends State<VideoBackground> {
+  late VideoPlayerController _videoController;
+
+  @override
+  void initState() {
+    super.initState();
+    _videoController = VideoPlayerController.asset(widget.videoPath)
+      ..setLooping(true)
+      ..setVolume(0)
+      ..initialize().then((_) {
+        setState(() {});
+        _videoController.play();
+      });
+  }
+
+  @override
+  void dispose() {
+    _videoController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _videoController.value.isInitialized
+        ? FittedBox(
+            fit: BoxFit.cover,
+            child: SizedBox(
+              width: _videoController.value.size.width,
+              height: _videoController.value.size.height,
+              child: VideoPlayer(_videoController),
+            ),
+          )
+        : const SizedBox();
   }
 }
