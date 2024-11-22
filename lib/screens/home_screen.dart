@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:portfolio_website/screens/sections/about_section.dart';
 import 'package:portfolio_website/screens/sections/contact_section.dart';
@@ -17,6 +18,10 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final ScrollController _scrollController = ScrollController();
+  final ValueNotifier<bool> _isScrolling = ValueNotifier<bool>(false);
+  bool _isAutoScrolling = false;
+  String _scrollDirection = 'down';
+  double _lastScrollPosition = 0.0;
 
   final Map<String, GlobalKey> _sectionKeys = {
     'Home': GlobalKey(),
@@ -27,8 +32,6 @@ class _HomeScreenState extends State<HomeScreen> {
   };
 
   String _activeSection = 'Home';
-  bool _isAutoScrolling = false;
-  final ValueNotifier<bool> _isScrolling = ValueNotifier<bool>(false);
 
   static const double mediumScreenBreakPoint = 768.0;
   static const double smallScreenBreakPoint = 600.0;
@@ -70,7 +73,18 @@ class _HomeScreenState extends State<HomeScreen> {
   void _onScroll() {
     if (_isAutoScrolling) return;
 
+    final currentPosition = _scrollController.offset;
+    final newDirection = currentPosition > _lastScrollPosition ? 'down' : 'up';
+
+    if (newDirection != _scrollDirection) {
+      setState(() {
+        _scrollDirection = newDirection;
+      });
+    }
+
     if (!_isScrolling.value) _isScrolling.value = true;
+
+    _lastScrollPosition = currentPosition;
 
     for (var entry in _sectionKeys.entries) {
       final context = entry.value.currentContext;
@@ -114,29 +128,25 @@ class _HomeScreenState extends State<HomeScreen> {
                 valueListenable: _isScrolling,
                 builder: (context, isScrolling, child) {
                   return VideoBackground(
-                    videoPath: "assets/videos/background.mp4",
+                    videoPath: "assets/videos/star.mp4",
                     play: isScrolling,
                   );
                 },
               ),
             ),
-            Scrollbar(
+            SingleChildScrollView(
               controller: _scrollController,
-              thumbVisibility: true,
-              child: SingleChildScrollView(
-                controller: _scrollController,
-                physics: const BouncingScrollPhysics(),
-                padding: EdgeInsets.symmetric(horizontal: padding),
-                child: Column(
-                  children: [
-                    _buildSection('Home', const HeroicSection()),
-                    _buildSection('Project', const ProjectSection()),
-                    _buildSection('Skill', const SkillSection()),
-                    _buildSection('About', const AboutSection()),
-                    _buildSection('Contact', const ContactSection()),
-                    const FooterSection(),
-                  ],
-                ),
+              physics: const BouncingScrollPhysics(),
+              padding: EdgeInsets.symmetric(horizontal: padding),
+              child: Column(
+                children: [
+                  _buildSection('Home', const HeroicSection()),
+                  _buildSection('Project', const ProjectSection()),
+                  _buildSection('Skill', const SkillSection()),
+                  _buildSection('About', const AboutSection()),
+                  _buildSection('Contact', const ContactSection()),
+                  const FooterSection(),
+                ],
               ),
             ),
           ],
@@ -159,11 +169,13 @@ class _HomeScreenState extends State<HomeScreen> {
 class VideoBackground extends StatefulWidget {
   final String videoPath;
   final bool play;
+  final bool isNetwork;
 
   const VideoBackground({
     super.key,
     required this.videoPath,
     required this.play,
+    this.isNetwork = false,
   });
 
   @override
@@ -176,11 +188,22 @@ class _VideoBackgroundState extends State<VideoBackground> {
   @override
   void initState() {
     super.initState();
-    _videoController = VideoPlayerController.asset(widget.videoPath)
+    _initializeController(widget.videoPath, widget.isNetwork);
+  }
+
+  void _initializeController(String path, bool isNetwork) {
+    _videoController = isNetwork
+        ? VideoPlayerController.networkUrl(path as Uri)
+        : VideoPlayerController.asset(path);
+
+    _videoController
       ..setLooping(true)
-      ..setVolume(0)
+      ..setVolume(1.0)
       ..initialize().then((_) {
-        if (widget.play) _videoController.play();
+        if (widget.play) {
+          _videoController.play();
+          _videoController.setPlaybackSpeed(2.0);
+        }
         setState(() {});
       });
   }
@@ -188,6 +211,7 @@ class _VideoBackgroundState extends State<VideoBackground> {
   @override
   void didUpdateWidget(covariant VideoBackground oldWidget) {
     super.didUpdateWidget(oldWidget);
+
     if (widget.play) {
       _videoController.play();
     } else {
