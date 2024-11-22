@@ -11,34 +11,6 @@ import 'package:url_launcher/url_launcher_string.dart';
 class ContactSection extends StatelessWidget {
   const ContactSection({super.key});
 
-  static const List<Map<String, dynamic>> socialMedia = [
-    {
-      'name': 'Github',
-      'icon': FontAwesomeIcons.github,
-      'url': 'https://www.github.com/pyapril15',
-    },
-    {
-      'name': 'LinkedIn',
-      'icon': FontAwesomeIcons.linkedin,
-      'url': 'https://www.linkedin.com/in/pyapril1507',
-    },
-    {
-      'name': 'Twitter',
-      'icon': FontAwesomeIcons.linkedin,
-      'url': 'https://www.twitter.com/pyapril15',
-    },
-    {
-      'name': 'Discord',
-      'icon': FontAwesomeIcons.linkedin,
-      'url': 'https://www.discord.com/pyapril15',
-    },
-    {
-      'name': 'Instagram',
-      'icon': FontAwesomeIcons.instagram,
-      'url': 'https://www.instagram.com/__pyapril15.py__',
-    },
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -184,13 +156,8 @@ class _BuildSocialButton extends StatelessWidget {
       runSpacing: AppSize.spacing,
       alignment: WrapAlignment.center,
       runAlignment: WrapAlignment.spaceEvenly,
-      children: ContactSection.socialMedia.map((social) {
-        return _buildSocialBtn(
-          context,
-          social['name'],
-          social['icon'],
-          social['url'],
-        );
+      children: AppText.socialMedia.map((social) {
+        return _buildSocialBtn(context, social.name, social.icon, social.url);
       }).toList(),
     );
   }

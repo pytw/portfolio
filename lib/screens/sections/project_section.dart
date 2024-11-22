@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:portfolio_website/constants/app_size.dart';
+import 'package:portfolio_website/constants/app_text.dart';
+import 'package:portfolio_website/models/models.dart';
 import 'package:portfolio_website/widgets/custom_header.dart';
 import 'package:portfolio_website/widgets/simple_custom_button.dart';
 import 'package:portfolio_website/widgets/effect.dart';
@@ -30,7 +32,7 @@ class ProjectSection extends StatelessWidget {
 
   Widget _buildProjectContent(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
-    final _ProjectDetail project = _sampleProject();
+    final ProjectDetail project = AppText.sampleProject();
     if (screenWidth >= AppSize.screenBreakPoint) {
       return Row(
         children: [
@@ -81,7 +83,7 @@ Widget _buildProjectImage(String imagePath) {
   );
 }
 
-Widget _buildProjectDetail(BuildContext context, _ProjectDetail project) {
+Widget _buildProjectDetail(BuildContext context, ProjectDetail project) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.center,
     children: [
@@ -113,7 +115,7 @@ Widget _buildProjectDetail(BuildContext context, _ProjectDetail project) {
   );
 }
 
-Widget _buildSkillChip(_TechnicalSkill skill) {
+Widget _buildSkillChip(TechnicalSkill skill) {
   return Effect(
     scale: 1.1,
     builder: (isHovered, __, ___, ____) => Chip(
@@ -144,39 +146,4 @@ Widget _buildMoreProjectBtn(BuildContext context) {
       underlineColor: const Color(0xff1a73e8),
     ),
   );
-}
-
-_ProjectDetail _sampleProject() {
-  return _ProjectDetail(
-    "Dashboard",
-    "assets/gif/tmc.gif",
-    "An admin dashboard serves multiple crucial functions, enhancing operational efficiency, decision-making, and user management. It provides a centralized platform for overseeing components, making informed decisions, and managing user interactions. The dashboard presents real-time data and analytics, enabling prompt responses to emerging trends and issues. It empowers data-driven decision-making, efficient user management, and content oversight. The dashboard also monitors system health, ensures security and compliance, and facilitates communication among team members. Its scalability supports long-term growth, adapting to changing business environments.",
-    _technicalSkills(),
-  );
-}
-
-List<_TechnicalSkill> _technicalSkills() {
-  return [
-    _TechnicalSkill('Flutter', 'assets/icons/Flutter.svg'),
-    _TechnicalSkill('Tkinter', 'assets/icons/Python.svg'),
-    _TechnicalSkill('Qt', 'assets/icons/Qt-Framework.svg'),
-    _TechnicalSkill('HTML', 'assets/icons/HTML5.svg'),
-    _TechnicalSkill('CSS', 'assets/icons/css3.svg'),
-  ];
-}
-
-class _ProjectDetail {
-  final String title;
-  final String imagePath;
-  final String overview;
-  final List<_TechnicalSkill> skills;
-
-  _ProjectDetail(this.title, this.imagePath, this.overview, this.skills);
-}
-
-class _TechnicalSkill {
-  final String name;
-  final String iconPath;
-
-  _TechnicalSkill(this.name, this.iconPath);
 }

@@ -1,5 +1,6 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:portfolio_website/constants/app_image.dart';
+import 'package:portfolio_website/constants/app_size.dart';
 import 'package:portfolio_website/screens/sections/about_section.dart';
 import 'package:portfolio_website/screens/sections/contact_section.dart';
 import 'package:portfolio_website/screens/sections/footer_section.dart';
@@ -7,7 +8,6 @@ import 'package:portfolio_website/screens/sections/heroic_section.dart';
 import 'package:portfolio_website/screens/sections/project_section.dart';
 import 'package:portfolio_website/screens/sections/skill_section.dart';
 import 'package:portfolio_website/widgets/navbar.dart';
-import 'package:video_player/video_player.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -18,10 +18,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final ScrollController _scrollController = ScrollController();
-  final ValueNotifier<bool> _isScrolling = ValueNotifier<bool>(false);
   bool _isAutoScrolling = false;
-  String _scrollDirection = 'down';
-  double _lastScrollPosition = 0.0;
+  late String _activeSection = 'Home';
 
   final Map<String, GlobalKey> _sectionKeys = {
     'Home': GlobalKey(),
@@ -30,11 +28,6 @@ class _HomeScreenState extends State<HomeScreen> {
     'About': GlobalKey(),
     'Contact': GlobalKey(),
   };
-
-  String _activeSection = 'Home';
-
-  static const double mediumScreenBreakPoint = 768.0;
-  static const double smallScreenBreakPoint = 600.0;
 
   @override
   void initState() {
@@ -53,8 +46,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
     setState(() => _activeSection = section);
 
-    if (!_isScrolling.value) _isScrolling.value = true;
-
     final keyContext = _sectionKeys[section]?.currentContext;
     if (keyContext != null) {
       _isAutoScrolling = true;
@@ -64,28 +55,10 @@ class _HomeScreenState extends State<HomeScreen> {
         curve: Curves.easeInOut,
       ).then((_) => _isAutoScrolling = false);
     }
-
-    Future.delayed(const Duration(milliseconds: 800), () {
-      _isScrolling.value = false;
-    });
   }
 
   void _onScroll() {
     if (_isAutoScrolling) return;
-
-    final currentPosition = _scrollController.offset;
-    final newDirection = currentPosition > _lastScrollPosition ? 'down' : 'up';
-
-    if (newDirection != _scrollDirection) {
-      setState(() {
-        _scrollDirection = newDirection;
-      });
-    }
-
-    if (!_isScrolling.value) _isScrolling.value = true;
-
-    _lastScrollPosition = currentPosition;
-
     for (var entry in _sectionKeys.entries) {
       final context = entry.value.currentContext;
       if (context != null) {
@@ -99,15 +72,11 @@ class _HomeScreenState extends State<HomeScreen> {
         }
       }
     }
-
-    Future.delayed(const Duration(milliseconds: 200), () {
-      _isScrolling.value = false;
-    });
   }
 
   double _calculatePadding(double width) {
-    if (width < smallScreenBreakPoint) return width * 0.005;
-    if (width < mediumScreenBreakPoint) return width * 0.01;
+    if (width < AppSize.smallScreenBreakPoint) return width * 0.005;
+    if (width < AppSize.screenBreakPoint) return width * 0.01;
     return width * 0.1;
   }
 
@@ -124,15 +93,7 @@ class _HomeScreenState extends State<HomeScreen> {
         body: Stack(
           children: [
             Positioned.fill(
-              child: ValueListenableBuilder<bool>(
-                valueListenable: _isScrolling,
-                builder: (context, isScrolling, child) {
-                  return VideoBackground(
-                    videoPath: "assets/videos/star.mp4",
-                    play: isScrolling,
-                  );
-                },
-              ),
+              child: _buildScrollImageEffect(),
             ),
             SingleChildScrollView(
               controller: _scrollController,
@@ -164,78 +125,43 @@ class _HomeScreenState extends State<HomeScreen> {
       ],
     );
   }
-}
 
-class VideoBackground extends StatefulWidget {
-  final String videoPath;
-  final bool play;
-  final bool isNetwork;
+  Widget _buildScrollImageEffect() {
+    final List<String> images = [AppImage.bg1, AppImage.bg2, AppImage.bg3];
 
-  const VideoBackground({
-    super.key,
-    required this.videoPath,
-    required this.play,
-    this.isNetwork = false,
-  });
+    return AnimatedBuilder(
+      animation: _scrollController,
+      builder: (context, child) {
+        double offset =
+            _scrollController.hasClients ? _scrollController.offset : 0.0;
+        double totalHeight = MediaQuery.of(context).size.height;
 
-  @override
-  State<VideoBackground> createState() => _VideoBackgroundState();
-}
+        int currentImageIndex = (offset ~/ totalHeight) % images.length;
 
-class _VideoBackgroundState extends State<VideoBackground> {
-  late VideoPlayerController _videoController;
+        int nextImageIndex = (currentImageIndex + 1) % images.length;
 
-  @override
-  void initState() {
-    super.initState();
-    _initializeController(widget.videoPath, widget.isNetwork);
-  }
+        double transitionFactor = (offset % totalHeight) / totalHeight;
 
-  void _initializeController(String path, bool isNetwork) {
-    _videoController = isNetwork
-        ? VideoPlayerController.networkUrl(path as Uri)
-        : VideoPlayerController.asset(path);
-
-    _videoController
-      ..setLooping(true)
-      ..setVolume(1.0)
-      ..initialize().then((_) {
-        if (widget.play) {
-          _videoController.play();
-          _videoController.setPlaybackSpeed(2.0);
-        }
-        setState(() {});
-      });
-  }
-
-  @override
-  void didUpdateWidget(covariant VideoBackground oldWidget) {
-    super.didUpdateWidget(oldWidget);
-
-    if (widget.play) {
-      _videoController.play();
-    } else {
-      _videoController.pause();
-    }
-  }
-
-  @override
-  void dispose() {
-    _videoController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return _videoController.value.isInitialized
-        ? FittedBox(
-            fit: BoxFit.cover,
-            child: SizedBox(
-              width: _videoController.value.size.width,
-              height: _videoController.value.size.height,
-              child: VideoPlayer(_videoController),
+        return Stack(
+          fit: StackFit.expand,
+          children: [
+            Opacity(
+              opacity: 1 - transitionFactor,
+              child: Image.asset(
+                images[currentImageIndex],
+                fit: BoxFit.cover,
+              ),
             ),
-          )
-        : const SizedBox();
+            Opacity(
+              opacity: transitionFactor,
+              child: Image.asset(
+                images[nextImageIndex],
+                fit: BoxFit.cover,
+              ),
+            ),
+          ],
+        );
+      },
+    );
   }
 }

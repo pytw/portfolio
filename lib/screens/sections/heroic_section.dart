@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:portfolio_website/constants/app_image.dart';
 import 'package:portfolio_website/constants/app_size.dart';
 import 'package:portfolio_website/constants/app_text.dart';
@@ -13,33 +12,6 @@ import 'dart:html' as html;
 
 class HeroicSection extends StatelessWidget {
   const HeroicSection({super.key});
-
-  static const List<Map<String, dynamic>> socialMedia = [
-    {
-      'name': 'Github',
-      'icon': FontAwesomeIcons.github,
-      'url': 'https://www.github.com/pyapril15',
-    },
-    {
-      'name': 'LinkedIn',
-      'icon': FontAwesomeIcons.linkedin,
-      'url': 'https://www.linkedin.com/in/pyapril1507',
-    },
-    {
-      'name': 'Instagram',
-      'icon': FontAwesomeIcons.instagram,
-      'url': 'https://www.instagram.com/__pyapril15.py__',
-    },
-  ];
-
-  static const Map<String, String> downloadLinks = {
-    'PDF':
-        'https://firebasestorage.googleapis.com/v0/b/portfolio-1952e.appspot.com/o/resume.pdf?alt=media&token=1f10e879-5234-4ab4-ab7c-c272e81f38fb',
-    'DOCX':
-        'https://firebasestorage.googleapis.com/v0/b/portfolio-1952e.appspot.com/o/resume.docx?alt=media&token=6bc02eaa-f332-46b0-b34a-fb51aeb2aa42',
-    'PNG':
-        'https://firebasestorage.googleapis.com/v0/b/portfolio-1952e.appspot.com/o/resume.png?alt=media&token=09985770-9968-4df8-8508-2942cd18935b',
-  };
 
   @override
   Widget build(BuildContext context) {
@@ -186,9 +158,8 @@ Widget _buildSocialIcons() {
       spacing: AppSize.spacing * 2,
       runSpacing: AppSize.spacing,
       alignment: WrapAlignment.center,
-      children: HeroicSection.socialMedia.map((social) {
-        return _buildSocialIconButton(
-            social['name'], social['icon'], social['url']);
+      children: AppText.socialMedia.map((social) {
+        return _buildSocialIconButton(social.name, social.icon, social.url);
       }).toList());
 }
 
@@ -225,7 +196,7 @@ void _showDownloadOptions(BuildContext context) {
       return ListView(
           padding: const EdgeInsets.all(AppSize.horizontalPadding),
           shrinkWrap: true,
-          children: HeroicSection.downloadLinks.keys.map((format) {
+          children: AppText.downloadLinks.keys.map((format) {
             return _buildDownloadOption(context, format);
           }).toList());
     },
@@ -237,7 +208,7 @@ Widget _buildDownloadOption(BuildContext context, String format) {
     title: Text("Download as $format"),
     onTap: () {
       Navigator.pop(context);
-      final url = HeroicSection.downloadLinks[format];
+      final url = AppText.downloadLinks[format];
       format = format.toLowerCase();
       if (url != null) {
         _startDownload(context, url, "praveen_yadav_resume.$format");
@@ -325,12 +296,12 @@ class _HeroicImageContainerState extends State<HeroicImageContainer> {
       decoration: BoxDecoration(
         gradient: RadialGradient(
           colors: [
-            Colors.yellow.shade800,
-            Colors.yellow.shade600,
-            Colors.yellow.shade400,
-            Colors.yellow.shade200,
-            Colors.yellow.shade100,
-            Colors.yellow.shade50,
+            Colors.blue.shade800,
+            Colors.blue.shade600,
+            Colors.blue.shade400,
+            Colors.blue.shade200,
+            Colors.blue.shade100,
+            Colors.blue.shade50,
           ],
           stops: const [0.1, 0.2, 0.4, 0.6, 0.8, 1],
           center: gradientCenter,
@@ -375,10 +346,7 @@ class _HeroicImageContainerState extends State<HeroicImageContainer> {
       builder: (_, __, ___, ____) => Image.asset(
         AppImage.heroicImage,
         fit: BoxFit.contain,
-        errorBuilder: (_, __, ___) => Image.asset(
-          AppImage.placeholderImage,
-          fit: BoxFit.contain,
-        ),
+        errorBuilder: (_, __, ___) => const Icon(FontAwesomeIcons.user),
       ),
     );
   }
