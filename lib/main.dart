@@ -22,7 +22,7 @@ class PortfolioApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Portfolio - Praveen Yadav',
-      theme: appTheme(),
+      theme: appThemeData(context),
       home: const HomeScreen(),
     );
   }

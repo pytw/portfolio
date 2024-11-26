@@ -76,13 +76,14 @@ class _HomeScreenState extends State<HomeScreen> {
 
   double _calculatePadding(double width) {
     if (width < AppSize.smallScreenBreakPoint) return width * 0.005;
-    if (width < AppSize.screenBreakPoint) return width * 0.01;
-    return width * 0.1;
+    if (width < AppSize.screenBreakPoint) return width * 0.05;
+    return width * 0.12;
   }
 
   @override
   Widget build(BuildContext context) {
-    final padding = _calculatePadding(MediaQuery.of(context).size.width);
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
 
     return SafeArea(
       child: Scaffold(
@@ -98,14 +99,24 @@ class _HomeScreenState extends State<HomeScreen> {
             SingleChildScrollView(
               controller: _scrollController,
               physics: const BouncingScrollPhysics(),
-              padding: EdgeInsets.symmetric(horizontal: padding),
+              padding: EdgeInsets.symmetric(
+                  horizontal: _calculatePadding(screenWidth)),
               child: Column(
                 children: [
-                  _buildSection('Home', const HeroicSection()),
-                  _buildSection('Project', const ProjectSection()),
-                  _buildSection('Skill', const SkillSection()),
-                  _buildSection('About', const AboutSection()),
-                  _buildSection('Contact', const ContactSection()),
+                  _buildSection(
+                    'Home',
+                    const HeroicSection(),
+                    screenHeight,
+                    screenWidth,
+                  ),
+                  _buildSection('Project', const ProjectSection(), screenHeight,
+                      screenWidth),
+                  _buildSection(
+                      'Skill', const SkillSection(), screenHeight, screenWidth),
+                  _buildSection(
+                      'About', const AboutSection(), screenHeight, screenWidth),
+                  _buildSection('Contact', const ContactSection(), screenHeight,
+                      screenWidth),
                   const FooterSection(),
                 ],
               ),
@@ -116,13 +127,19 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildSection(String key, Widget sectionWidget) {
-    return Column(
+  Widget _buildSection(String key, Widget sectionWidget, double screenHeight,
+      double screenWidth) {
+    return Container(
       key: _sectionKeys[key],
-      children: [
-        sectionWidget,
-        const SizedBox(height: 36),
-      ],
+      margin: EdgeInsets.symmetric(
+        vertical: screenHeight * 0.02,
+        horizontal: screenWidth * 0.02,
+      ),
+      padding: EdgeInsets.symmetric(
+        vertical: screenHeight * 0.02,
+        horizontal: screenWidth * 0.02,
+      ),
+      child: sectionWidget,
     );
   }
 
@@ -149,14 +166,14 @@ class _HomeScreenState extends State<HomeScreen> {
               opacity: 1 - transitionFactor,
               child: Image.asset(
                 images[currentImageIndex],
-                fit: BoxFit.cover,
+                fit: BoxFit.fill,
               ),
             ),
             Opacity(
               opacity: transitionFactor,
               child: Image.asset(
                 images[nextImageIndex],
-                fit: BoxFit.cover,
+                fit: BoxFit.fill,
               ),
             ),
           ],

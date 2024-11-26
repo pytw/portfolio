@@ -11,29 +11,23 @@ class SkillSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppSize.horizontalPadding,
-        vertical: AppSize.verticalPadding,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          _buildSkillHeader(context),
-          const SizedBox(height: AppSize.spacing * 3),
-          LayoutBuilder(
-            builder: (context, constraints) {
-              final isWideScreen =
-                  constraints.maxWidth > AppSize.screenBreakPoint;
-              return isWideScreen
-                  ? _buildHorizontalSkillCategories(
-                      context, AppText.skillCategories)
-                  : _buildVerticalSkillCategories(
-                      context, AppText.skillCategories);
-            },
-          ),
-        ],
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        _buildSkillHeader(context),
+        const SizedBox(height: AppSize.spacing * 3),
+        LayoutBuilder(
+          builder: (context, constraints) {
+            final isWideScreen =
+                constraints.maxWidth > AppSize.screenBreakPoint;
+            return isWideScreen
+                ? _buildHorizontalSkillCategories(
+                    context, AppText.skillCategories)
+                : _buildVerticalSkillCategories(
+                    context, AppText.skillCategories);
+          },
+        ),
+      ],
     );
   }
 }
@@ -41,11 +35,11 @@ class SkillSection extends StatelessWidget {
 Widget _buildSkillHeader(BuildContext context) {
   return CustomHeader(
     titleText: 'What ',
-    titleStyle: Theme.of(context).textTheme.headlineMedium!.copyWith(
+    titleStyle: Theme.of(context).textTheme.displaySmall?.copyWith(
           color: Theme.of(context).primaryColor,
         ),
     subtitleText: 'I Bring to the Table.',
-    subtitleStyle: Theme.of(context).textTheme.headlineMedium!.copyWith(
+    subtitleStyle: Theme.of(context).textTheme.displaySmall?.copyWith(
           color: Theme.of(context).colorScheme.onPrimary,
         ),
   );
@@ -124,7 +118,7 @@ Widget _buildSkillCategoryHeader(BuildContext context, SkillCategory category) {
       const SizedBox(width: AppSize.spacing),
       Text(
         category.title,
-        style: Theme.of(context).textTheme.titleMedium!.copyWith(
+        style: Theme.of(context).textTheme.titleLarge?.copyWith(
               fontWeight: FontWeight.bold,
               color: Theme.of(context).colorScheme.onPrimary,
             ),
@@ -145,7 +139,7 @@ Widget _buildSkillList(BuildContext context, List<TechnicalSkill> skills) {
             const SizedBox(width: AppSize.spacing * 2),
             Text(
               skill.name,
-              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                     color: Theme.of(context).colorScheme.onSecondary,
                   ),
             ),

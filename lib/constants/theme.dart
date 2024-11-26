@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:portfolio_website/theme/app_text_theme.dart';
 import 'app_size.dart';
 
 class AppColors {
@@ -22,14 +23,15 @@ final scrollbarThemeData = ScrollbarThemeData(
   radius: const Radius.circular(AppSize.borderSize),
 );
 
-ThemeData appTheme() {
+ThemeData appThemeData(BuildContext context) {
   return ThemeData(
     brightness: Brightness.dark,
     primaryColor: AppColors.primaryColor,
     scaffoldBackgroundColor: AppColors.backgroundColor,
     appBarTheme: appBarTheme,
-    fontFamily: GoogleFonts.poppins().fontFamily,
+    fontFamily: GoogleFonts.roboto().fontFamily,
     scrollbarTheme: scrollbarThemeData,
+    textTheme: AppTextTheme.getTextTheme(context),
     colorScheme: const ColorScheme(
       primary: AppColors.primaryColor,
       secondary: AppColors.secondaryColor,

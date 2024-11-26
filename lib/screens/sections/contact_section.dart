@@ -13,18 +13,12 @@ class ContactSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppSize.horizontalPadding,
-        vertical: AppSize.verticalPadding,
-      ),
-      child: Column(
-        children: [
-          _buildContactHeader(context),
-          const SizedBox(height: (AppSize.spacing * 3)),
-          _buildContactContent(context),
-        ],
-      ),
+    return Column(
+      children: [
+        _buildContactHeader(context),
+        const SizedBox(height: (AppSize.spacing * 3)),
+        _buildContactContent(context),
+      ],
     );
   }
 
@@ -53,11 +47,11 @@ class ContactSection extends StatelessWidget {
 Widget _buildContactHeader(BuildContext context) {
   return CustomHeader(
     titleText: "Let's ",
-    titleStyle: Theme.of(context).textTheme.headlineMedium?.copyWith(
+    titleStyle: Theme.of(context).textTheme.displaySmall?.copyWith(
           color: Theme.of(context).primaryColor,
         ),
     subtitleText: "get to know each other",
-    subtitleStyle: Theme.of(context).textTheme.headlineMedium?.copyWith(
+    subtitleStyle: Theme.of(context).textTheme.displaySmall?.copyWith(
           color: Theme.of(context).colorScheme.onPrimary,
         ),
   );
@@ -76,7 +70,7 @@ Widget _buildContactDetail(BuildContext context) {
     children: [
       Text(
         "Get in Touch!",
-        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+        style: Theme.of(context).textTheme.titleLarge?.copyWith(
               color: Theme.of(context).colorScheme.onPrimary,
               fontWeight: FontWeight.bold,
             ),
@@ -85,7 +79,7 @@ Widget _buildContactDetail(BuildContext context) {
         label: AppText.introText,
         child: Text(
           AppText.introText,
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                 color: Theme.of(context).colorScheme.onSecondary,
                 letterSpacing: 0.8,
                 height: 2.5,
@@ -94,7 +88,7 @@ Widget _buildContactDetail(BuildContext context) {
       ),
       Text(
         "Contact with Me:",
-        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+        style: Theme.of(context).textTheme.titleLarge?.copyWith(
               color: Theme.of(context).colorScheme.onPrimary,
               fontWeight: FontWeight.bold,
             ),
@@ -103,7 +97,7 @@ Widget _buildContactDetail(BuildContext context) {
         label: AppText.contactMeText,
         child: Text(
           AppText.contactMeText,
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                 color: Theme.of(context).colorScheme.onSecondary,
                 letterSpacing: 0.8,
                 height: 2.5,

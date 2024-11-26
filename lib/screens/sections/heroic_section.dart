@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:portfolio_website/constants/app_image.dart';
 import 'package:portfolio_website/constants/app_size.dart';
 import 'package:portfolio_website/constants/app_text.dart';
@@ -15,12 +16,7 @@ class HeroicSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-          horizontal: AppSize.horizontalPadding,
-          vertical: AppSize.verticalPadding),
-      child: _buildHeroicContent(context),
-    );
+    return _buildHeroicContent(context);
   }
 
   Widget _buildHeroicContent(BuildContext context) {
@@ -35,7 +31,7 @@ class HeroicSection extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(width: (AppSize.spacing * 2)),
+          const SizedBox(width: (AppSize.spacing * 3)),
           const Flexible(child: HeroicImageContainer()),
         ],
       );
@@ -49,23 +45,117 @@ class HeroicSection extends StatelessWidget {
       );
     }
   }
-}
 
-Widget _buildHeroicDetails(BuildContext context) {
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      const _BuildWishing(),
-      const SizedBox(height: AppSize.spacing),
-      _buildWelcome(context),
-      const SizedBox(height: AppSize.spacing),
-      _buildProfession(context),
-      const SizedBox(height: AppSize.spacing * 6),
-      _buildActionButtons(context),
-      const SizedBox(height: AppSize.spacing * 2),
-      _buildSocialIcons(),
-    ],
-  );
+  Widget _buildHeroicDetails(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const _BuildWishing(),
+        const SizedBox(height: AppSize.spacing),
+        _buildWelcome(context),
+        const SizedBox(height: AppSize.spacing),
+        _buildProfession(context),
+        const SizedBox(height: AppSize.spacing * 5),
+        _buildActionButtons(context),
+        const SizedBox(height: AppSize.spacing * 2),
+        _buildSocialIcons(),
+      ],
+    );
+  }
+
+  Widget _buildProfession(BuildContext context) {
+    return Text(
+      AppText.profession,
+      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+            color: Theme.of(context).colorScheme.onSecondary,
+          ),
+    );
+  }
+
+  Widget _buildWelcome(BuildContext context) {
+    return CustomHeader(
+      titleText: "I'm ",
+      titleStyle: Theme.of(context).textTheme.displayMedium?.copyWith(
+            color: Theme.of(context).colorScheme.onPrimary,
+          ),
+      subtitleText: 'Praveen Yadav',
+      subtitleStyle: Theme.of(context).textTheme.displayMedium?.copyWith(
+            color: Theme.of(context).primaryColor,
+          ),
+      isTyping: true,
+      showIcon: true,
+    );
+  }
+
+  Widget _buildActionButtons(BuildContext context) {
+    return Wrap(
+      spacing: AppSize.spacing * 2,
+      runSpacing: AppSize.spacing,
+      alignment: WrapAlignment.center,
+      children: [
+        Effect(
+          scale: 1.1,
+          hoverOpacity: 0.9,
+          builder: (isHovered, isClick, scale, opacity) => Tooltip(
+            message: "Download Resume",
+            child: SimpleCustomButton(
+              onPressed: () => _DownloadResume(context).showDownloadOptions(),
+              label: "Download Resume",
+              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+              borderColor: Colors.white,
+              borderWidth: 2,
+            ),
+          ),
+        ),
+        Effect(
+          scale: 1.1,
+          builder: (isHovered, isClicked, scale, opacity) => Tooltip(
+            message: "See Projects",
+            child: SimpleCustomButton(
+              onPressed: () {},
+              label: "See Projects",
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSocialIcons() {
+    return Wrap(
+        spacing: AppSize.spacing * 2,
+        runSpacing: AppSize.spacing,
+        alignment: WrapAlignment.center,
+        children: AppText.socialMedia.map((social) {
+          return _buildSocialIconButton(social.name, social.icon, social.url);
+        }).toList());
+  }
+
+  Widget _buildSocialIconButton(String name, IconData icon, String url) {
+    return Effect(
+      scale: 1.1,
+      rotationAngle: 0.3,
+      builder: (isHovered, isClicked, scale, opacity) => IconButton(
+        onPressed: () async {
+          if (await canLaunchUrlString(url)) {
+            await launchUrlString(url);
+          }
+        },
+        icon: Icon(
+          icon,
+          color: isHovered
+              ? name == 'Instagram'
+                  ? Colors.red
+                  : name == 'Github'
+                      ? Colors.blue
+                      : Colors.white
+              : Colors.white,
+        ),
+        iconSize: AppSize.iconSize,
+        tooltip: name,
+      ),
+    );
+  }
 }
 
 class _BuildWishing extends StatelessWidget {
@@ -84,174 +174,86 @@ class _BuildWishing extends StatelessWidget {
 
     return CustomHeader(
       titleText: 'Hey ',
-      titleStyle: Theme.of(context).textTheme.titleLarge?.copyWith(
+      titleStyle: Theme.of(context).textTheme.displaySmall?.copyWith(
             color: Theme.of(context).primaryColor,
           ),
       subtitleText: '${welcome[0]} ${welcome[1]} !',
-      subtitleStyle: Theme.of(context).textTheme.titleLarge?.copyWith(
+      subtitleStyle: Theme.of(context).textTheme.displaySmall?.copyWith(
             color: Theme.of(context).colorScheme.onPrimary,
           ),
     );
   }
 }
 
-Widget _buildWelcome(BuildContext context) {
-  return CustomHeader(
-    titleText: "I'm ",
-    titleStyle: Theme.of(context).textTheme.headlineMedium?.copyWith(
-          color: Theme.of(context).colorScheme.onPrimary,
-        ),
-    subtitleText: 'Praveen Yadav',
-    subtitleStyle: Theme.of(context).textTheme.headlineMedium?.copyWith(
-          color: Theme.of(context).primaryColor,
-        ),
-    isTyping: true,
-    showIcon: true,
-  );
-}
+class _DownloadResume {
+  final BuildContext context;
 
-Widget _buildProfession(BuildContext context) {
-  return Text(
-    AppText.profession,
-    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-          color: Theme.of(context).colorScheme.onSecondary,
-        ),
-  );
-}
+  const _DownloadResume(this.context);
 
-Widget _buildActionButtons(BuildContext context) {
-  return Wrap(
-    spacing: AppSize.spacing * 2,
-    runSpacing: AppSize.spacing,
-    alignment: WrapAlignment.center,
-    children: [
-      Effect(
-        scale: 1.1,
-        hoverOpacity: 0.9,
-        builder: (isHovered, isClick, scale, opacity) => Tooltip(
-          message: "Download Resume",
-          child: SimpleCustomButton(
-            onPressed: () => _showDownloadOptions(context),
-            label: "Download Resume",
-            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-            borderColor: Colors.white,
-            borderWidth: 2,
-          ),
-        ),
-      ),
-      Effect(
-        scale: 1.1,
-        builder: (isHovered, isClicked, scale, opacity) => Tooltip(
-          message: "See Projects",
-          child: SimpleCustomButton(
-            onPressed: () => _showDownloadOptions(context),
-            label: "See Projects",
-          ),
-        ),
-      ),
-    ],
-  );
-}
+  void showDownloadOptions() {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return ListView(
+            padding: const EdgeInsets.all(AppSize.horizontalPadding),
+            shrinkWrap: true,
+            children: AppText.downloadLinks.keys.map((format) {
+              return _buildDownloadOption(context, format);
+            }).toList());
+      },
+    );
+  }
 
-Widget _buildSocialIcons() {
-  return Wrap(
-      spacing: AppSize.spacing * 2,
-      runSpacing: AppSize.spacing,
-      alignment: WrapAlignment.center,
-      children: AppText.socialMedia.map((social) {
-        return _buildSocialIconButton(social.name, social.icon, social.url);
-      }).toList());
-}
-
-Widget _buildSocialIconButton(String name, IconData icon, String url) {
-  return Effect(
-    scale: 1.1,
-    rotationAngle: 0.3,
-    builder: (isHovered, isClicked, scale, opacity) => IconButton(
-      onPressed: () async {
-        if (await canLaunchUrlString(url)) {
-          await launchUrlString(url);
+  Widget _buildDownloadOption(BuildContext context, String format) {
+    return ListTile(
+      title: Text("Download as $format"),
+      onTap: () {
+        Navigator.pop(context);
+        final url = AppText.downloadLinks[format];
+        format = format.toLowerCase();
+        if (url != null) {
+          _startDownload(context, url, "praveen_yadav_resume.$format");
         }
       },
-      icon: Icon(
-        icon,
-        color: isHovered
-            ? name == 'Instagram'
-                ? Colors.red
-                : name == 'Github'
-                    ? Colors.blue
-                    : Colors.white
-            : Colors.white,
-      ),
-      iconSize: AppSize.iconSize,
-      tooltip: name,
-    ),
-  );
-}
-
-void _showDownloadOptions(BuildContext context) {
-  showModalBottomSheet(
-    context: context,
-    builder: (BuildContext context) {
-      return ListView(
-          padding: const EdgeInsets.all(AppSize.horizontalPadding),
-          shrinkWrap: true,
-          children: AppText.downloadLinks.keys.map((format) {
-            return _buildDownloadOption(context, format);
-          }).toList());
-    },
-  );
-}
-
-Widget _buildDownloadOption(BuildContext context, String format) {
-  return ListTile(
-    title: Text("Download as $format"),
-    onTap: () {
-      Navigator.pop(context);
-      final url = AppText.downloadLinks[format];
-      format = format.toLowerCase();
-      if (url != null) {
-        _startDownload(context, url, "praveen_yadav_resume.$format");
-      }
-    },
-  );
-}
-
-void _startDownload(BuildContext context, String url, String fileName) {
-  ScaffoldMessenger.of(context).showSnackBar(
-    const SnackBar(content: Text('Start Downloading...')),
-  );
-
-  Future.delayed(const Duration(seconds: 1), () {
-    if (!context.mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Downloading...')),
     );
-  });
-
-  try {
-    downloadFileWeb(url, fileName);
-
-    Future.delayed(const Duration(seconds: 2), () {
-      if (!context.mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Download Complete')),
-      );
-    });
-  } catch (e) {
-    Future.delayed(const Duration(seconds: 2), () {
-      if (!context.mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Download Failed')),
-      );
-    });
   }
-}
 
-void downloadFileWeb(String url, String fileName) {
-  html.AnchorElement anchorElement = html.AnchorElement(href: url);
-  anchorElement.download = fileName;
-  anchorElement.click();
+  void _startDownload(BuildContext context, String url, String fileName) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Start Downloading...')),
+    );
+
+    Future.delayed(const Duration(seconds: 1), () {
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Downloading...')),
+      );
+    });
+
+    try {
+      _downloadFileWeb(url, fileName);
+
+      Future.delayed(const Duration(seconds: 2), () {
+        if (!context.mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Download Complete')),
+        );
+      });
+    } catch (e) {
+      Future.delayed(const Duration(seconds: 2), () {
+        if (!context.mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Download Failed')),
+        );
+      });
+    }
+  }
+
+  void _downloadFileWeb(String url, String fileName) {
+    html.AnchorElement anchorElement = html.AnchorElement(href: url);
+    anchorElement.download = fileName;
+    anchorElement.click();
+  }
 }
 
 class HeroicImageContainer extends StatefulWidget {

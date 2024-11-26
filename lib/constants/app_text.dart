@@ -34,7 +34,7 @@ class AppText {
     return ProjectDetail(
       "Dashboard",
       "assets/gif/tmc.gif",
-      "An admin dashboard serves multiple crucial functions, enhancing operational efficiency, decision-making, and user management. It provides a centralized platform for overseeing components, making informed decisions, and managing user interactions. The dashboard presents real-time data and analytics, enabling prompt responses to emerging trends and issues. It empowers data-driven decision-making, efficient user management, and content oversight. The dashboard also monitors system health, ensures security and compliance, and facilitates communication among team members. Its scalability supports long-term growth, adapting to changing business environments.",
+      "The project is called Transport Management System (TMC), developed using the PyQt6 package in Python, designed specifically for transport booking in colleges. This application is cross-platform, allowing it to run on multiple operating systems. The frontend of the application was created using Qt Designer in Python, while the backend is powered by Python and utilizes MySQL as the database. The system comes with a variety of features, including transport booking for exams, events, and regular services. It allows users to view and print booking history, and integrates a payment gateway for secure transactions. Other key features include student detail management, course management, university management, subject management, and fee management, among others. This application provides a comprehensive solution for managing transport services in colleges.",
       _technicalSkills(),
     );
   }

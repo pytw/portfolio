@@ -12,21 +12,15 @@ class ProjectSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppSize.horizontalPadding,
-        vertical: AppSize.verticalPadding,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          _buildProjectHeader(context),
-          const SizedBox(height: AppSize.spacing * 3),
-          _buildProjectContent(context),
-          const SizedBox(height: AppSize.spacing * 2),
-          _buildMoreProjectBtn(context),
-        ],
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        _buildProjectHeader(context),
+        const SizedBox(height: AppSize.spacing * 3),
+        _buildProjectContent(context),
+        const SizedBox(height: AppSize.spacing * 2),
+        _buildMoreProjectBtn(context),
+      ],
     );
   }
 
@@ -62,11 +56,11 @@ class ProjectSection extends StatelessWidget {
 Widget _buildProjectHeader(BuildContext context) {
   return CustomHeader(
     titleText: 'A Glimpse of ',
-    titleStyle: Theme.of(context).textTheme.headlineMedium!.copyWith(
+    titleStyle: Theme.of(context).textTheme.displaySmall?.copyWith(
           color: Theme.of(context).colorScheme.onPrimary,
         ),
     subtitleText: 'My Work',
-    subtitleStyle: Theme.of(context).textTheme.headlineMedium!.copyWith(
+    subtitleStyle: Theme.of(context).textTheme.displaySmall?.copyWith(
           color: Theme.of(context).primaryColor,
         ),
   );
@@ -95,11 +89,11 @@ Widget _buildProjectDetail(BuildContext context, ProjectDetail project) {
       ),
       const SizedBox(height: AppSize.spacing),
       Text(
-        project.overview,
-        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+        "The project is called Transport Management System (TMC), developed using the PyQt6 package in Python, designed specifically for transport booking in colleges. This application is cross-platform, allowing it to run on multiple operating systems.\n\n"
+        "The frontend of the application was created using Qt Designer in Python, while the backend is powered by Python and utilizes MySQL as the database. The system comes with a variety of features, including transport booking for exams, events, and regular services.\n\n"
+        "Other key features include student detail management, course management, university management, subject management, and fee management, among others. This application provides a comprehensive solution for managing transport services in colleges.",
+        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
               color: Theme.of(context).colorScheme.onSecondary,
-              letterSpacing: 0.8,
-              height: 2.5,
             ),
       ),
       const SizedBox(height: AppSize.spacing),

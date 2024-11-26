@@ -18,12 +18,12 @@ class FooterSection extends StatelessWidget {
         children: [
           Text(
             '\u00A9 2024 Praveen Yadav. All rights reserved.',
-            style: Theme.of(context).textTheme.bodyMedium,
+            style: Theme.of(context).textTheme.titleMedium,
           ),
           const SizedBox(height: spacing),
           Text(
             'Made with Flutter',
-            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: Theme.of(context).colorScheme.onSecondary,
                 ),
           ),
