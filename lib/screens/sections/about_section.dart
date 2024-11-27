@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:portfolio_website/constants/app_image.dart';
-import 'package:portfolio_website/constants/app_size.dart';
-import 'package:portfolio_website/constants/app_text.dart';
-import 'package:portfolio_website/widgets/custom_header.dart';
-import 'package:portfolio_website/widgets/simple_custom_button.dart';
-import 'package:portfolio_website/widgets/effect.dart';
+
+import '../../theme/app_constant.dart';
+import '../../widgets/custom_header.dart';
+import '../../widgets/effect.dart';
+import '../../widgets/simple_custom_button.dart';
 
 class AboutSection extends StatelessWidget {
   const AboutSection({super.key});
@@ -40,7 +39,7 @@ class AboutSection extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         final screenWidth = constraints.maxWidth;
-        final isDesktop = screenWidth >= AppSize.screenBreakPoint;
+        final isDesktop = screenWidth >= AppSize.layoutBuilderBreakPoint;
 
         return isDesktop
             ? Row(
@@ -53,7 +52,7 @@ class AboutSection extends StatelessWidget {
             : Column(
                 children: [
                   _buildAboutMeImage(),
-                  const SizedBox(height: AppSize.spacing),
+                  const SizedBox(height: AppSize.spacing * 2),
                   _buildAboutMeText(context),
                 ],
               );
@@ -67,8 +66,7 @@ class AboutSection extends StatelessWidget {
       child: Image.asset(
         AppImage.aboutImage,
         fit: BoxFit.contain,
-        errorBuilder: (context, error, stackTrace) =>
-            const Icon(Icons.broken_image),
+        errorBuilder: (_, __, ___) => const CircularProgressIndicator(),
       ),
     );
   }
@@ -81,6 +79,8 @@ class AboutSection extends StatelessWidget {
         AppText.aboutMeText,
         style: theme.textTheme.bodyLarge?.copyWith(
           color: theme.colorScheme.onSecondary,
+          letterSpacing: 0.5,
+          height: 2,
         ),
       ),
     );
@@ -94,16 +94,22 @@ class AboutSection extends StatelessWidget {
         scale: 1.1,
         builder: (isHovered, isClicked, __, ___) => SimpleCustomButton(
           label: "Connect with Me",
-          textStyle: TextStyle(
-            color: isClicked ? theme.primaryColor : theme.colorScheme.onPrimary,
-          ),
+          textStyle: Theme.of(context).textTheme.labelLarge?.copyWith(
+              color:
+                  isClicked ? theme.primaryColor : theme.colorScheme.onPrimary,
+              letterSpacing: 1),
           backgroundColor: theme.scaffoldBackgroundColor,
           borderWidth: 1.5,
           borderColor:
               isHovered ? theme.primaryColor : theme.colorScheme.onPrimary,
           onPressed: () {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Feature coming soon!')),
+              const SnackBar(
+                content: Text(
+                  'Feature coming soon!',
+                  textAlign: TextAlign.center,
+                ),
+              ),
             );
           },
         ),

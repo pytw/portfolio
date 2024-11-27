@@ -7,6 +7,7 @@ enum IconPosition {
 
 class SimpleCustomButton extends StatelessWidget {
   final String? label;
+  final String? message;
   final Icon? icon;
   final VoidCallback onPressed;
   final TextStyle? textStyle;
@@ -24,6 +25,7 @@ class SimpleCustomButton extends StatelessWidget {
     super.key,
     required this.onPressed,
     this.label,
+    this.message,
     this.icon,
     this.textStyle,
     this.padding = const EdgeInsets.symmetric(vertical: 6.0, horizontal: 8.0),
@@ -45,23 +47,26 @@ class SimpleCustomButton extends StatelessWidget {
       child: InkWell(
         onTap: onPressed,
         borderRadius: borderRadius,
-        child: Container(
-          padding: padding,
-          decoration: BoxDecoration(
-            color: backgroundColor,
-            borderRadius: borderRadius,
-            border: Border.all(color: borderColor, width: borderWidth),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: _buildContent(),
+        child: Tooltip(
+          message: message ?? label,
+          child: Container(
+            padding: padding,
+            decoration: BoxDecoration(
+              color: backgroundColor,
+              borderRadius: borderRadius,
+              border: Border.all(color: borderColor, width: borderWidth),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: _buildContent(context),
+            ),
           ),
         ),
       ),
     );
   }
 
-  List<Widget> _buildContent() {
+  List<Widget> _buildContent(BuildContext context) {
     final List<Widget> content = [];
 
     if (icon != null && iconPosition == IconPosition.left) {
@@ -71,7 +76,7 @@ class SimpleCustomButton extends StatelessWidget {
     if (label != null) {
       content.add(
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: icon != null ? 8.0 : 0.0),
+          padding: EdgeInsets.symmetric(horizontal: icon != null ? 8 : 0),
           child: Container(
             decoration: showUnderline
                 ? BoxDecoration(
@@ -84,10 +89,10 @@ class SimpleCustomButton extends StatelessWidget {
             child: Text(
               label!,
               style: textStyle ??
-                  const TextStyle(
-                    color: Colors.white,
-                    fontSize: 14,
-                  ),
+                  Theme.of(context)
+                      .textTheme
+                      .labelLarge
+                      ?.copyWith(letterSpacing: 0.6),
             ),
           ),
         ),

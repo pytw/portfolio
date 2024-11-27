@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 
 class AppTextTheme {
-  // Scales font size dynamically based on TextScale
   static double getResponsiveFontSize(BuildContext context, double baseSize) {
     final textScale = MediaQuery.textScalerOf(context);
     return textScale.scale(baseSize);
   }
 
-  // Generate a responsive TextTheme
   static TextTheme getTextTheme(BuildContext context) {
     return TextTheme(
       displayLarge: TextStyle(
@@ -21,7 +19,6 @@ class AppTextTheme {
       displaySmall: TextStyle(
         fontSize: getResponsiveFontSize(context, 24), // Section header
         fontWeight: FontWeight.w600,
-        color: Colors.yellow
       ),
       headlineLarge: TextStyle(
         fontSize: getResponsiveFontSize(context, 22), // Page sub-header

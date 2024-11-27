@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:portfolio_website/constants/app_image.dart';
-import 'package:portfolio_website/constants/app_size.dart';
 import 'package:portfolio_website/screens/sections/about_section.dart';
 import 'package:portfolio_website/screens/sections/contact_section.dart';
 import 'package:portfolio_website/screens/sections/footer_section.dart';
 import 'package:portfolio_website/screens/sections/heroic_section.dart';
 import 'package:portfolio_website/screens/sections/project_section.dart';
 import 'package:portfolio_website/screens/sections/skill_section.dart';
+import 'package:portfolio_website/widgets/custom_drawer.dart';
 import 'package:portfolio_website/widgets/navbar.dart';
+
+import '../theme/app_constant.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -75,8 +76,8 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   double _calculatePadding(double width) {
-    if (width < AppSize.smallScreenBreakPoint) return width * 0.005;
-    if (width < AppSize.screenBreakPoint) return width * 0.05;
+    if (width < AppSize.smallScreenBreakPoint) return width * 0.002;
+    if (width < AppSize.screenBreakPoint) return width * 0.02;
     return width * 0.12;
   }
 
@@ -91,6 +92,7 @@ class _HomeScreenState extends State<HomeScreen> {
           activeSection: _activeSection,
           onSectionSelected: _scrollToSection,
         ),
+        drawer: CustomDrawer(onSectionSelected: _scrollToSection),
         body: Stack(
           children: [
             Positioned.fill(
@@ -109,14 +111,34 @@ class _HomeScreenState extends State<HomeScreen> {
                     screenHeight,
                     screenWidth,
                   ),
-                  _buildSection('Project', const ProjectSection(), screenHeight,
-                      screenWidth),
+                  const SizedBox(height: AppSize.spacing * 3),
                   _buildSection(
-                      'Skill', const SkillSection(), screenHeight, screenWidth),
+                    'Project',
+                    const ProjectSection(),
+                    screenHeight,
+                    screenWidth,
+                  ),
+                  const SizedBox(height: AppSize.spacing * 3),
                   _buildSection(
-                      'About', const AboutSection(), screenHeight, screenWidth),
-                  _buildSection('Contact', const ContactSection(), screenHeight,
-                      screenWidth),
+                    'Skill',
+                    const SkillSection(),
+                    screenHeight,
+                    screenWidth,
+                  ),
+                  const SizedBox(height: AppSize.spacing * 3),
+                  _buildSection(
+                    'About',
+                    const AboutSection(),
+                    screenHeight,
+                    screenWidth,
+                  ),
+                  const SizedBox(height: AppSize.spacing * 3),
+                  _buildSection(
+                    'Contact',
+                    const ContactSection(),
+                    screenHeight,
+                    screenWidth,
+                  ),
                   const FooterSection(),
                 ],
               ),
@@ -132,19 +154,24 @@ class _HomeScreenState extends State<HomeScreen> {
     return Container(
       key: _sectionKeys[key],
       margin: EdgeInsets.symmetric(
-        vertical: screenHeight * 0.02,
-        horizontal: screenWidth * 0.02,
+        vertical: screenHeight * 0.01,
+        horizontal: screenWidth * 0.015,
       ),
       padding: EdgeInsets.symmetric(
-        vertical: screenHeight * 0.02,
-        horizontal: screenWidth * 0.02,
+        vertical: screenHeight * 0.01,
+        horizontal: screenWidth * 0.015,
       ),
       child: sectionWidget,
     );
   }
 
   Widget _buildScrollImageEffect() {
-    final List<String> images = [AppImage.bg1, AppImage.bg2, AppImage.bg3];
+    final List<String> images = [
+      AppImage.bg1,
+      AppImage.bg2,
+      AppImage.bg3,
+      AppImage.bg4,
+    ];
 
     return AnimatedBuilder(
       animation: _scrollController,

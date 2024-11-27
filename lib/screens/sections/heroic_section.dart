@@ -2,48 +2,49 @@ import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:portfolio_website/constants/app_image.dart';
-import 'package:portfolio_website/constants/app_size.dart';
-import 'package:portfolio_website/constants/app_text.dart';
-import 'package:portfolio_website/widgets/custom_header.dart';
-import 'package:portfolio_website/widgets/simple_custom_button.dart';
-import 'package:portfolio_website/widgets/effect.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'dart:html' as html;
+
+import '../../theme/app_constant.dart';
+import '../../widgets/custom_header.dart';
+import '../../widgets/effect.dart';
+import '../../widgets/simple_custom_button.dart';
 
 class HeroicSection extends StatelessWidget {
   const HeroicSection({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return _buildHeroicContent(context);
-  }
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        bool isLargeScreen = constraints.maxWidth >= 575;
 
-  Widget _buildHeroicContent(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
-    if (screenWidth >= AppSize.screenBreakPoint) {
-      return Row(
-        children: [
-          Flexible(
-            child: Row(
-              children: [
-                _buildHeroicDetails(context),
-              ],
-            ),
-          ),
-          const SizedBox(width: (AppSize.spacing * 3)),
-          const Flexible(child: HeroicImageContainer()),
-        ],
-      );
-    } else {
-      return Column(
-        children: [
-          const HeroicImageContainer(),
-          const SizedBox(height: AppSize.spacing),
-          Center(child: _buildHeroicDetails(context)),
-        ],
-      );
-    }
+        return Padding(
+          padding: const EdgeInsets.all(AppSize.horizontalPadding),
+          child: isLargeScreen
+              ? Row(
+                  children: [
+                    Flexible(
+                      child: _buildHeroicDetails(context),
+                    ),
+                    const SizedBox(width: AppSize.spacing * 3),
+                    const Flexible(
+                      child: Align(
+                          alignment: Alignment.center,
+                          child: HeroicImageContainer()),
+                    ),
+                  ],
+                )
+              : Column(
+                  children: [
+                    const HeroicImageContainer(),
+                    const SizedBox(height: AppSize.spacing),
+                    _buildHeroicDetails(context),
+                  ],
+                ),
+        );
+      },
+    );
   }
 
   Widget _buildHeroicDetails(BuildContext context) {
@@ -96,26 +97,34 @@ class HeroicSection extends StatelessWidget {
         Effect(
           scale: 1.1,
           hoverOpacity: 0.9,
-          builder: (isHovered, isClick, scale, opacity) => Tooltip(
-            message: "Download Resume",
-            child: SimpleCustomButton(
-              onPressed: () => _DownloadResume(context).showDownloadOptions(),
-              label: "Download Resume",
-              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-              borderColor: Colors.white,
-              borderWidth: 2,
-            ),
+          builder: (isHovered, isClick, scale, opacity) => SimpleCustomButton(
+            onPressed: () => _DownloadResume(context).showDownloadOptions(),
+            label: "Download Resume",
+            textStyle: Theme.of(context).textTheme.labelLarge?.copyWith(
+                  letterSpacing: 0.8,
+                ),
+            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+            borderColor: Colors.white,
+            borderWidth: 2,
           ),
         ),
         Effect(
           scale: 1.1,
-          builder: (isHovered, isClicked, scale, opacity) => Tooltip(
-            message: "See Projects",
-            child: SimpleCustomButton(
-              onPressed: () {},
+          builder: (isHovered, isClicked, scale, opacity) => SimpleCustomButton(
+              onPressed: () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text(
+                      'Feature coming soon!',
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                );
+              },
               label: "See Projects",
-            ),
-          ),
+              textStyle: Theme.of(context).textTheme.labelLarge?.copyWith(
+                    letterSpacing: 1,
+                  )),
         ),
       ],
     );
@@ -123,12 +132,13 @@ class HeroicSection extends StatelessWidget {
 
   Widget _buildSocialIcons() {
     return Wrap(
-        spacing: AppSize.spacing * 2,
-        runSpacing: AppSize.spacing,
-        alignment: WrapAlignment.center,
-        children: AppText.socialMedia.map((social) {
-          return _buildSocialIconButton(social.name, social.icon, social.url);
-        }).toList());
+      spacing: AppSize.spacing * 2,
+      runSpacing: AppSize.spacing,
+      alignment: WrapAlignment.center,
+      children: AppText.socialMedia.map((social) {
+        return _buildSocialIconButton(social.name, social.icon, social.url);
+      }).toList(),
+    );
   }
 
   Widget _buildSocialIconButton(String name, IconData icon, String url) {
@@ -288,38 +298,45 @@ class _HeroicImageContainerState extends State<HeroicImageContainer> {
 
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
-    bool isLargeScreen = screenWidth >= AppSize.screenBreakPoint;
-    final gradientCenter = _calculateGradientCenter(currentTime);
+    final isLargeScreen = MediaQuery.of(context).size.width >= 850;
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final gradientCenter = _calculateGradientCenter(currentTime);
 
-    return Container(
-      width: isLargeScreen ? screenWidth * 0.3 : double.infinity,
-      height: isLargeScreen ? screenWidth * 0.3 : screenWidth * 0.6,
-      decoration: BoxDecoration(
-        gradient: RadialGradient(
-          colors: [
-            Colors.blue.shade800,
-            Colors.blue.shade600,
-            Colors.blue.shade400,
-            Colors.blue.shade200,
-            Colors.blue.shade100,
-            Colors.blue.shade50,
-          ],
-          stops: const [0.1, 0.2, 0.4, 0.6, 0.8, 1],
-          center: gradientCenter,
-          radius: 1,
-        ),
-        shape: isLargeScreen ? BoxShape.circle : BoxShape.rectangle,
-        borderRadius: isLargeScreen
-            ? null
-            : BorderRadius.circular(AppSize.borderRadius * 2),
-      ),
-      child: isLargeScreen
-          ? ClipOval(child: _buildImage())
-          : ClipRRect(
-              borderRadius: BorderRadius.circular(AppSize.borderRadius * 2),
-              child: _buildImage(),
+        return Container(
+          width: isLargeScreen
+              ? constraints.maxWidth * 0.85
+              : constraints.maxWidth,
+          height: isLargeScreen
+              ? constraints.maxWidth * 0.85
+              : constraints.maxWidth * 0.75,
+          decoration: BoxDecoration(
+            gradient: RadialGradient(
+              colors: [
+                Colors.blue.shade800,
+                Colors.blue.shade600,
+                Colors.blue.shade400,
+                Colors.blue.shade200,
+                Colors.blue.shade100,
+                Colors.blue.shade50,
+              ],
+              stops: const [0.1, 0.2, 0.4, 0.6, 0.8, 1],
+              center: gradientCenter,
+              radius: 1,
             ),
+            shape: isLargeScreen ? BoxShape.circle : BoxShape.rectangle,
+            borderRadius: isLargeScreen
+                ? null
+                : BorderRadius.circular(AppSize.borderRadius * 2),
+          ),
+          child: isLargeScreen
+              ? ClipOval(child: _buildImage())
+              : ClipRRect(
+                  borderRadius: BorderRadius.circular(AppSize.borderRadius * 2),
+                  child: _buildImage(),
+                ),
+        );
+      },
     );
   }
 

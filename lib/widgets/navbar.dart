@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../theme/app_constant.dart';
+
 class Navbar extends StatelessWidget implements PreferredSizeWidget {
   final Function(String section) onSectionSelected;
   final String activeSection;
@@ -10,9 +12,6 @@ class Navbar extends StatelessWidget implements PreferredSizeWidget {
     required this.activeSection,
   });
 
-  static const double mediumScreenBreakPoint = 768.0;
-  static const double smallScreenBreakPoint = 600.0;
-
   final List<Map<String, dynamic>> _sections = [
     {'label': 'Home', 'icon': Icons.home},
     {'label': 'Project', 'icon': Icons.work},
@@ -21,14 +20,21 @@ class Navbar extends StatelessWidget implements PreferredSizeWidget {
     {'label': 'Contact', 'icon': Icons.contact_mail},
   ];
 
-  Widget _buildLogo() => const Padding(
-        padding: EdgeInsets.symmetric(horizontal: 12.0),
-        child: Text(
-          'PY',
-          style: TextStyle(
-            color: Colors.blue,
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
+  Widget _buildLogo(BuildContext context) => Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSize.horizontalPadding,
+        ),
+        child: InkWell(
+          onTap: () => onSectionSelected('Home'),
+          mouseCursor: SystemMouseCursors.click,
+          highlightColor: Colors.transparent,
+          splashColor: Colors.transparent,
+          child: Text(
+            'PY',
+            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                  color: Theme.of(context).primaryColor,
+                  letterSpacing: 2,
+                ),
           ),
         ),
       );
@@ -37,89 +43,78 @@ class Navbar extends StatelessWidget implements PreferredSizeWidget {
     required String label,
     required IconData icon,
     required bool isActive,
-    required bool isHovered,
-    required bool isTablet,
   }) {
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      child: GestureDetector(
-        onTap: () => onSectionSelected(label),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12.0),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(
-                icon,
-                color: Colors.blue,
-                size: isTablet ? 20 : 24,
+    final hoverNotifier = ValueNotifier<bool>(false);
+
+    return ValueListenableBuilder<bool>(
+      valueListenable: hoverNotifier,
+      builder: (context, isHovered, child) {
+        return MouseRegion(
+          cursor: SystemMouseCursors.click,
+          onEnter: (_) => hoverNotifier.value = true,
+          onExit: (_) => hoverNotifier.value = false,
+          child: GestureDetector(
+            onTap: () => onSectionSelected(label),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppSize.horizontalPadding,
               ),
-              if (!isTablet) const SizedBox(width: 6),
-              if (!isTablet)
-                Text(
-                  label,
-                  style: TextStyle(
-                    color: isHovered || isActive ? Colors.blue : Colors.white,
-                    fontSize: isTablet ? 16 : 18,
-                    fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    icon,
+                    color: Colors.blue,
                   ),
-                ),
-            ],
+                  const SizedBox(width: AppSize.spacing/2),
+                  Text(
+                    label,
+                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                      color: isHovered || isActive ? Colors.blue : Colors.white,
+                      fontWeight:
+                          isActive ? FontWeight.w500 : FontWeight.normal,
+                      letterSpacing: 1
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-    final bool isTablet = width < mediumScreenBreakPoint;
-    final bool isSmallScreen = width < smallScreenBreakPoint;
+    final bool isSmallScreen = width < AppSize.screenBreakPoint;
 
     return AppBar(
       elevation: 0,
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.transparent,
+      automaticallyImplyLeading: false,
       title: Row(
         children: [
-          _buildLogo(),
+          _buildLogo(context),
           const Spacer(),
           if (isSmallScreen)
-            PopupMenuButton<String>(
-              icon: const Icon(Icons.menu, color: Colors.blue),
-              onSelected: onSectionSelected,
-              itemBuilder: (_) => _sections
-                  .map(
-                    (section) => PopupMenuItem<String>(
-                      value: section['label'] as String,
-                      child: Text(
-                        section['label'] as String,
-                        style: const TextStyle(color: Colors.black),
-                      ),
-                    ),
-                  )
-                  .toList(),
+            Builder(
+              builder: (context) => IconButton(
+                icon: const Icon(Icons.menu, color: Colors.blue),
+                onPressed: () {
+                  Scaffold.of(context).openDrawer();
+                },
+              ),
             )
           else
             Row(
               children: _sections.map((section) {
                 final String label = section['label'] as String;
-                return StatefulBuilder(
-                  builder: (context, setState) {
-                    bool isHovered = false;
-                    return MouseRegion(
-                      cursor: SystemMouseCursors.click,
-                      onEnter: (_) => setState(() => isHovered = true),
-                      onExit: (_) => setState(() => isHovered = false),
-                      child: _buildNavItem(
-                        label: label,
-                        icon: section['icon'] as IconData,
-                        isActive: activeSection == label,
-                        isHovered: isHovered,
-                        isTablet: isTablet,
-                      ),
-                    );
-                  },
+                return _buildNavItem(
+                  label: label,
+                  icon: section['icon'] as IconData,
+                  isActive: activeSection == label,
                 );
               }).toList(),
             ),
