@@ -30,14 +30,6 @@ class AppImage {
   static const String _assetImage = 'assets/images/';
   static const String _assetIcon = 'assets/icons/';
 
-  static const String _assetImageBg = '${_assetImage}background/';
-
-  // background
-  static const String bg1 = '${_assetImageBg}bg1.jpg';
-  static const String bg2 = '${_assetImageBg}bg2.jpg';
-  static const String bg3 = '${_assetImageBg}bg3.jpg';
-  static const String bg4 = '${_assetImageBg}bg4.jpg';
-
   //additional images
   static const String heroicImage = '${_assetImage}pyapril15.png';
   static const String aboutImage = '${_assetImage}about-me.png';
@@ -87,7 +79,7 @@ class AppText {
     SocialMedia(
         'Github', FontAwesomeIcons.github, 'https://www.github.com/pyapril15'),
     SocialMedia('LinkedIn', FontAwesomeIcons.linkedin,
-        'https://www.linkedin.com/in/pyapril15'),
+        'www.linkedin.com/in/praveen-yadav-1947222ab'),
     SocialMedia('Instagram', FontAwesomeIcons.instagram,
         'https://www.instagram.com/codelabpraveen'),
     SocialMedia('Twitter', FontAwesomeIcons.twitter,
