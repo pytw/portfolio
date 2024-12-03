@@ -12,7 +12,7 @@ class ProjectScreen extends StatefulWidget {
   const ProjectScreen({super.key});
 
   @override
-  _ProjectScreenState createState() => _ProjectScreenState();
+  State<ProjectScreen> createState() => _ProjectScreenState();
 }
 
 class _ProjectScreenState extends State<ProjectScreen> {
@@ -21,17 +21,14 @@ class _ProjectScreenState extends State<ProjectScreen> {
   @override
   void initState() {
     super.initState();
-    _projects = fetchProjects();  // Fetch data once when the widget is initialized
+    _projects = fetchProjects();
   }
 
-  // Fetch projects from Firestore
   Future<List<Map<String, dynamic>>> fetchProjects() async {
-    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    FirebaseFirestore fireStore = FirebaseFirestore.instance;
 
-    // Fetch documents from 'projects' collection
-    QuerySnapshot querySnapshot = await firestore.collection('projects').get();
+    QuerySnapshot querySnapshot = await fireStore.collection('projects').get();
 
-    // Map each document to a Map (to display in the UI)
     return querySnapshot.docs.map((doc) {
       return {
         'name': doc['name'],
@@ -46,8 +43,8 @@ class _ProjectScreenState extends State<ProjectScreen> {
     return width < AppSize.smallScreenBreakPoint
         ? width * 0.005
         : width < AppSize.screenBreakPoint
-        ? width * 0.02
-        : width * 0.08;
+            ? width * 0.02
+            : width * 0.08;
   }
 
   @override
@@ -58,44 +55,11 @@ class _ProjectScreenState extends State<ProjectScreen> {
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
           padding:
-          EdgeInsets.symmetric(horizontal: _calculatePadding(screenWidth)),
+              EdgeInsets.symmetric(horizontal: _calculatePadding(screenWidth)),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _buildProjectSection(context, _buildProjectMainHeader(context)),
-              // Use FutureBuilder here, but fetch data only once in the state
-              FutureBuilder<List<Map<String, dynamic>>>(
-                future: _projects,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(child: CircularProgressIndicator());
-                  } else if (snapshot.hasError) {
-                    return Center(child: Text('Error: ${snapshot.error}'));
-                  } else if (snapshot.hasData) {
-                    var projects = snapshot.data;
-
-                    // Carousel with the first 3 projects
-                    return _buildProjectSection(
-                      context,
-                      CarouselSlider(
-                        options: CarouselOptions(
-                          autoPlay: true,
-                          enlargeCenterPage: true,
-                          height: MediaQuery.of(context).size.height * 0.9,
-                          viewportFraction: 0.8,
-                        ),
-                        items: projects!.sublist(0, 3).map((project) {
-                          return _BuildProject(project: project);
-                        }).toList(),
-                      ),
-                    );
-                  } else {
-                    return Center(child: Text('No Projects Found'));
-                  }
-                },
-              ),
-              _buildProjectSection(context, _buildProjectHeader(context)),
-              // Use FutureBuilder again for the grid view (only fetch once)
               FutureBuilder<List<Map<String, dynamic>>>(
                 future: _projects,
                 builder: (context, snapshot) {
@@ -106,18 +70,55 @@ class _ProjectScreenState extends State<ProjectScreen> {
                   } else if (snapshot.hasData) {
                     var projects = snapshot.data;
 
-                    // GridView with all projects
+                    return _buildProjectSection(
+                      context,
+                      LayoutBuilder(
+                        builder: (context, constraints) {
+                          double width = constraints.maxWidth;
+                          double height = MediaQuery.of(context).size.height;
+                          height = width > 500 ? height * 0.8 : height * 0.5;
+                          return CarouselSlider(
+                            options: CarouselOptions(
+                              autoPlay: true,
+                              enlargeCenterPage: true,
+                              height: height,
+                              viewportFraction: 0.8,
+                            ),
+                            items: projects!.sublist(0, 3).map((project) {
+                              return _BuildProject(project: project);
+                            }).toList(),
+                          );
+                        },
+                      ),
+                    );
+                  } else {
+                    return const Center(child: Text('No Projects Found'));
+                  }
+                },
+              ),
+              _buildProjectSection(context, _buildProjectHeader(context)),
+              FutureBuilder<List<Map<String, dynamic>>>(
+                future: _projects,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  } else if (snapshot.hasData) {
+                    var projects = snapshot.data;
+
                     return _buildProjectSection(
                       context,
                       LayoutBuilder(
                         builder: (context, constraints) {
                           int crossAxisCount =
-                          (constraints.maxWidth ~/ 200).clamp(2, 4);
+                              (constraints.maxWidth ~/ 200).clamp(2, 4);
+
                           return GridView.builder(
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),
                             gridDelegate:
-                            SliverGridDelegateWithFixedCrossAxisCount(
+                                SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: crossAxisCount,
                               childAspectRatio: 1,
                               crossAxisSpacing: 10,
@@ -167,8 +168,8 @@ class _ProjectScreenState extends State<ProjectScreen> {
       subtitleText: "Projects",
       titleStyle: Theme.of(context).textTheme.displayMedium,
       subtitleStyle: Theme.of(context).textTheme.displayMedium?.copyWith(
-        color: Theme.of(context).primaryColor,
-      ),
+            color: Theme.of(context).primaryColor,
+          ),
     );
   }
 
@@ -176,10 +177,9 @@ class _ProjectScreenState extends State<ProjectScreen> {
     return CustomHeader(
       titleText: "More ",
       subtitleText: "Projects",
-      titleStyle:
-      Theme.of(context).textTheme.displaySmall?.copyWith(
-        color: Theme.of(context).primaryColor,
-      ),
+      titleStyle: Theme.of(context).textTheme.displaySmall?.copyWith(
+            color: Theme.of(context).primaryColor,
+          ),
       subtitleStyle: Theme.of(context).textTheme.displaySmall,
     );
   }
@@ -187,29 +187,12 @@ class _ProjectScreenState extends State<ProjectScreen> {
 
 class _BuildProject extends StatelessWidget {
   final Map<String, dynamic> project;
-  final bool isCard;
 
-  const _BuildProject({required this.project, this.isCard = false});
+  const _BuildProject({required this.project});
 
   @override
   Widget build(BuildContext context) {
-    return isCard
-        ? Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(
-          AppSize.borderRadius,
-        ),
-      ),
-      elevation: 5,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(child: _buildProjectImage(context, project['image'])),
-          _buildProjectOverView(context, project),
-        ],
-      ),
-    )
-        : Stack(
+    return Stack(
       children: [
         _buildProjectImage(context, project['image']),
         _buildProjectOverView(context, project),
@@ -219,27 +202,21 @@ class _BuildProject extends StatelessWidget {
 }
 
 Widget _buildProjectImage(BuildContext context, String imageUrl) {
-  print('Loading image from URL: $imageUrl');
   return ClipRRect(
     borderRadius: BorderRadius.circular(10),
-    child: Image.network(
-      imageUrl.isNotEmpty
-          ? imageUrl
-          : 'https://example.com/placeholder.jpg',
+    child: CachedNetworkImage(
+      imageUrl: imageUrl,
       width: double.infinity,
       height: double.infinity,
       fit: BoxFit.cover,
-      loadingBuilder: (context, child, loadingProgress) {
-        if (loadingProgress == null) return child;
-        return const Center(child: CircularProgressIndicator());
-      },
-      errorBuilder: (context, error, stackTrace) {
-        return Icon(
-          Icons.broken_image,
-          size: 50,
-          color: Theme.of(context).colorScheme.onError,
-        );
-      },
+      placeholder: (context, url) => const Center(
+        child: CircularProgressIndicator(),
+      ),
+      errorWidget: (context, url, error) => Icon(
+        Icons.broken_image,
+        size: 50,
+        color: Theme.of(context).colorScheme.onError,
+      ),
     ),
   );
 }
@@ -287,9 +264,9 @@ Widget _buildProjectDescription(
     maxLines: 2,
     overflow: TextOverflow.ellipsis,
     style: Theme.of(context).textTheme.titleSmall?.copyWith(
-      color: Theme.of(context).colorScheme.onSecondary,
-      letterSpacing: 0.5,
-    ),
+          color: Theme.of(context).colorScheme.onSecondary,
+          letterSpacing: 0.5,
+        ),
   );
 }
 
@@ -313,8 +290,8 @@ Widget _buildProjectRatingWithButton(
           onPressed: () {},
           label: "Details",
           textStyle: Theme.of(context).textTheme.titleSmall?.copyWith(
-            letterSpacing: 0.5,
-          ),
+                letterSpacing: 0.5,
+              ),
           backgroundColor: Colors.transparent,
           borderColor: isHovered ? Colors.white : Colors.transparent,
         ),
