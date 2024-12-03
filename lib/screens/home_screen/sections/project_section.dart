@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../../models/models.dart';
-import '../../theme/app_constant.dart';
-import '../../widgets/custom_header.dart';
-import '../../widgets/effect.dart';
-import '../../widgets/simple_custom_button.dart';
+import '../../../models/models.dart';
+import '../../../theme/app_constant.dart';
+import '../../../widgets/custom_header.dart';
+import '../../../widgets/effect.dart';
+import '../../../widgets/simple_custom_button.dart';
 
 class ProjectSection extends StatelessWidget {
   const ProjectSection({super.key});

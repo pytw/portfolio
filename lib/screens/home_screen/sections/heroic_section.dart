@@ -5,10 +5,10 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'dart:html' as html;
 
-import '../../theme/app_constant.dart';
-import '../../widgets/custom_header.dart';
-import '../../widgets/effect.dart';
-import '../../widgets/simple_custom_button.dart';
+import '../../../theme/app_constant.dart';
+import '../../../widgets/custom_header.dart';
+import '../../../widgets/effect.dart';
+import '../../../widgets/simple_custom_button.dart';
 
 class HeroicSection extends StatelessWidget {
   const HeroicSection({super.key});

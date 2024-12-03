@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:visibility_detector/visibility_detector.dart';
-import 'package:portfolio_website/screens/sections/about_section.dart';
-import 'package:portfolio_website/screens/sections/contact_section.dart';
-import 'package:portfolio_website/screens/sections/footer_section.dart';
-import 'package:portfolio_website/screens/sections/heroic_section.dart';
-import 'package:portfolio_website/screens/sections/project_section.dart';
-import 'package:portfolio_website/screens/sections/skill_section.dart';
+import 'package:portfolio_website/screens/home_screen/sections/about_section.dart';
+import 'package:portfolio_website/screens/home_screen/sections/contact_section.dart';
+import 'package:portfolio_website/screens/home_screen/sections/footer_section.dart';
+import 'package:portfolio_website/screens/home_screen/sections/heroic_section.dart';
+import 'package:portfolio_website/screens/home_screen/sections/project_section.dart';
+import 'package:portfolio_website/screens/home_screen/sections/skill_section.dart';
 import 'package:portfolio_website/widgets/custom_drawer.dart';
 import 'package:portfolio_website/widgets/navbar.dart';
 
-import '../theme/app_constant.dart';
+import '../../../theme/app_constant.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -22,6 +23,11 @@ class _HomeScreenState extends State<HomeScreen> {
   final ScrollController _scrollController = ScrollController();
   bool _isAutoScrolling = false;
   String _activeSection = 'Home';
+  late final Stream<DateTime> _dateTimeStream = Stream.periodic(
+    const Duration(seconds: 1),
+    (_) => DateTime.now(),
+  );
+
   final Map<String, GlobalKey> _sectionKeys = {
     'Home': GlobalKey(),
     'Project': GlobalKey(),
@@ -98,17 +104,32 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildScrollProgressIndicator() {
-    return Positioned(
-      left: 0, top: 0, right: 0,
-      child: LinearProgressIndicator(
-        value: _scrollController.hasClients
-            ? _scrollController.position.pixels /
-                _scrollController.position.maxScrollExtent
-            : 0.0,
-        minHeight: 4,
-        backgroundColor: Colors.grey[300],
-        valueColor: const AlwaysStoppedAnimation<Color>(Colors.blue),
-      ),
+    return LinearProgressIndicator(
+      value: _scrollController.hasClients
+          ? _scrollController.position.pixels /
+              _scrollController.position.maxScrollExtent
+          : 0.0,
+      minHeight: 4,
+      backgroundColor: Colors.grey[300],
+      valueColor: const AlwaysStoppedAnimation<Color>(Colors.blue),
+    );
+  }
+
+  Widget _buildTimeWidget(BuildContext context) {
+    return StreamBuilder<DateTime>(
+      stream: _dateTimeStream,
+      builder: (context, snapshot) {
+        final time = snapshot.data ?? DateTime.now();
+        final formattedTime = DateFormat.yMEd().add_jms().format(time);
+        return Padding(
+          padding:
+              const EdgeInsets.symmetric(horizontal: AppSize.horizontalPadding),
+          child: Text(
+            formattedTime,
+            style: Theme.of(context).textTheme.headlineSmall,
+          ),
+        );
+      },
     );
   }
 
@@ -161,14 +182,14 @@ class _HomeScreenState extends State<HomeScreen> {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
 
-    return SafeArea(
-      child: Scaffold(
-        appBar: Navbar(
-          activeSection: _activeSection,
-          onSectionSelected: _scrollToSection,
-        ),
-        drawer: CustomDrawer(onSectionSelected: _scrollToSection),
-        body: Stack(
+    return Scaffold(
+      appBar: Navbar(
+        activeSection: _activeSection,
+        onSectionSelected: _scrollToSection,
+      ),
+      drawer: CustomDrawer(onSectionSelected: _scrollToSection),
+      body: SafeArea(
+        child: Stack(
           children: [
             SingleChildScrollView(
               controller: _scrollController,
@@ -190,10 +211,17 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
             ),
-            _buildScrollProgressIndicator(),
             Positioned(
-              top: screenHeight/2 - 80, right: 16,
-                child: _buildSectionIndicator(),
+              top: 0,
+              left: 0,
+              right: 0,
+              child: _buildScrollProgressIndicator(),
+            ),
+            Positioned(top: 8, right: 0, child: _buildTimeWidget(context)),
+            Positioned(
+              top: screenHeight / 2 - 80,
+              right: 16,
+              child: _buildSectionIndicator(),
             ),
             _buildBackToTopButton(),
           ],

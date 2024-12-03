@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../../theme/app_constant.dart';
-import '../../widgets/custom_header.dart';
-import '../../widgets/effect.dart';
-import '../../widgets/simple_custom_button.dart';
+import '../../../theme/app_constant.dart';
+import '../../../widgets/custom_header.dart';
+import '../../../widgets/effect.dart';
+import '../../../widgets/simple_custom_button.dart';
 
 class AboutSection extends StatelessWidget {
   const AboutSection({super.key});
