@@ -1,5 +1,8 @@
 import 'dart:async';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+
+import '../theme/app_constant.dart';
 
 class CustomHeader extends StatefulWidget {
   final String titleText;
@@ -110,19 +113,21 @@ class _CustomHeaderState extends State<CustomHeader> {
           ),
           const SizedBox(width: 10),
           widget.showIcon
-              ? Image.asset(
-                  "assets/gif/hand.gif",
+              ? CachedNetworkImage(
+                  imageUrl: AppImage.handImage,
                   width: 32,
                   height: 32,
-                  errorBuilder: (_, __, ___) {
-                    return Transform.flip(
-                      flipX: true,
-                      child: const Icon(
-                        Icons.waving_hand,
-                        color: Colors.yellow,
-                      ),
-                    );
-                  },
+                  fit: BoxFit.contain,
+                  placeholder: (context, url) => const Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                  errorWidget: (context, url, error) => Transform.flip(
+                    flipX: true,
+                    child: const Icon(
+                      Icons.waving_hand,
+                      color: Colors.yellow,
+                    ),
+                  ),
                 )
               : const SizedBox()
         ],

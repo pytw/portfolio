@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:math';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -356,10 +357,16 @@ class _HeroicImageContainerState extends State<HeroicImageContainer> {
   Widget _buildImage() {
     return Effect(
       scale: 1.05,
-      builder: (_, __, ___, ____) => Image.asset(
-        AppImage.heroicImage,
+      builder: (_, __, ___, ____) => CachedNetworkImage(
+        imageUrl: AppImage.heroicImage,
         fit: BoxFit.contain,
-        errorBuilder: (_, __, ___) => const Icon(FontAwesomeIcons.user),
+        placeholder: (context, url) => const Center(
+          child: CircularProgressIndicator(),
+        ),
+        errorWidget: (context, url, error) => Icon(
+          FontAwesomeIcons.user,
+          color: Theme.of(context).colorScheme.onError,
+        ),
       ),
     );
   }

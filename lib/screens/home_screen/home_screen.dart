@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:visibility_detector/visibility_detector.dart';
+import 'package:portfolio_website/screens/home_screen/section_builder.dart';
+import 'package:portfolio_website/widgets/back_to_top.dart';
+import 'package:portfolio_website/widgets/date_time_widget.dart';
+import 'package:portfolio_website/widgets/scroll_progress_indicator.dart';
 import 'package:portfolio_website/screens/home_screen/sections/about_section.dart';
 import 'package:portfolio_website/screens/home_screen/sections/contact_section.dart';
-import 'package:portfolio_website/screens/home_screen/sections/footer_section.dart';
+import 'package:portfolio_website/screens/sections/footer_section.dart';
 import 'package:portfolio_website/screens/home_screen/sections/heroic_section.dart';
 import 'package:portfolio_website/screens/home_screen/sections/project_section.dart';
 import 'package:portfolio_website/screens/home_screen/sections/skill_section.dart';
 import 'package:portfolio_website/widgets/custom_drawer.dart';
 import 'package:portfolio_website/widgets/navbar.dart';
-
 import '../../../theme/app_constant.dart';
+import '../../widgets/section_indicator.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -21,8 +23,11 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final ScrollController _scrollController = ScrollController();
+  double _scrollProgress = 0.0;
+
   bool _isAutoScrolling = false;
   String _activeSection = 'Home';
+
   late final Stream<DateTime> _dateTimeStream = Stream.periodic(
     const Duration(seconds: 1),
     (_) => DateTime.now(),
@@ -43,8 +48,6 @@ class _HomeScreenState extends State<HomeScreen> {
     'About': false,
     'Contact': false,
   };
-
-  bool _showBackToTopButton = false;
 
   @override
   void initState() {
@@ -81,7 +84,11 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _onScroll() {
-    if (_isAutoScrolling) return;
+    setState(() {
+      double maxScroll = _scrollController.position.maxScrollExtent;
+      double currentScroll = _scrollController.position.pixels;
+      _scrollProgress = maxScroll != 0 ? currentScroll / maxScroll : 0;
+    });
 
     for (var entry in _sectionKeys.entries) {
       final context = entry.value.currentContext;
@@ -97,76 +104,6 @@ class _HomeScreenState extends State<HomeScreen> {
         }
       }
     }
-
-    setState(() {
-      _showBackToTopButton = _scrollController.offset > 300;
-    });
-  }
-
-  Widget _buildScrollProgressIndicator() {
-    return LinearProgressIndicator(
-      value: _scrollController.hasClients
-          ? _scrollController.position.pixels /
-              _scrollController.position.maxScrollExtent
-          : 0.0,
-      minHeight: 4,
-      backgroundColor: Colors.grey[300],
-      valueColor: const AlwaysStoppedAnimation<Color>(Colors.blue),
-    );
-  }
-
-  Widget _buildTimeWidget(BuildContext context) {
-    return StreamBuilder<DateTime>(
-      stream: _dateTimeStream,
-      builder: (context, snapshot) {
-        final time = snapshot.data ?? DateTime.now();
-        final formattedTime = DateFormat.yMEd().add_jms().format(time);
-        return Padding(
-          padding:
-              const EdgeInsets.symmetric(horizontal: AppSize.horizontalPadding),
-          child: Text(
-            formattedTime,
-            style: Theme.of(context).textTheme.headlineSmall,
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _buildSectionIndicator() {
-    return Column(
-      children: _sectionKeys.keys.map((section) {
-        final isActive = _activeSection == section;
-        return GestureDetector(
-          onTap: () => _scrollToSection(section),
-          child: Container(
-            margin: const EdgeInsets.only(bottom: 10),
-            width: isActive ? 14 : 10,
-            height: isActive ? 14 : 10,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: isActive ? Colors.blue : Colors.grey,
-            ),
-          ),
-        );
-      }).toList(),
-    );
-  }
-
-  Widget _buildBackToTopButton() {
-    return Visibility(
-      visible: _showBackToTopButton,
-      child: Positioned(
-        bottom: 20,
-        right: 20,
-        child: FloatingActionButton(
-          onPressed: () => _scrollToSection('Home'),
-          tooltip: 'Back to top',
-          backgroundColor: Colors.blue,
-          child: const Icon(Icons.arrow_upward),
-        ),
-      ),
-    );
   }
 
   double _calculatePadding(double width) {
@@ -179,7 +116,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
@@ -195,15 +131,17 @@ class _HomeScreenState extends State<HomeScreen> {
               controller: _scrollController,
               physics: const BouncingScrollPhysics(),
               padding: EdgeInsets.symmetric(
-                  horizontal: _calculatePadding(screenWidth)),
+                horizontal: _calculatePadding(screenWidth),
+              ),
               child: Column(
                 children: [
                   for (var section in _sectionKeys.keys) ...[
-                    _buildSection(
-                      section,
-                      _getSectionWidget(section),
-                      screenHeight,
-                      screenWidth,
+                    SectionBuilder(
+                      sectionKey: section,
+                      sectionWidget: _getSectionWidget(section),
+                      globalKey: _sectionKeys[section]!,
+                      onVisibilityChanged: _onVisibilityChanged,
+                      isVisible: _sectionVisibility[section] ?? false,
                     ),
                     const SizedBox(height: AppSize.spacing * 3),
                   ],
@@ -211,65 +149,24 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
             ),
+            ScrollProgressIndicator(progress: _scrollProgress),
             Positioned(
-              top: 0,
-              left: 0,
+              top: 8,
               right: 0,
-              child: _buildScrollProgressIndicator(),
+              child: DateTimeWidget(dateTimeStream: _dateTimeStream),
             ),
-            Positioned(top: 8, right: 0, child: _buildTimeWidget(context)),
             Positioned(
-              top: screenHeight / 2 - 80,
+              top: MediaQuery.of(context).size.height / 3,
               right: 16,
-              child: _buildSectionIndicator(),
-            ),
-            _buildBackToTopButton(),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildSection(
-    String sectionKey,
-    Widget sectionWidget,
-    double screenHeight,
-    double screenWidth,
-  ) {
-    return VisibilityDetector(
-      key: Key(sectionKey),
-      onVisibilityChanged: (info) {
-        _onVisibilityChanged(sectionKey, info.visibleFraction > 0.1);
-      },
-      child: AnimatedBuilder(
-        animation: _scrollController,
-        builder: (context, child) {
-          final isVisible = _sectionVisibility[sectionKey] ?? false;
-
-          final fadeInOpacity = isVisible ? 1.0 : 0.0;
-          final slideUpOffset = isVisible ? 0.0 : 50.0;
-
-          return AnimatedOpacity(
-            duration: const Duration(milliseconds: 600),
-            opacity: fadeInOpacity,
-            child: Transform.translate(
-              offset: Offset(0, slideUpOffset),
-              child: Container(
-                key: _sectionKeys[sectionKey],
-                margin: EdgeInsets.symmetric(
-                  vertical: screenHeight * 0.02,
-                  horizontal: screenWidth * 0.015,
-                ),
-                padding: EdgeInsets.symmetric(
-                  vertical: screenHeight * 0.02,
-                  horizontal: screenWidth * 0.02,
-                ),
-                child: sectionWidget,
+              child: SectionIndicator(
+                sectionKeys: _sectionKeys,
+                activeSection: _activeSection,
+                onSectionTap: _scrollToSection,
               ),
             ),
-          );
-        },
-        child: sectionWidget,
+            BackToTopButton(scrollController: _scrollController),
+          ],
+        ),
       ),
     );
   }

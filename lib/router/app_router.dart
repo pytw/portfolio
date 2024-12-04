@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../screens/home_screen/home_screen.dart';
-import '../screens/project/project_screen.dart';
+import '../screens/project_screen/project_screen.dart';
 
 class AppRoutes {
   static const String home = '/';

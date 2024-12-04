@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -67,10 +68,16 @@ class ProjectSection extends StatelessWidget {
       hoverOpacity: 0.8,
       fadeOnHover: true,
       builder: (isHovered, isClicked, scale, opacity) {
-        return Image.asset(
-          imagePath,
+        return CachedNetworkImage(
+          imageUrl: imagePath,
           fit: BoxFit.contain,
-          errorBuilder: (_, __, ___) => const CircularProgressIndicator(),
+          placeholder: (context, url) => const Center(
+            child: CircularProgressIndicator(),
+          ),
+          errorWidget: (context, url, error) => Icon(
+            Icons.broken_image,
+            color: Theme.of(context).colorScheme.onError,
+          ),
         );
       },
     );

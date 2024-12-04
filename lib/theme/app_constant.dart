@@ -27,13 +27,17 @@ class AppSize {
 }
 
 class AppImage {
-  static const String _assetImage = 'assets/images/';
   static const String _assetIcon = 'assets/icons/';
 
+  static const String handImage = 'https://firebasestorage.googleapis.com/v0/b/portfolio-1952e.appspot.com/o/assets%2Fgif%2Fhand.gif?alt=media&token=4d41440e-0270-4140-bd54-6ed97b1e6ead';
+
   //additional images
-  static const String heroicImage = '${_assetImage}pyapril15.png';
-  static const String aboutImage = '${_assetImage}about-me.png';
-  static const String contactImage = '${_assetImage}connect.png';
+  static const String heroicImage =
+      'https://firebasestorage.googleapis.com/v0/b/portfolio-1952e.appspot.com/o/profile%2Fpyapril15.png?alt=media&token=73fbd140-f2d1-4f87-afa4-dae0c8062dc2';
+  static const String aboutImage =
+      'https://firebasestorage.googleapis.com/v0/b/portfolio-1952e.appspot.com/o/assets%2Fabout-me.png?alt=media&token=dedb14d5-c58f-4be6-a91c-8e06ac2a87c6';
+  static const String contactImage =
+      'https://firebasestorage.googleapis.com/v0/b/portfolio-1952e.appspot.com/o/assets%2Fconnect.png?alt=media&token=ba67304e-7f42-4357-8c13-1005540bafa2';
 
   // icons
   static const String pythonSvgIcon = '${_assetIcon}Python.svg';
@@ -93,7 +97,7 @@ class AppText {
   static ProjectDetail sampleProject() {
     return ProjectDetail(
       "Dashboard",
-      "assets/gif/tmc.gif",
+      "https://firebasestorage.googleapis.com/v0/b/portfolio-1952e.appspot.com/o/assets%2Fgif%2Ftmc.gif?alt=media&token=75138057-b92a-48e1-8f18-7c05bfe811b3",
       "The project is called Transport Management System (TMC), developed using the PyQt6 package in Python, designed specifically for transport booking in colleges. This application is cross-platform.\n\n"
           "The frontend of the application was created using Qt Designer in Python, while the backend is powered by Python and utilizes MySQL as the database. The system comes with a variety of features, including transport booking for exams, events, and regular services.\n\n"
           "This application provides a comprehensive solution for managing transport services in colleges.",
