@@ -1,32 +1,28 @@
-import 'package:go_router/go_router.dart';
-/*
-final GoRouter router = GoRouter(
-  routes: [
-    GoRoute(
-      name: "home",
-      path: '/',
-      builder: (context, state) => const HomeScreen(),
-    ),
-    GoRoute(
-      name: "project",
-      path: '/projects',
-      builder: (context, state) => const ProjectSection(),
-    ),
-    GoRoute(
-      name: "skills",
-      path: '/skills',
-      builder: (context, state) => const SkillsSection(),
-    ),
-    GoRoute(
-      name: "about",
-      path: '/about',
-      builder: (context, state) => const AboutSection(),
-    ),
-    GoRoute(
-      name: "contact",
-      path: '/contact',
-      builder: (context, state) => const ContactSection(),
-    ),
-  ],
-);
-*/
+import 'package:flutter/material.dart';
+import '../screens/home_screen/home_screen.dart';
+import '../screens/project/project_screen.dart';
+
+class AppRoutes {
+  static const String home = '/';
+  static const String projects = '/projects';
+
+  static Route<dynamic> generateRoute(RouteSettings settings) {
+    switch (settings.name) {
+      case home:
+        return MaterialPageRoute(builder: (_) => const HomeScreen());
+      case projects:
+        return MaterialPageRoute(builder: (_) => const ProjectScreen());
+      default:
+        return _errorRoute();
+    }
+  }
+
+  static Route<dynamic> _errorRoute() {
+    return MaterialPageRoute(
+      builder: (_) => Scaffold(
+        appBar: AppBar(title: const Text('Error')),
+        body: const Center(child: Text('Page not found!')),
+      ),
+    );
+  }
+}

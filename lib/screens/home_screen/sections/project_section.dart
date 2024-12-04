@@ -128,14 +128,7 @@ class ProjectSection extends StatelessWidget {
         clickScale: 1,
         builder: (isHovered, isClicked, __, ___) => SimpleCustomButton(
           onPressed: () {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text(
-                  'Feature coming soon!',
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            );
+            Navigator.pushNamed(context, '/projects');
           },
           label: 'More Projects . . .',
           textStyle: Theme.of(context).textTheme.labelLarge?.copyWith(

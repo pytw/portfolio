@@ -111,20 +111,14 @@ class HeroicSection extends StatelessWidget {
         Effect(
           scale: 1.1,
           builder: (isHovered, isClicked, scale, opacity) => SimpleCustomButton(
-              onPressed: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text(
-                      'Feature coming soon!',
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                );
-              },
-              label: "See Projects",
-              textStyle: Theme.of(context).textTheme.labelLarge?.copyWith(
-                    letterSpacing: 1,
-                  )),
+            onPressed: () {
+              Navigator.pushNamed(context, '/projects');
+            },
+            label: "See Projects",
+            textStyle: Theme.of(context).textTheme.labelLarge?.copyWith(
+                  letterSpacing: 1,
+                ),
+          ),
         ),
       ],
     );

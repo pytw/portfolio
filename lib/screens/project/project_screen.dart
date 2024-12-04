@@ -5,6 +5,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:portfolio_website/widgets/custom_header.dart';
 import 'package:portfolio_website/widgets/effect.dart';
 import 'package:portfolio_website/widgets/simple_custom_button.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../theme/app_constant.dart';
 
@@ -35,6 +36,7 @@ class _ProjectScreenState extends State<ProjectScreen> {
         'description': doc['description'],
         'rating': doc['rating'],
         'image': doc['image'],
+        'link': doc['link'],
       };
     }).toList();
   }
@@ -112,7 +114,7 @@ class _ProjectScreenState extends State<ProjectScreen> {
                       LayoutBuilder(
                         builder: (context, constraints) {
                           int crossAxisCount =
-                              (constraints.maxWidth ~/ 200).clamp(2, 4);
+                              (constraints.maxWidth ~/ 310).clamp(2, 4);
 
                           return GridView.builder(
                             shrinkWrap: true,
@@ -208,7 +210,7 @@ Widget _buildProjectImage(BuildContext context, String imageUrl) {
       imageUrl: imageUrl,
       width: double.infinity,
       height: double.infinity,
-      fit: BoxFit.cover,
+      fit: BoxFit.contain,
       placeholder: (context, url) => const Center(
         child: CircularProgressIndicator(),
       ),
@@ -244,7 +246,11 @@ Widget _buildProjectOverView(
         const SizedBox(height: AppSize.spacing),
         _buildProjectDescription(context, project['description']),
         const SizedBox(height: AppSize.spacing),
-        _buildProjectRatingWithButton(context, project['rating']),
+        _buildProjectRatingWithButton(
+          context,
+          project['rating'],
+          project['link'],
+        ),
       ],
     ),
   );
@@ -271,7 +277,7 @@ Widget _buildProjectDescription(
 }
 
 Widget _buildProjectRatingWithButton(
-    BuildContext context, String projectRating) {
+    BuildContext context, String projectRating, String url) {
   return Row(
     children: [
       const Icon(
@@ -287,8 +293,12 @@ Widget _buildProjectRatingWithButton(
       const Spacer(),
       Effect(
         builder: (isHovered, __, ___, ____) => SimpleCustomButton(
-          onPressed: () {},
-          label: "Details",
+          onPressed: () async {
+            if (await canLaunchUrlString(url)) {
+              await launchUrlString(url);
+            }
+          },
+          label: "Get Project",
           textStyle: Theme.of(context).textTheme.titleSmall?.copyWith(
                 letterSpacing: 0.5,
               ),
