@@ -19,12 +19,11 @@ class PortfolioApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       title: 'Portfolio - Praveen Yadav',
       theme: appThemeData(context),
-      initialRoute: AppRoutes.home,
-      onGenerateRoute: AppRoutes.generateRoute,
+      routerConfig: AppRouter.router,
     );
   }
 }

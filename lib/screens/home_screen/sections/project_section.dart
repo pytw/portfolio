@@ -1,8 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../models/models.dart';
+import '../../../router/app_router.dart';
 import '../../../theme/app_constant.dart';
 import '../../../widgets/custom_header.dart';
 import '../../../widgets/effect.dart';
@@ -135,7 +137,7 @@ class ProjectSection extends StatelessWidget {
         clickScale: 1,
         builder: (isHovered, isClicked, __, ___) => SimpleCustomButton(
           onPressed: () {
-            Navigator.pushNamed(context, '/projects');
+            context.goNamed(AppRouteNames.projects);
           },
           label: 'More Projects . . .',
           textStyle: Theme.of(context).textTheme.labelLarge?.copyWith(

@@ -49,6 +49,8 @@ class _HomeScreenState extends State<HomeScreen> {
     'Contact': false,
   };
 
+  bool _isMounted = true;
+
   @override
   void initState() {
     super.initState();
@@ -57,14 +59,18 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void dispose() {
+    _isMounted = false;
+    _scrollController.removeListener(_onScroll);
     _scrollController.dispose();
     super.dispose();
   }
 
   void _onVisibilityChanged(String section, bool isVisible) {
-    setState(() {
-      _sectionVisibility[section] = isVisible;
-    });
+    if (_isMounted) {
+      setState(() {
+        _sectionVisibility[section] = isVisible;
+      });
+    }
   }
 
   void _scrollToSection(String section) {
@@ -79,28 +85,32 @@ class _HomeScreenState extends State<HomeScreen> {
         keyContext,
         duration: const Duration(milliseconds: 800),
         curve: Curves.easeInOut,
-      ).then((_) => _isAutoScrolling = false);
+      ).then((_) {
+        if (_isMounted) _isAutoScrolling = false;
+      });
     }
   }
 
   void _onScroll() {
-    setState(() {
-      double maxScroll = _scrollController.position.maxScrollExtent;
-      double currentScroll = _scrollController.position.pixels;
-      _scrollProgress = maxScroll != 0 ? currentScroll / maxScroll : 0;
-    });
+    if (_isMounted) {
+      setState(() {
+        double maxScroll = _scrollController.position.maxScrollExtent;
+        double currentScroll = _scrollController.position.pixels;
+        _scrollProgress = maxScroll != 0 ? currentScroll / maxScroll : 0;
+      });
 
-    for (var entry in _sectionKeys.entries) {
-      final context = entry.value.currentContext;
-      if (context != null) {
-        final box = context.findRenderObject() as RenderBox;
-        final position = box.localToGlobal(Offset.zero).dy;
+      for (var entry in _sectionKeys.entries) {
+        final context = entry.value.currentContext;
+        if (context != null) {
+          final box = context.findRenderObject() as RenderBox;
+          final position = box.localToGlobal(Offset.zero).dy;
 
-        if (position >= -100 &&
-            position <= 100 &&
-            _activeSection != entry.key) {
-          setState(() => _activeSection = entry.key);
-          break;
+          if (position >= -100 &&
+              position <= 100 &&
+              _activeSection != entry.key) {
+            setState(() => _activeSection = entry.key);
+            break;
+          }
         }
       }
     }

@@ -18,6 +18,7 @@ class _ProjectScreenState extends State<ProjectScreen> {
   final ScrollController _scrollController = ScrollController();
   late Future<List<Map<String, dynamic>>> _projects;
   double _scrollProgress = 0.0;
+  bool _isMounted = true;
   late final Stream<DateTime> _dateTimeStream = Stream.periodic(
     const Duration(seconds: 1),
     (_) => DateTime.now(),
@@ -31,33 +32,41 @@ class _ProjectScreenState extends State<ProjectScreen> {
   }
 
   void _scrollListener() {
-    setState(() {
-      double maxScroll = _scrollController.position.maxScrollExtent;
-      double currentScroll = _scrollController.position.pixels;
-      _scrollProgress = maxScroll != 0 ? currentScroll / maxScroll : 0;
-    });
+    if (_isMounted) {
+      setState(() {
+        double maxScroll = _scrollController.position.maxScrollExtent;
+        double currentScroll = _scrollController.position.pixels;
+        _scrollProgress = maxScroll != 0 ? currentScroll / maxScroll : 0;
+      });
+    }
   }
 
   @override
   void dispose() {
+    _isMounted = false;
     _scrollController.removeListener(_scrollListener);
     _scrollController.dispose();
     super.dispose();
   }
 
   Future<List<Map<String, dynamic>>> fetchProjects() async {
-    FirebaseFirestore fireStore = FirebaseFirestore.instance;
+    try {
+      FirebaseFirestore fireStore = FirebaseFirestore.instance;
+      QuerySnapshot querySnapshot =
+          await fireStore.collection('projects').get();
 
-    QuerySnapshot querySnapshot = await fireStore.collection('projects').get();
-
-    return querySnapshot.docs.map((doc) {
-      return {
-        'name': doc['name'],
-        'rating': doc['rating'],
-        'image': doc['image'],
-        'link': doc['link'],
-      };
-    }).toList();
+      return querySnapshot.docs.map((doc) {
+        return {
+          'name': doc['name'],
+          'rating': doc['rating'],
+          'image': doc['image'],
+          'link': doc['link'],
+        };
+      }).toList();
+    } catch (error) {
+      debugPrint('Error fetching projects: $error');
+      return [];
+    }
   }
 
   @override
@@ -79,7 +88,7 @@ class _ProjectScreenState extends State<ProjectScreen> {
               right: 0,
               child: DateTimeWidget(dateTimeStream: _dateTimeStream),
             ),
-            BackToTopButton(scrollController: _scrollController)
+            BackToTopButton(scrollController: _scrollController),
           ],
         ),
       ),

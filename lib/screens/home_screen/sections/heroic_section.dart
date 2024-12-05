@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'dart:html' as html;
 
@@ -114,7 +115,7 @@ class HeroicSection extends StatelessWidget {
           scale: 1.1,
           builder: (isHovered, isClicked, scale, opacity) => SimpleCustomButton(
             onPressed: () {
-              Navigator.pushNamed(context, AppRoutes.projects);
+              context.goNamed(AppRouteNames.projects);
             },
             label: "See Projects",
             textStyle: Theme.of(context).textTheme.labelLarge?.copyWith(
