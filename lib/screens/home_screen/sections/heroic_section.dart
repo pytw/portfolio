@@ -6,6 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'dart:html' as html;
 
+import '../../../router/app_router.dart';
 import '../../../theme/app_constant.dart';
 import '../../../widgets/custom_header.dart';
 import '../../../widgets/effect.dart';
@@ -113,7 +114,7 @@ class HeroicSection extends StatelessWidget {
           scale: 1.1,
           builder: (isHovered, isClicked, scale, opacity) => SimpleCustomButton(
             onPressed: () {
-              Navigator.pushNamed(context, '/projects');
+              Navigator.pushNamed(context, AppRoutes.projects);
             },
             label: "See Projects",
             textStyle: Theme.of(context).textTheme.labelLarge?.copyWith(
