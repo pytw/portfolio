@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <!-- Home Page -->
+    <url>
+        <loc>https://portfolio-1952e.web.app/</loc>
+        <lastmod>2024-11-27</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>1.0</priority>
+    </url>
+
+    <!-- Projects Page -->
+    <url>
+        <loc>https://portfolio-1952e.web.app/projects</loc>
+        <lastmod>2024-12-05</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <!-- Additional Pages -->
+    <!-- Add more pages as needed -->
+</urlset>
