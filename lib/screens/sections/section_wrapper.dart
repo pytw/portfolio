@@ -12,7 +12,7 @@ class SectionWrapper extends StatelessWidget {
     final screenWidth = MediaQuery.of(context).size.width;
 
     return Container(
-      key: globalKey ,
+      key: globalKey,
       margin: EdgeInsets.symmetric(
         vertical: screenHeight * 0.01,
         horizontal: screenWidth * 0.01,

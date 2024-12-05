@@ -118,10 +118,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   double _calculatePadding(double width) {
     return width < AppSize.smallScreenBreakPoint
-        ? width * 0.02
+        ? width * 0.005
         : width < AppSize.screenBreakPoint
-            ? width * 0.05
-            : width * 0.12;
+            ? width * 0.02
+            : width * 0.08;
   }
 
   @override
