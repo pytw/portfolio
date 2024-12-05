@@ -105,8 +105,8 @@ class _HomeScreenState extends State<HomeScreen> {
           final box = context.findRenderObject() as RenderBox;
           final position = box.localToGlobal(Offset.zero).dy;
 
-          if (position >= -100 &&
-              position <= 100 &&
+          if (position >= -150 &&
+              position <= 150 &&
               _activeSection != entry.key) {
             setState(() => _activeSection = entry.key);
             break;
