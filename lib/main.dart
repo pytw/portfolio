@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:portfolio_website/router/app_router.dart';
 import 'theme/app_theme.dart';
 import 'firebase/firebase_options.dart';
+import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -11,7 +12,13 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
+  configureApp();
+
   runApp(const PortfolioApp());
+}
+
+void configureApp() {
+  setUrlStrategy(PathUrlStrategy());
 }
 
 class PortfolioApp extends StatelessWidget {
