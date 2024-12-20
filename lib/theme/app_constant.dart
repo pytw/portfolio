@@ -29,7 +29,8 @@ class AppSize {
 class AppImage {
   static const String _assetIcon = 'assets/icons/';
 
-  static const String handImage = 'https://firebasestorage.googleapis.com/v0/b/portfolio-1952e.appspot.com/o/assets%2Fgif%2Fhand.gif?alt=media&token=4d41440e-0270-4140-bd54-6ed97b1e6ead';
+  static const String handImage =
+      'https://firebasestorage.googleapis.com/v0/b/portfolio-1952e.appspot.com/o/assets%2Fgif%2Fhand.gif?alt=media&token=4d41440e-0270-4140-bd54-6ed97b1e6ead';
 
   //additional images
   static const String heroicImage =
@@ -72,11 +73,11 @@ class AppText {
 
   static const Map<String, String> downloadLinks = {
     'PDF':
-        'https://firebasestorage.googleapis.com/v0/b/portfolio-1952e.appspot.com/o/resume.pdf?alt=media&token=1f10e879-5234-4ab4-ab7c-c272e81f38fb',
+        'https://firebasestorage.googleapis.com/v0/b/portfolio-1952e.appspot.com/o/resume%2FPraveen%20Yadav(Resume).pdf?alt=media&token=438855fd-da69-499f-b8ab-4f88a541a815',
     'DOCX':
-        'https://firebasestorage.googleapis.com/v0/b/portfolio-1952e.appspot.com/o/resume.docx?alt=media&token=6bc02eaa-f332-46b0-b34a-fb51aeb2aa42',
+        'https://firebasestorage.googleapis.com/v0/b/portfolio-1952e.appspot.com/o/resume%2FPraveen%20Yadav(Resume).docx?alt=media&token=b157c7cb-a25c-40ac-934a-80857a216e50',
     'PNG':
-        'https://firebasestorage.googleapis.com/v0/b/portfolio-1952e.appspot.com/o/resume.png?alt=media&token=09985770-9968-4df8-8508-2942cd18935b',
+        'https://firebasestorage.googleapis.com/v0/b/portfolio-1952e.appspot.com/o/resume%2FPraveen%20Yadav(Resume).jpg?alt=media&token=1832d978-9d27-4c33-8b10-8c166bd62bed',
   };
 
   static List<SocialMedia> socialMedia = [
