@@ -361,6 +361,9 @@ class _HeroicImageContainerState extends State<HeroicImageContainer> {
       scale: 1.05,
       builder: (_, __, ___, ____) => CachedNetworkImage(
         imageUrl: AppImage.heroicImage,
+        httpHeaders: const {
+          'Access-Control-Allow-Origin': '*',
+        },
         fit: BoxFit.contain,
         placeholder: (context, url) => const Center(
           child: CircularProgressIndicator(),

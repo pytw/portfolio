@@ -22,6 +22,13 @@
             "web": "1:75019783513:web:deb5d4da63c1b6f712d048"
           }
         }
+      },
+      "android": {
+        "default": {
+          "projectId": "portfolio-1952e",
+          "appId": "1:75019783513:android:cf17ba0f4e9dcd3d12d048",
+          "fileOutput": "android/app/google-services.json"
+        }
       }
     }
   },

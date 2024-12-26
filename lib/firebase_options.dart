@@ -59,6 +59,7 @@ class DefaultFirebaseOptions {
     projectId: 'portfolio-1952e',
     authDomain: 'portfolio-1952e.firebaseapp.com',
     storageBucket: 'portfolio-1952e.appspot.com',
+    measurementId: 'G-C5XB6CKM87',
   );
 
 }

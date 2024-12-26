@@ -15,14 +15,13 @@ class SectionIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
       children: sectionKeys.keys.map((section) {
         final isActive = activeSection == section;
-        return GestureDetector(
+        return InkWell(
           onTap: () => onSectionTap(section),
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 300),
-            curve: Curves.easeOut,
+            curve: Curves.easeInOut,
             margin: const EdgeInsets.only(bottom: 10),
             width: isActive ? 16 : 12,
             height: isActive ? 16 : 12,

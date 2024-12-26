@@ -17,8 +17,7 @@ class ProjectScreen extends StatefulWidget {
 class _ProjectScreenState extends State<ProjectScreen> {
   final ScrollController _scrollController = ScrollController();
   late Future<List<Map<String, dynamic>>> _projects;
-  double _scrollProgress = 0.0;
-  bool _isMounted = true;
+
   late final Stream<DateTime> _dateTimeStream = Stream.periodic(
     const Duration(seconds: 1),
     (_) => DateTime.now(),
@@ -28,23 +27,10 @@ class _ProjectScreenState extends State<ProjectScreen> {
   void initState() {
     super.initState();
     _projects = fetchProjects();
-    _scrollController.addListener(_scrollListener);
-  }
-
-  void _scrollListener() {
-    if (_isMounted) {
-      setState(() {
-        double maxScroll = _scrollController.position.maxScrollExtent;
-        double currentScroll = _scrollController.position.pixels;
-        _scrollProgress = maxScroll != 0 ? currentScroll / maxScroll : 0;
-      });
-    }
   }
 
   @override
   void dispose() {
-    _isMounted = false;
-    _scrollController.removeListener(_scrollListener);
     _scrollController.dispose();
     super.dispose();
   }
@@ -82,7 +68,13 @@ class _ProjectScreenState extends State<ProjectScreen> {
               projectsFuture: _projects,
               padding: _calculatePadding(screenWidth),
             ),
-            ScrollProgressIndicator(progress: _scrollProgress),
+            Positioned(
+              left: 0,
+              top: 0,
+              right: 0,
+              child: ScrollLinearProgressIndicator(
+                  scrollController: _scrollController),
+            ),
             Positioned(
               top: 8,
               right: 0,

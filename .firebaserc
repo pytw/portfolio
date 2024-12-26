@@ -1,5 +1,8 @@
 {
   "projects": {
-    "default": "portfolio-1952e"
-  }
+    "default": "portfolio-1952e",
+    "staging": "portfolio-1952e"
+  },
+  "targets": {},
+  "etags": {}
 }

@@ -23,7 +23,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final ScrollController _scrollController = ScrollController();
-  double _scrollProgress = 0.0;
 
   bool _isAutoScrolling = false;
   String _activeSection = 'Home';
@@ -49,8 +48,6 @@ class _HomeScreenState extends State<HomeScreen> {
     'Contact': false,
   };
 
-  bool _isMounted = true;
-
   @override
   void initState() {
     super.initState();
@@ -59,18 +56,17 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void dispose() {
-    _isMounted = false;
     _scrollController.removeListener(_onScroll);
     _scrollController.dispose();
     super.dispose();
   }
 
   void _onVisibilityChanged(String section, bool isVisible) {
-    if (_isMounted) {
-      setState(() {
-        _sectionVisibility[section] = isVisible;
-      });
-    }
+    if (!mounted) return;
+
+    setState(() {
+      _sectionVisibility[section] = isVisible;
+    });
   }
 
   void _scrollToSection(String section) {
@@ -86,31 +82,24 @@ class _HomeScreenState extends State<HomeScreen> {
         duration: const Duration(milliseconds: 800),
         curve: Curves.easeInOut,
       ).then((_) {
-        if (_isMounted) _isAutoScrolling = false;
+        if (mounted) _isAutoScrolling = false;
       });
     }
   }
 
   void _onScroll() {
-    if (_isMounted) {
-      setState(() {
-        double maxScroll = _scrollController.position.maxScrollExtent;
-        double currentScroll = _scrollController.position.pixels;
-        _scrollProgress = maxScroll != 0 ? currentScroll / maxScroll : 0;
-      });
+    if (!mounted) return;
+    for (var entry in _sectionKeys.entries) {
+      final context = entry.value.currentContext;
+      if (context != null) {
+        final box = context.findRenderObject() as RenderBox;
+        final position = box.localToGlobal(Offset.zero).dy;
 
-      for (var entry in _sectionKeys.entries) {
-        final context = entry.value.currentContext;
-        if (context != null) {
-          final box = context.findRenderObject() as RenderBox;
-          final position = box.localToGlobal(Offset.zero).dy;
-
-          if (position >= -150 &&
-              position <= 150 &&
-              _activeSection != entry.key) {
-            setState(() => _activeSection = entry.key);
-            break;
-          }
+        if (position >= -150 &&
+            position <= 150 &&
+            _activeSection != entry.key) {
+          setState(() => _activeSection = entry.key);
+          break;
         }
       }
     }
@@ -159,7 +148,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
             ),
-            ScrollProgressIndicator(progress: _scrollProgress),
+            Positioned(
+              left: 0,
+              top: 0,
+              right: 0,
+              child: ScrollLinearProgressIndicator(
+                  scrollController: _scrollController),
+            ),
             Positioned(
               top: 8,
               right: 0,
