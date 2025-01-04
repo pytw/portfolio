@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:cached_network_image/cached_network_image.dart';
+
 import 'package:flutter/material.dart';
 
 import '../theme/app_constant.dart';
@@ -113,21 +113,24 @@ class _CustomHeaderState extends State<CustomHeader> {
           ),
           const SizedBox(width: 10),
           widget.showIcon
-              ? CachedNetworkImage(
-                  imageUrl: AppImage.handImage,
+              ? Image.network(
+                  AppImage.handImage,
                   width: 32,
                   height: 32,
                   fit: BoxFit.contain,
-                  placeholder: (context, url) => const Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                  errorWidget: (context, url, error) => Transform.flip(
-                    flipX: true,
-                    child: const Icon(
-                      Icons.waving_hand,
-                      color: Colors.yellow,
-                    ),
-                  ),
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) return child;
+                    return Center(child: CircularProgressIndicator());
+                  },
+                  errorBuilder: (context, error, stackTrace) {
+                    return Transform.flip(
+                      flipX: true,
+                      child: const Icon(
+                        Icons.waving_hand,
+                        color: Colors.yellow,
+                      ),
+                    );
+                  },
                 )
               : const SizedBox()
         ],

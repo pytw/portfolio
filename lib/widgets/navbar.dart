@@ -5,20 +5,14 @@ import '../theme/app_constant.dart';
 class Navbar extends StatelessWidget implements PreferredSizeWidget {
   final Function(String section) onSectionSelected;
   final String activeSection;
+  final List<Map<String, dynamic>> navItems;
 
-  Navbar({
+  const Navbar({
     super.key,
     required this.onSectionSelected,
     required this.activeSection,
+    required this.navItems,
   });
-
-  final List<Map<String, dynamic>> _sections = [
-    {'label': 'Home', 'icon': Icons.home},
-    {'label': 'Project', 'icon': Icons.work},
-    {'label': 'Skill', 'icon': Icons.code},
-    {'label': 'About', 'icon': Icons.person},
-    {'label': 'Contact', 'icon': Icons.contact_mail},
-  ];
 
   Widget _buildLogo(BuildContext context) => Padding(
         padding: const EdgeInsets.symmetric(
@@ -109,7 +103,7 @@ class Navbar extends StatelessWidget implements PreferredSizeWidget {
             )
           else
             Row(
-              children: _sections.map((section) {
+              children: navItems.map((section) {
                 final String label = section['label'] as String;
                 return _buildNavItem(
                   label: label,

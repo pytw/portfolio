@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../../../theme/app_constant.dart';
@@ -63,19 +62,21 @@ class AboutSection extends StatelessWidget {
 
   Widget _buildAboutMeImage() {
     return Semantics(
-      label: 'Illustration about personal development',
-      child: CachedNetworkImage(
-        imageUrl: AppImage.aboutImage,
-        fit: BoxFit.contain,
-        placeholder: (context, url) => const Center(
-          child: CircularProgressIndicator(),
-        ),
-        errorWidget: (context, url, error) => Icon(
-          Icons.broken_image,
-          color: Theme.of(context).colorScheme.onError,
-        ),
-      ),
-    );
+        label: 'Illustration about personal development',
+        child: Image.network(
+          AppImage.aboutImage,
+          fit: BoxFit.contain,
+          loadingBuilder: (context, child, loadingProgress) {
+            if (loadingProgress == null) return child;
+            return const Center(child: CircularProgressIndicator());
+          },
+          errorBuilder: (context, error, stackTrace) {
+            return Icon(
+              Icons.broken_image,
+              color: Theme.of(context).colorScheme.onError,
+            );
+          },
+        ));
   }
 
   Widget _buildAboutMeText(BuildContext context) {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:portfolio_website/router/app_router.dart';
+import 'package:portfolio_website/screens/home_screen/home_screen.dart';
 import 'firebase_options.dart';
 import 'theme/app_theme.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';

@@ -34,12 +34,12 @@ class SectionBuilder extends StatelessWidget {
         }
       },
       child: AnimatedOpacity(
+        key: globalKey,
         duration: const Duration(milliseconds: 600),
         opacity: fadeInOpacity,
         child: Transform.translate(
           offset: Offset(0, slideUpOffset),
           child: SectionWrapper(
-            globalKey: globalKey,
             child: sectionWidget,
           ),
         ),

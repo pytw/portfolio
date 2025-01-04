@@ -1,11 +1,11 @@
 import 'dart:async';
+import 'dart:html' as html;
 import 'dart:math';
-import 'package:cached_network_image/cached_network_image.dart';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher_string.dart';
-import 'dart:html' as html;
 
 import '../../../router/app_router.dart';
 import '../../../theme/app_constant.dart';
@@ -359,20 +359,22 @@ class _HeroicImageContainerState extends State<HeroicImageContainer> {
   Widget _buildImage() {
     return Effect(
       scale: 1.05,
-      builder: (_, __, ___, ____) => CachedNetworkImage(
-        imageUrl: AppImage.heroicImage,
-        httpHeaders: const {
-          'Access-Control-Allow-Origin': '*',
-        },
-        fit: BoxFit.contain,
-        placeholder: (context, url) => const Center(
-          child: CircularProgressIndicator(),
-        ),
-        errorWidget: (context, url, error) => Icon(
-          FontAwesomeIcons.user,
-          color: Theme.of(context).colorScheme.onError,
-        ),
-      ),
+      builder: (_, __, ___, ____) {
+        return Image.network(
+          AppImage.heroicImage,
+          fit: BoxFit.contain,
+          loadingBuilder: (context, child, loadingProgress) {
+            if (loadingProgress == null) return child;
+            return const Center(child: CircularProgressIndicator());
+          },
+          errorBuilder: (context, error, stackTrace) {
+            return Icon(
+              FontAwesomeIcons.user,
+              color: Theme.of(context).colorScheme.onError,
+            );
+          },
+        );
+      },
     );
   }
 }

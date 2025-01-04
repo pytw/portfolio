@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -61,19 +60,21 @@ class ContactSection extends StatelessWidget {
 
   Widget _buildContactImage() {
     return Semantics(
-      label: 'Illustration of connecting with others',
-      child: CachedNetworkImage(
-        imageUrl: AppImage.contactImage,
-        fit: BoxFit.contain,
-        placeholder: (context, url) => const Center(
-          child: CircularProgressIndicator(),
-        ),
-        errorWidget: (context, url, error) => Icon(
-          Icons.broken_image,
-          color: Theme.of(context).colorScheme.onError,
-        ),
-      ),
-    );
+        label: 'Illustration of connecting with others',
+        child: Image.network(
+          AppImage.contactImage,
+          fit: BoxFit.contain,
+          loadingBuilder: (context, child, loadingProgress) {
+            if (loadingProgress == null) return child;
+            return const Center(child: CircularProgressIndicator());
+          },
+          errorBuilder: (context, error, stackTrace) {
+            return Icon(
+              Icons.broken_image,
+              color: Theme.of(context).colorScheme.onError,
+            );
+          },
+        ));
   }
 
   Widget _buildContactDetail(BuildContext context) {
