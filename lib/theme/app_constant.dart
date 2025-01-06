@@ -182,3 +182,19 @@ I’m excited to connect with you! Whether you have a project in mind, questions
 For collaboration, insights, or tech discussions, don’t hesitate to reach out through my GitHub or Discord. I value every conversation and look forward to building something amazing together.
   """;
 }
+
+class AppNavItem {
+  static final List<Map<String, dynamic>> primaryNavBarItem = [
+    {'label': 'Home', 'icon': Icons.home},
+    {'label': 'Project', 'icon': Icons.work},
+    {'label': 'Skill', 'icon': Icons.code},
+    {'label': 'About', 'icon': Icons.person},
+    {'label': 'Contact', 'icon': Icons.contact_mail},
+  ];
+
+  static final List<Map<String, dynamic>> secondaryNavBarItem = [
+    {'label': 'Home', 'icon': Icons.home},
+    {'label': 'Project', 'icon': Icons.work},
+    {'label': 'Program', 'icon': Icons.code},
+  ];
+}

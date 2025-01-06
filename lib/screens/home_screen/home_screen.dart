@@ -32,15 +32,6 @@ class _HomeScreenState extends State<HomeScreen> {
     (_) => DateTime.now(),
   );
 
-  // Define your dynamic nav items here
-  final List<Map<String, dynamic>> _navItems = [
-    {'label': 'Home', 'icon': Icons.home},
-    {'label': 'Project', 'icon': Icons.work},
-    {'label': 'Skill', 'icon': Icons.code},
-    {'label': 'About', 'icon': Icons.person},
-    {'label': 'Contact', 'icon': Icons.contact_mail},
-  ];
-
   final Map<String, GlobalKey> _sectionKeys = {
     'Home': GlobalKey(),
     'Project': GlobalKey(),
@@ -128,7 +119,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       appBar: Navbar(
-        navItems: _navItems,
+        navItems: AppNavItem.primaryNavBarItem,
         activeSection: _activeSection,
         onSectionSelected: _scrollToSection,
       ),

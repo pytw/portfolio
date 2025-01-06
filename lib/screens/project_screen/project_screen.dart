@@ -6,6 +6,7 @@ import '../../theme/app_constant.dart';
 import '../../widgets/back_to_top.dart';
 import '../../widgets/date_time_widget.dart';
 import '../../widgets/scroll_progress_indicator.dart';
+import '../../widgets/secondary_app_bar.dart';
 
 class ProjectScreen extends StatefulWidget {
   const ProjectScreen({super.key});
@@ -16,6 +17,7 @@ class ProjectScreen extends StatefulWidget {
 
 class _ProjectScreenState extends State<ProjectScreen> {
   final ScrollController _scrollController = ScrollController();
+  int _selectedIndex = 0;
   late Future<List<Map<String, dynamic>>> _projects;
 
   late final Stream<DateTime> _dateTimeStream = Stream.periodic(
@@ -55,11 +57,25 @@ class _ProjectScreenState extends State<ProjectScreen> {
     }
   }
 
+  void _onItemSelected(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
+      appBar: CustomNavBar(
+        selectedIndex: _selectedIndex,
+        navItems: AppNavItem.secondaryNavBarItem,
+        onItemSelected: _onItemSelected,
+        onLogin: (){},
+        onSignup: (){},
+        logoTitle: "PY",
+      ),
       body: SafeArea(
         child: Stack(
           children: [

@@ -2,21 +2,26 @@ import 'package:flutter/material.dart';
 
 class CustomNavBar extends StatelessWidget implements PreferredSizeWidget {
   final int selectedIndex;
-  final List<NavItem> navItems;
+  final List<Map<String, dynamic>> navItems;
   final Function(int) onItemSelected;
   final VoidCallback onLogin;
   final VoidCallback onSignup;
+  final String logoTitle;
+  final String? logoImagePath;
 
-  CustomNavBar({
+  const CustomNavBar({
+    super.key,
     required this.selectedIndex,
     required this.navItems,
     required this.onItemSelected,
     required this.onLogin,
     required this.onSignup,
+    required this.logoTitle,
+    this.logoImagePath,
   });
 
   @override
-  Size get preferredSize => Size.fromHeight(60);
+  Size get preferredSize => Size.fromHeight(70);
 
   @override
   Widget build(BuildContext context) {
@@ -26,13 +31,14 @@ class CustomNavBar extends StatelessWidget implements PreferredSizeWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          // Left side: Logo
+          // Left Side: Logo
           Row(
             children: [
-              Icon(Icons.ac_unit, size: 32, color: Colors.blue), // Example logo
+              if (logoImagePath != null) Image.asset(logoImagePath!, height: 32)
+              else Icon(Icons.ac_unit, size: 32, color: Colors.blue),
               const SizedBox(width: 8),
               Text(
-                "AppName",
+                logoTitle,
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -42,7 +48,7 @@ class CustomNavBar extends StatelessWidget implements PreferredSizeWidget {
             ],
           ),
 
-          // Right side: Navigation items + Login/Signup buttons
+          // Right Side: Navigation items + Login/Signup buttons
           Row(
             children: [
               ...navItems.asMap().entries.map((entry) {
@@ -54,35 +60,35 @@ class CustomNavBar extends StatelessWidget implements PreferredSizeWidget {
 
                 return GestureDetector(
                   onTap: () => onItemSelected(index),
-                  child: Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: Row(
-                          children: [
-                            if (item.icon != null)
-                              Icon(item.icon, color: color, size: 20),
-                            if (item.label != null)
-                              Padding(
-                                padding: const EdgeInsets.only(left: 4.0),
-                                child: Text(
-                                  item.label!,
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: color,
-                                    fontWeight: isActive
-                                        ? FontWeight.bold
-                                        : FontWeight.normal,
-                                  ),
-                                ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                    child: Row(
+                      children: [
+                        if (item['icon'] != null)
+                          Icon(
+                            item['icon'],
+                            color: color,
+                            size: 20,
+                          ),
+                        if (item['label'] != null)
+                          Padding(
+                            padding: const EdgeInsets.only(left: 4.0),
+                            child: Text(
+                              item['label']!,
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: color,
+                                fontWeight: isActive
+                                    ? FontWeight.bold
+                                    : FontWeight.normal,
                               ),
-                          ],
-                        ),
-                      ),
-                    ],
+                            ),
+                          ),
+                      ],
+                    ),
                   ),
                 );
-              }).toList(),
+              }),
 
               const SizedBox(width: 16),
 
@@ -91,7 +97,7 @@ class CustomNavBar extends StatelessWidget implements PreferredSizeWidget {
                 onPressed: onLogin,
                 child: Text(
                   "Login",
-                  style: TextStyle(color: Colors.blue),
+                  style: TextStyle(color: Colors.blue, fontSize: 16),
                 ),
               ),
 
@@ -103,8 +109,13 @@ class CustomNavBar extends StatelessWidget implements PreferredSizeWidget {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
                   ),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 ),
-                child: Text("Signup"),
+                child: Text(
+                  "Signup",
+                  style: TextStyle(fontSize: 16),
+                ),
               ),
             ],
           ),
@@ -112,11 +123,4 @@ class CustomNavBar extends StatelessWidget implements PreferredSizeWidget {
       ),
     );
   }
-}
-
-class NavItem {
-  final IconData? icon;
-  final String? label;
-
-  NavItem({this.icon, this.label});
 }
